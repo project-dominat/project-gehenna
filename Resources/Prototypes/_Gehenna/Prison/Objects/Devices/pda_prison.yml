@@ -1,0 +1,35 @@
+- type: entity
+  parent: BaseSecurityPDA
+  id: PrisonWorkerPDA
+  name: prison worker PDA
+  suffix: "[Prison]"
+  description: A rugged PDA issued to Gehenna prison staff.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-boss
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-boss
+  - type: PdaBorderColor
+    borderColor: "#4a5c6e"
+    accentVColor: "#8b9bb4"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda.rsi
+    state: pda-space-prison-boss

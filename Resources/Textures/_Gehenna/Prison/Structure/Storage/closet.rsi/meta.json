@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Created for Gehenna project",
+  "size": { "x": 32, "y": 32 },
+  "states": [
+    { "name": "planet_worker" },
+    { "name": "planet_worker_door" },
+    { "name": "planet_worker_open" }
+  ]
+}

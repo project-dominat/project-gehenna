@@ -1,0 +1,35 @@
+- type: entity
+  parent: LockerBaseSecure
+  id: LockerPrisonGehenna
+  name: prisoner property locker
+  suffix: "[Prison]"
+  description: A secure locker for storing inmates' personal belongings.
+  components:
+  - type: Appearance
+  - type: Sprite
+    sprite: _Gehenna/Prison/Structure/Storage/closet.rsi
+    noRot: true
+    layers:
+    - state: planet_worker
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: planet_worker_door
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+      sprite: Structures/Storage/closet.rsi
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+      sprite: Structures/Storage/closet.rsi
+    - state: paper
+      visible: false
+      sprite: Structures/Storage/closet_labels.rsi
+      offset: "-0.065,0"
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: EntityStorageVisuals
+    stateBaseClosed: planet_worker
+    stateDoorOpen: planet_worker_open
+    stateDoorClosed: planet_worker_door
+  - type: AccessReader
+    access: [["Security"]]

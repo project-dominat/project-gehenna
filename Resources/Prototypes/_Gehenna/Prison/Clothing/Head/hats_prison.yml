@@ -1,0 +1,31 @@
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatPrisonBoss
+  name: prison warden cap
+  suffix: "[Prison]"
+  description: A distinguished cap worn by the warden of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Head/prisonboss-tophat.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Head/prisonboss-tophat.rsi
+  - type: Tag
+    tags:
+    - ClothMade
+    - WhitelistChameleon
+
+- type: entity
+  parent: ClothingHeadBase
+  id: ClothingHeadHatPrisonWorker
+  name: prison officer cap
+  suffix: "[Prison]"
+  description: A sturdy cap worn by Gehenna prison officers.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Head/prison-worker-tophat.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Head/prison-worker-tophat.rsi
+  - type: Tag
+    tags:
+    - ClothMade
+    - WhitelistChameleon

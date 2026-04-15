@@ -1,0 +1,13 @@
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonWorker
+  name: prison worker uniform
+  suffix: "[Prison]"
+  description: A durable uniform for Gehenna prison workers. It smells of industrial cleaner.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-worker-uniform.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-worker-uniform.rsi
+  - type: SuitSensor
+    mode: SensorCords
