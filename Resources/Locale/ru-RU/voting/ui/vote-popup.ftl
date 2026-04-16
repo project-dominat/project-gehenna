@@ -1,0 +1,5 @@
+ui-vote-created = { $initiator } создал голосование:
+ui-vote-button  = { $text } ({ $votes })
+ui-vote-button-no-votes  = { $text }
+ui-vote-follow-button-popup = Следить за игроком
+

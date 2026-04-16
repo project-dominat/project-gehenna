@@ -27,7 +27,7 @@
             <LineEdit Name="AddressBox"
                       Access="Public"
                       Text="localhost"
-                      PlaceHolder="server address:port"
+                      PlaceHolder="{Loc 'main-menu-address-placeholder'}"
                       HorizontalExpand="True" />
         </GridContainer>
         <Button Name="DirectConnectButton"

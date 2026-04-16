@@ -7,8 +7,6 @@
     { "name": "icon" },
     { "name": "equipped-HELMET", "directions": 4 },
     { "name": "inhand-left", "directions": 4 },
-    { "name": "inhand-right", "directions": 4 },
-    { "name": "overlay-icon" },
-    { "name": "overlay-equipped", "directions": 4 }
+    { "name": "inhand-right", "directions": 4 }
   ]
 }

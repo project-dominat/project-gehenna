@@ -33,3 +33,5 @@
   - type: Icon
     sprite: _Gehenna/Prison/Objects/Devices/pda.rsi
     state: pda-space-prison-boss
+  - type: Item
+    sprite: Objects/Devices/pda.rsi

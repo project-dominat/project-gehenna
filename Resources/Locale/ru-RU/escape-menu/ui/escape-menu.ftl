@@ -1,0 +1,11 @@
+### EscapeMenu.xaml
+
+ui-escape-title = Игровое меню
+ui-escape-options = Настройки
+ui-escape-rules = Правила
+ui-escape-guidebook = Гайдбук
+ui-escape-wiki = Вики
+ui-escape-disconnect = Отключиться
+ui-escape-quit = Выйти
+ui-escape-feedback = Обратная связь
+

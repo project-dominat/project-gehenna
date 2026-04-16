@@ -1,0 +1,51 @@
+# Gehenna production startup config.
+# Used by runserver.bat and runserver.sh through --config-file.
+# This keeps local production startup independent from bin/Content.Server/server_config.toml.
+
+[config]
+preset_development = false
+preset_debug = false
+
+[game]
+lobbyenabled = true
+lobbyduration = 300
+defaultpreset = "secret"
+map = ""
+map_rotation = true
+role_timers = true
+role_loadout_timers = true
+admin_job_tracking = false
+
+[events]
+enabled = true
+
+[ghost]
+role_time = 3.0
+quick_lottery = false
+
+[gateway]
+generator_enabled = true
+
+[movement]
+mob_pushing = false
+
+[physics]
+grid_splitting = true
+
+[procgen]
+preload = true
+
+[shuttle]
+arrivals = true
+emergency = true
+preload_grids = true
+grid_fill = true
+auto_call_time = 90
+
+[ic]
+random_characters = false
+random_species_weights = "SpeciesWeights"
+ssd_sleep_time = 600.0
+
+[database]
+engine = "sqlite"

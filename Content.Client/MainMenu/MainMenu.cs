@@ -120,7 +120,9 @@ namespace Content.Client.MainMenu
             }
             catch (ArgumentException e)
             {
-                _userInterfaceManager.Popup($"Unable to connect: {e.Message}", "Connection error.");
+                _userInterfaceManager.Popup(
+                    Loc.GetString("main-menu-unable-to-connect", ("reason", e.Message)),
+                    Loc.GetString("main-menu-connection-error"));
                 _sawmill.Warning(e.ToString());
                 _netManager.ConnectFailed -= _onConnectFailed;
                 _setConnectingState(false);
@@ -153,7 +155,7 @@ namespace Content.Client.MainMenu
                 }
                 else if (!ushort.TryParse(match6.Groups[2].Value, out port))
                 {
-                    throw new ArgumentException("Not a valid port.");
+                    throw new ArgumentException(Loc.GetString("main-menu-invalid-port"));
                 }
 
                 return;
@@ -165,7 +167,7 @@ namespace Content.Client.MainMenu
             port = _client.DefaultPort;
             if (split.Length > 2)
             {
-                throw new ArgumentException("Not a valid Address.");
+                throw new ArgumentException(Loc.GetString("main-menu-invalid-address"));
             }
 
             // IP:port format.
@@ -174,7 +176,7 @@ namespace Content.Client.MainMenu
                 ip = split[0];
                 if (!ushort.TryParse(split[1], out port))
                 {
-                    throw new ArgumentException("Not a valid port.");
+                    throw new ArgumentException(Loc.GetString("main-menu-invalid-port"));
                 }
             }
         }

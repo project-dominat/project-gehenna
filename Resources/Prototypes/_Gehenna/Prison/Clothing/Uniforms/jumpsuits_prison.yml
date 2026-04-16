@@ -11,6 +11,7 @@
     sprite: _Gehenna/Prison/Clothing/Uniform/prison-worker-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
+    randomMode: false
 
 - type: entity
   parent: ClothingUniformBase
@@ -20,12 +21,13 @@
   description: A worn uniform issued to inmates of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-1
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-1-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-1
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-1-uniform.rsi
     equippedState: equipped-INNERCLOTHING-digi
   - type: SuitSensor
     mode: SensorCords
+    randomMode: false
 
 - type: entity
   parent: ClothingUniformBase
@@ -35,11 +37,12 @@
   description: A worn uniform issued to inmates of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-2
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-2-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-2
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-2-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
+    randomMode: false
 
 - type: entity
   parent: ClothingUniformBase
@@ -49,11 +52,12 @@
   description: A worn uniform issued to inmates of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-3
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-3-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-3
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-3-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
+    randomMode: false
 
 - type: entity
   parent: ClothingUniformBase
@@ -63,11 +67,12 @@
   description: A formal uniform worn by the warden of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-basic
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-basic-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-basic
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-basic-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
+    randomMode: false
 
 - type: entity
   parent: ClothingUniformBase
@@ -77,8 +82,9 @@
   description: A business suit tailored for the warden of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-business
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-business-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-business
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-business-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
+    randomMode: false
