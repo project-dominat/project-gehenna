@@ -26,6 +26,7 @@ public sealed class ViewportUIController : UIController
         _configurationManager.OnValueChanged(CCVars.ViewportMaximumWidth, _ => UpdateViewportRatio());
         _configurationManager.OnValueChanged(CCVars.ViewportWidth, _ => UpdateViewportRatio());
         _configurationManager.OnValueChanged(CCVars.ViewportVerticalFit, _ => UpdateViewportRatio());
+        _configurationManager.OnValueChanged(CCVars.ViewportStretch, _ => UpdateViewportRatio());
 
         var gameplayStateLoad = UIManager.GetUIController<GameplayStateLoadController>();
         gameplayStateLoad.OnScreenLoad += OnScreenLoad;
@@ -48,6 +49,11 @@ public sealed class ViewportUIController : UIController
         var width = _configurationManager.GetCVar(CCVars.ViewportWidth);
         var verticalfit = _configurationManager.GetCVar(CCVars.ViewportVerticalFit) && _configurationManager.GetCVar(CCVars.ViewportStretch);
 
+        // Gehenna edit start - server-capped aspect-fit viewport
+        Viewport.AspectFitEnabled = verticalfit;
+        Viewport.AspectFitMinWidth = EyeManager.PixelsPerMeter * min;
+        Viewport.AspectFitMaxWidth = EyeManager.PixelsPerMeter * max;
+
         if (verticalfit)
         {
             width = max;
@@ -56,6 +62,7 @@ public sealed class ViewportUIController : UIController
         {
             width = CCVars.ViewportWidth.DefaultValue;
         }
+        // Gehenna edit end
 
         Viewport.Viewport.ViewportSize = (EyeManager.PixelsPerMeter * width, EyeManager.PixelsPerMeter * ViewportHeight);
         Viewport.UpdateCfg();

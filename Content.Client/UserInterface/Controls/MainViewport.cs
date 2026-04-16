@@ -18,6 +18,12 @@ namespace Content.Client.UserInterface.Controls
 
         public ScalingViewport Viewport { get; }
 
+        // Gehenna edit start - server-capped aspect-fit viewport
+        public bool AspectFitEnabled { get; set; }
+        public int AspectFitMinWidth { get; set; }
+        public int AspectFitMaxWidth { get; set; }
+        // Gehenna edit end
+
         public MainViewport()
         {
             IoCManager.InjectDependencies(this);
@@ -26,7 +32,9 @@ namespace Content.Client.UserInterface.Controls
             {
                 AlwaysRender = true,
                 RenderScaleMode = ScalingViewportRenderScaleMode.CeilInt,
-                MouseFilter = MouseFilterMode.Stop
+                MouseFilter = MouseFilterMode.Stop,
+                HorizontalExpand = true,
+                VerticalExpand = true
             };
 
             AddChild(Viewport);
@@ -58,7 +66,9 @@ namespace Content.Client.UserInterface.Controls
 
             if (stretch)
             {
-                var snapFactor = CalcSnappingFactor();
+                // Gehenna edit start - server-capped aspect-fit viewport
+                var snapFactor = AspectFitEnabled ? (int?) null : CalcSnappingFactor();
+                // Gehenna edit end
                 if (snapFactor == null)
                 {
                     // Did not find a snap, enable stretching.
@@ -69,7 +79,12 @@ namespace Content.Client.UserInterface.Controls
                         "bilinear" => ScalingViewportStretchMode.Bilinear,
                         _ => ScalingViewportStretchMode.Nearest
                     };
-                    Viewport.IgnoreDimension = verticalFit ? ScalingViewportIgnoreDimension.Horizontal : ScalingViewportIgnoreDimension.None;
+                    // Gehenna edit start - server-capped aspect-fit viewport
+                    if (AspectFitEnabled && TryApplyAspectFitViewportSize())
+                        Viewport.IgnoreDimension = ScalingViewportIgnoreDimension.Horizontal;
+                    else
+                        Viewport.IgnoreDimension = verticalFit ? ScalingViewportIgnoreDimension.Horizontal : ScalingViewportIgnoreDimension.None;
+                    // Gehenna edit end
 
                     if (renderScaleUp)
                     {
@@ -104,6 +119,28 @@ namespace Content.Client.UserInterface.Controls
                 Viewport.FixedRenderScale = 1;
             }
         }
+
+        // Gehenna edit start - server-capped aspect-fit viewport
+        private bool TryApplyAspectFitViewportSize()
+        {
+            var viewportHeight = Viewport.ViewportSize.Y;
+            if (viewportHeight <= 0 || PixelSize.X <= 0 || PixelSize.Y <= 0)
+                return false;
+
+            var minWidth = AspectFitMinWidth > 0 ? AspectFitMinWidth : Viewport.ViewportSize.X;
+            var maxWidth = AspectFitMaxWidth > 0 ? AspectFitMaxWidth : Viewport.ViewportSize.X;
+            if (maxWidth < minWidth)
+                (minWidth, maxWidth) = (maxWidth, minWidth);
+
+            var targetWidth = (int) Math.Ceiling((double) viewportHeight * PixelSize.X / PixelSize.Y);
+            targetWidth = Math.Clamp(targetWidth, minWidth, maxWidth);
+
+            if (Viewport.ViewportSize.X != targetWidth || Viewport.ViewportSize.Y != viewportHeight)
+                Viewport.ViewportSize = (targetWidth, viewportHeight);
+
+            return true;
+        }
+        // Gehenna edit end
 
         private int? CalcSnappingFactor()
         {

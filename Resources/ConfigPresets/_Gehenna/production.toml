@@ -16,6 +16,10 @@ role_timers = true
 role_loadout_timers = true
 admin_job_tracking = false
 
+[viewport]
+# Gehenna 16:9 FoV cap. Current upstream default is 21; Sunrise reaches about 26.7 on 16:9.
+maximum_width = 26
+
 [events]
 enabled = true
 
