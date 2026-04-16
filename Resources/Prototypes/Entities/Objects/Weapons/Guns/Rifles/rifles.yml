@@ -25,6 +25,10 @@
       - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/batrifle.ogg
+  - type: GunRecoil
+    baseSwayMultiplier: 1.5
+    recoilKickMultiplier: 1.2
+    recoverySpeed: 0.8
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/sf_rifle_cock.ogg

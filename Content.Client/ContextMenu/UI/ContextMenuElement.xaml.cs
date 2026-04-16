@@ -57,10 +57,15 @@ namespace Content.Client.ContextMenu.UI
 
         protected override void Dispose(bool disposing)
         {
+            if (disposing)
+            {
+                var subMenu = _subMenu;
+                _subMenu = null;
+                ParentMenu = null;
+                subMenu?.Dispose();
+            }
+
             base.Dispose(disposing);
-            _subMenu?.Dispose();
-            _subMenu = null;
-            ParentMenu = null;
         }
 
         protected override void Draw(DrawingHandleScreen handle)

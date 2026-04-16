@@ -76,6 +76,7 @@ namespace Content.Client.ContextMenu.UI
         public void OnStateExited(GameplayState state)
         {
             _updating = false;
+            _context.Close();
             Elements.Clear();
             _cfg.UnsubValueChanged(CCVars.EntityMenuGroupingType, OnGroupingChanged);
             _context.OnContextKeyEvent -= OnKeyBindDown;
@@ -194,6 +195,12 @@ namespace Content.Client.ContextMenu.UI
                 !player.IsValid())
                 return;
 
+            if (_combatMode.IsInCombatMode(player))
+            {
+                _context.Close();
+                return;
+            }
+
             // Do we need to do in-range unOccluded checks?
             var visibility = _verbSystem.Visibility;
 
@@ -293,7 +300,16 @@ namespace Content.Client.ContextMenu.UI
             var element = new EntityMenuElement(entity);
             element.SubMenu = new ContextMenuPopup(_context, element);
             element.SubMenu.OnPopupOpen += () => _verb.OpenVerbMenu(entity, popup: element.SubMenu);
-            element.SubMenu.OnPopupHide += element.SubMenu.MenuBody.RemoveAllChildren;
+            element.SubMenu.OnPopupHide += () =>
+            {
+                if (element.SubMenu is not { Disposed: false } subMenu ||
+                    subMenu.MenuBody.Disposed)
+                {
+                    return;
+                }
+
+                subMenu.MenuBody.RemoveAllChildren();
+            };
             _context.AddElement(menu, element);
             Elements.TryAdd(entity, element);
         }
@@ -312,16 +328,21 @@ namespace Content.Client.ContextMenu.UI
 
             // remove the element
             var parent = element.ParentMenu?.ParentElement;
-            element.Dispose();
+            if (!element.Disposed)
+                element.Dispose();
             Elements.Remove(entity);
 
             // update any parent elements
-            if (parent is EntityMenuElement e)
+            if (parent is EntityMenuElement { Disposed: false } e)
                 UpdateElement(e);
 
             // If this was the last entity, close the entity menu
-            if (_context.RootMenu.MenuBody.ChildCount == 0)
+            if (_context.RootMenu is { Disposed: false } &&
+                !_context.RootMenu.MenuBody.Disposed &&
+                _context.RootMenu.MenuBody.ChildCount == 0)
+            {
                 _context.Close();
+            }
         }
 
         /// <summary>
@@ -332,8 +353,12 @@ namespace Content.Client.ContextMenu.UI
         /// </remarks>
         private void UpdateElement(EntityMenuElement element)
         {
-            if (element.SubMenu == null)
+            if (element.Disposed ||
+                element.SubMenu == null ||
+                element.SubMenu.Disposed)
+            {
                 return;
+            }
 
             // Get the first entity in the sub-menus
             var entity = GetFirstEntityOrNull(element.SubMenu);
@@ -359,7 +384,7 @@ namespace Content.Client.ContextMenu.UI
 
             // update the parent element, so that it's count and entity icon gets updated.
             var parent = element.ParentMenu?.ParentElement;
-            if (parent is EntityMenuElement e)
+            if (parent is EntityMenuElement { Disposed: false } e)
                 UpdateElement(e);
         }
 
@@ -368,7 +393,7 @@ namespace Content.Client.ContextMenu.UI
         /// </summary>
         private EntityUid? GetFirstEntityOrNull(ContextMenuPopup? menu)
         {
-            if (menu == null)
+            if (menu == null || menu.Disposed || menu.MenuBody.Disposed)
                 return null;
 
             foreach (var element in menu.MenuBody.Children)

@@ -32,6 +32,10 @@
       path: /Audio/Weapons/Guns/Gunshots/revolver.ogg
   - type: UseDelay
     delay: 0.66
+  - type: GunRecoil
+    baseSwayMultiplier: 0.65
+    recoilKickMultiplier: 0.9
+    recoverySpeed: 1.25
   - type: ContainerContainer
     containers:
       revolver-ammo: !type:Container
