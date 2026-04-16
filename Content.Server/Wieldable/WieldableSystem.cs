@@ -5,6 +5,7 @@ using Content.Shared.Hands;
 using Content.Shared.Movement.Components;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
+using Content.Shared.Weapons.Ranged.Components;
 
 namespace Content.Server.Wieldable;
 
@@ -34,6 +35,10 @@ public sealed class WieldableSystem : SharedWieldableSystem
     private void OnGetEyePvsScale(Entity<CursorOffsetRequiresWieldComponent> entity,
         ref HeldRelayedEvent<GetEyePvsScaleRelayedEvent> args)
     {
+        // Gun ADS owns its own PVS scaling through ActiveAimingComponent.
+        if (HasComp<GunComponent>(entity.Owner))
+            return;
+
         if (!TryComp(entity, out EyeCursorOffsetComponent? eyeCursorOffset) || !TryComp(entity.Owner, out WieldableComponent? wieldableComp))
             return;
 

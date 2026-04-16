@@ -23,6 +23,9 @@
   - type: GunRecoil
     baseSwayMultiplier: 1.2
     recoilKickMultiplier: 0.8
+    recoilScale: 0.55
+    recoilApproachRate: 32
+    recoilDampingRatio: 0.8
     recoverySpeed: 0.9
   - type: Battery
     maxCharge: 1000
@@ -84,6 +87,9 @@
   - type: GunRecoil
     baseSwayMultiplier: 1.2
     recoilKickMultiplier: 0.8
+    recoilScale: 0.55
+    recoilApproachRate: 32
+    recoilDampingRatio: 0.8
     recoverySpeed: 0.9
   - type: BatteryAmmoProvider
     proto: RedLightLaser
@@ -130,6 +136,9 @@
   - type: GunRecoil
     baseSwayMultiplier: 0.6
     recoilKickMultiplier: 0.5
+    recoilScale: 0.4
+    recoilApproachRate: 38
+    recoilDampingRatio: 0.82
     recoverySpeed: 1.4
 
 - type: entity
@@ -142,6 +151,9 @@
   - type: GunRecoil
     baseSwayMultiplier: 0.6
     recoilKickMultiplier: 0.5
+    recoilScale: 0.4
+    recoilApproachRate: 38
+    recoilDampingRatio: 0.82
     recoverySpeed: 1.4
   - type: Tag
     tags:

@@ -17,8 +17,9 @@ public sealed class SharedGunRecoilSystem : EntitySystem
 
         if (TryComp<GunRecoilComponent>(gun, out var recoil))
         {
-            kick = recoil.Kick * gun.Comp.CameraRecoilScalarModified;
-            lateral = recoil.LateralKick;
+            var recoilScale = recoil.RecoilKickMultiplier * recoil.RecoilScale * gun.Comp.CameraRecoilScalarModified;
+            kick = recoil.Kick * recoilScale;
+            lateral = recoil.LateralKick * recoilScale;
             maxKick = recoil.MaxKick;
         }
 

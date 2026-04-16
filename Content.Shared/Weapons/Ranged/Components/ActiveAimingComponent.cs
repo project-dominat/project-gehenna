@@ -1,4 +1,3 @@
-using System.Numerics;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.Weapons.Ranged.Components;
@@ -20,16 +19,4 @@ public sealed partial class ActiveAimingComponent : Component
     /// </summary>
     [AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan StartedAt;
-
-    /// <summary>
-    /// Client-only smoothed eye offset.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    public Vector2 CurrentEyeOffset;
-
-    /// <summary>
-    /// Client-only target eye offset.
-    /// </summary>
-    [ViewVariables(VVAccess.ReadWrite)]
-    public Vector2 TargetEyeOffset;
 }

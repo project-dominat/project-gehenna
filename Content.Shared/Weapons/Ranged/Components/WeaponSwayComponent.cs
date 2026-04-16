@@ -23,6 +23,21 @@ public sealed partial class WeaponSwayComponent : Component
     public const float DefaultWalkSwayMultiplier = 2f;
     public const float DefaultSprintSwayMultiplier = 4f;
     public const float DefaultAimingMovementPenaltyMultiplier = 0.5f;
+    public const float DefaultBreathAmplitude = 0f;
+    public const float DefaultBreathFrequency = 0.35f;
+    public const float DefaultBreathHoldMultiplier = 0.25f;
+    public const float DefaultBreathHoldMaxDuration = 3.5f;
+    public const float DefaultBreathHoldRecoveryRate = 0.75f;
+    public const float DefaultBreathHoldExhaustedMultiplier = 1.5f;
+    public const float DefaultBreathHoldMovementThreshold = 0.08f;
+
+    // Noise-based sway defaults
+    public const int DefaultNoiseOctaves = 3;
+    public const float DefaultNoiseLacunarity = 2.7f;
+    public const float DefaultNoiseGain = 0.4f;
+    public const int DefaultHipFireNoiseOctaves = 4;
+    public const float DefaultHipFireNoiseLacunarity = 2.2f;
+    public const float DefaultHipFireNoiseGain = 0.5f;
 
     /// <summary>
     /// Aim drift amplitude in tiles while standing still.
@@ -119,4 +134,86 @@ public sealed partial class WeaponSwayComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public float AimingMovementPenaltyMultiplier = DefaultAimingMovementPenaltyMultiplier;
+
+    /// <summary>
+    /// Low-frequency ADS breathing drift amplitude in tiles.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BreathAmplitude = DefaultBreathAmplitude;
+
+    /// <summary>
+    /// Breathing drift cycles per second while deliberately aiming.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BreathFrequency = DefaultBreathFrequency;
+
+    /// <summary>
+    /// Sway multiplier applied while the player is holding breath.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BreathHoldMultiplier = DefaultBreathHoldMultiplier;
+
+    /// <summary>
+    /// Maximum breath hold duration in seconds.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BreathHoldMaxDuration = DefaultBreathHoldMaxDuration;
+
+    /// <summary>
+    /// Breath hold recovery rate in seconds recovered per second.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BreathHoldRecoveryRate = DefaultBreathHoldRecoveryRate;
+
+    /// <summary>
+    /// Sway multiplier applied after breath hold is exhausted.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BreathHoldExhaustedMultiplier = DefaultBreathHoldExhaustedMultiplier;
+
+    /// <summary>
+    /// Maximum movement factor that still allows breath holding.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float BreathHoldMovementThreshold = DefaultBreathHoldMovementThreshold;
+
+    // ── Noise-based sway parameters ──
+
+    /// <summary>
+    /// Number of FBm octaves for aimed sway noise. More octaves = finer detail layers.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int NoiseOctaves = DefaultNoiseOctaves;
+
+    /// <summary>
+    /// Frequency multiplier between octaves for aimed sway.
+    /// Higher = more difference between slow drift and fine tremor.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float NoiseLacunarity = DefaultNoiseLacunarity;
+
+    /// <summary>
+    /// Amplitude multiplier between octaves for aimed sway.
+    /// Lower = fine detail is subtler relative to main drift.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float NoiseGain = DefaultNoiseGain;
+
+    /// <summary>
+    /// Number of FBm octaves for hip-fire sway noise.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public int HipFireNoiseOctaves = DefaultHipFireNoiseOctaves;
+
+    /// <summary>
+    /// Frequency multiplier between octaves for hip-fire sway.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float HipFireNoiseLacunarity = DefaultHipFireNoiseLacunarity;
+
+    /// <summary>
+    /// Amplitude multiplier between octaves for hip-fire sway.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float HipFireNoiseGain = DefaultHipFireNoiseGain;
 }

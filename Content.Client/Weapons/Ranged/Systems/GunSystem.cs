@@ -35,6 +35,9 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
+    private const float CameraRecoilVisualScale = 0.02f;
+    private const float MaxCameraRecoilVisualKick = 0.035f;
+
     [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
@@ -44,6 +47,8 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private readonly IStateManager _state = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly ClientAimingSystem _aiming = default!;
+    [Dependency] private readonly SharedCameraRecoilSystem _cameraRecoil = default!;
+    [Dependency] private readonly SharedGunRecoilSystem _gunRecoil = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
@@ -205,6 +210,8 @@ public sealed partial class GunSystem : SharedGunSystem
 
         // Define target coordinates relative to gun entity, so that network latency on moving grids doesn't fuck up the target location.
         var coordinates = TransformSystem.ToCoordinates(entity, aimCoordinates);
+        // Raw mouse position (no sway/recoil) for server-side aim validation.
+        var rawMouseCoordinates = TransformSystem.ToCoordinates(entity, new MapCoordinates(mousePos.Position, mousePos.MapId));
 
         NetEntity? target = null;
         if (_state.CurrentState is GameplayStateBase screen)
@@ -212,11 +219,11 @@ public sealed partial class GunSystem : SharedGunSystem
 
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 
-
         RaisePredictiveEvent(new RequestShootEvent
         {
             Target = target,
             Coordinates = GetNetCoordinates(coordinates),
+            RawCoordinates = GetNetCoordinates(rawMouseCoordinates),
             Gun = GetNetEntity(gun),
             Continuous = _cfg.GetCVar(CCVars.ControlHoldToAttackRanged),
         });
@@ -294,6 +301,13 @@ public sealed partial class GunSystem : SharedGunSystem
             return;
 
         _aiming.ApplyShotFeedback(gun, recoil, spreadShot);
+
+        var cameraKick = _gunRecoil.GetCameraKick(gun, recoil) * CameraRecoilVisualScale;
+        if (cameraKick.Length() > MaxCameraRecoilVisualKick)
+            cameraKick = cameraKick.Normalized() * MaxCameraRecoilVisualKick;
+
+        if (cameraKick != Vector2.Zero)
+            _cameraRecoil.KickCamera(user.Value, cameraKick);
     }
 
     private bool IsSpreadShot(EntityUid? ent, IShootable shootable)

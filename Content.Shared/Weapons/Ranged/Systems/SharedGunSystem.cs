@@ -141,6 +141,16 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
     }
 
+    /// <summary>
+    /// Tolerance multiplier for network jitter when validating aim deviation.
+    /// </summary>
+    private const float AimValidationTolerance = 1.3f;
+
+    /// <summary>
+    /// Fallback maximum aim deviation in tiles when no sway/recoil data is available.
+    /// </summary>
+    private const float FallbackMaxDeviation = 1.5f;
+
     private void OnShootRequest(RequestShootEvent msg, EntitySessionEventArgs args)
     {
         var user = args.SenderSession.AttachedEntity;
@@ -155,11 +165,102 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (gun.Owner != GetEntity(msg.Gun))
             return;
 
-        gun.Comp.ShootCoordinates = GetCoordinates(msg.Coordinates);
+        var shootCoords = GetCoordinates(msg.Coordinates);
+
+        // Gehenna edit start — server-side aim deviation validation (envelope check)
+        if (_netManager.IsServer)
+        {
+            shootCoords = ValidateAimDeviation(user.Value, gun, shootCoords, GetCoordinates(msg.RawCoordinates));
+        }
+        // Gehenna edit end
+
+        gun.Comp.ShootCoordinates = shootCoords;
         gun.Comp.Target = GetEntity(msg.Target);
         AttemptShoot(user.Value, gun);
         if (msg.Continuous)
             gun.Comp.ShotCounter = 0;
+    }
+
+    /// <summary>
+    /// Validates that the aim offset (difference between raw mouse and actual shoot coordinates)
+    /// is within the allowed envelope based on weapon sway, bloom, and recoil state.
+    /// If the deviation is too large, clamps the shoot coordinates to the envelope boundary.
+    /// </summary>
+    private EntityCoordinates ValidateAimDeviation(
+        EntityUid user,
+        Entity<GunComponent> gun,
+        EntityCoordinates shootCoords,
+        EntityCoordinates rawCoords)
+    {
+        var shootMap = TransformSystem.ToMapCoordinates(shootCoords);
+        var rawMap = TransformSystem.ToMapCoordinates(rawCoords);
+
+        if (shootMap.MapId != rawMap.MapId)
+            return rawCoords; // different maps = something is wrong, fall back to raw
+
+        var deviation = shootMap.Position - rawMap.Position;
+        var deviationLength = deviation.Length();
+
+        if (deviationLength < 0.001f)
+            return shootCoords; // no meaningful deviation
+
+        var maxDeviation = ComputeMaxAllowedDeviation(user, gun);
+
+        if (deviationLength <= maxDeviation)
+            return shootCoords; // within envelope
+
+        // Clamp to envelope boundary: raw position + allowed deviation in the same direction
+        var clampedOffset = deviation / deviationLength * maxDeviation;
+        var clampedMapPos = rawMap.Position + clampedOffset;
+        var clampedMapCoords = new MapCoordinates(clampedMapPos, rawMap.MapId);
+
+        // Convert back to entity coordinates relative to user
+        return TransformSystem.ToCoordinates(user, clampedMapCoords);
+    }
+
+    /// <summary>
+    /// Computes the maximum allowed aim deviation based on weapon state, ADS, movement, bloom, and recoil.
+    /// </summary>
+    private float ComputeMaxAllowedDeviation(EntityUid user, Entity<GunComponent> gun)
+    {
+        var sway = CompOrNull<WeaponSwayComponent>(gun.Owner);
+        var recoil = CompOrNull<GunRecoilComponent>(gun.Owner);
+        var isAiming = HasComp<ActiveAimingComponent>(user);
+
+        // Base sway envelope
+        float maxSway;
+        if (isAiming)
+            maxSway = sway?.MaxSway ?? WeaponSwayComponent.DefaultMaxSway;
+        else
+            maxSway = sway?.HipFireMaxSway ?? WeaponSwayComponent.DefaultHipFireMaxSway;
+
+        // Movement contribution
+        var movementPenalty = 0f;
+        if (TryComp<PhysicsComponent>(user, out var physics))
+        {
+            var velocity = Physics.GetMapLinearVelocity(user, physics).Length();
+            var velocityForMax = sway?.VelocityForMaxSway ?? WeaponSwayComponent.DefaultVelocityForMaxSway;
+            if (velocityForMax > 0f)
+            {
+                var moveFactor = Math.Clamp(velocity / velocityForMax, 0f, 1f);
+                var sprintMult = sway?.SprintSwayMultiplier ?? WeaponSwayComponent.DefaultSprintSwayMultiplier;
+                var moveMult = MathHelper.Lerp(1f, sprintMult, moveFactor);
+                if (isAiming)
+                {
+                    var aimPenaltyMult = sway?.AimingMovementPenaltyMultiplier ??
+                                         WeaponSwayComponent.DefaultAimingMovementPenaltyMultiplier;
+                    moveMult = 1f + (moveMult - 1f) * aimPenaltyMult;
+                }
+                movementPenalty = maxSway * (moveMult - 1f);
+            }
+        }
+
+        // Server-tracked bloom and recoil
+        var bloom = recoil?.ServerBloom ?? 0f;
+        var recoilEstimate = recoil?.ServerRecoilEstimate ?? 0f;
+
+        var total = (maxSway + movementPenalty + bloom + recoilEstimate) * AimValidationTolerance;
+        return MathF.Max(total, 0.1f); // never less than 0.1 tiles
     }
 
     private void OnStopShootRequest(RequestStopShootEvent ev, EntitySessionEventArgs args)
@@ -408,6 +509,13 @@ public abstract partial class SharedGunSystem : EntitySystem
         Shoot(gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out var userImpulse, user, throwItems: attemptEv.ThrowItems);
         var shotEv = new GunShotEvent(user, ev.Ammo);
         RaiseLocalEvent(gun, ref shotEv);
+
+        // Gehenna edit start — server-side bloom/recoil tracking for anti-cheat
+        if (_netManager.IsServer)
+        {
+            UpdateServerBloomOnShot(gun, ev.Ammo);
+        }
+        // Gehenna edit end
 
         if (!userImpulse || !TryComp<PhysicsComponent>(user, out var userPhysics))
             return true;
@@ -673,6 +781,76 @@ public abstract partial class SharedGunSystem : EntitySystem
     {
         UpdateBattery(frameTime);
         UpdateBallistic(frameTime);
+
+        // Gehenna edit start — decay server-side bloom/recoil estimates
+        if (_netManager.IsServer)
+        {
+            DecayServerBloom(frameTime);
+        }
+        // Gehenna edit end
+    }
+
+    /// <summary>
+    /// Increments server-side bloom and recoil estimate after a confirmed shot.
+    /// </summary>
+    private void UpdateServerBloomOnShot(Entity<GunComponent> gun, List<(EntityUid? Entity, IShootable Shootable)> ammo)
+    {
+        if (!TryComp<GunRecoilComponent>(gun.Owner, out var recoil))
+            return;
+
+        // Determine if any ammo in this shot is spread-type
+        var isSpread = false;
+        foreach (var (ent, shootable) in ammo)
+        {
+            if (ent != null && HasComp<ProjectileSpreadComponent>(ent.Value))
+            {
+                isSpread = true;
+                break;
+            }
+
+            if (shootable is CartridgeAmmoComponent cartridge &&
+                ProtoManager.TryIndex<EntityPrototype>(cartridge.Prototype, out var proto) &&
+                proto.Components.ContainsKey("ProjectileSpread"))
+            {
+                isSpread = true;
+                break;
+            }
+        }
+
+        var bloomPerShot = isSpread
+            ? recoil.ShotgunSwayPenaltyPerShot
+            : recoil.SwayPenaltyPerShot;
+        var recoilPerShot = isSpread
+            ? recoil.ShotgunRecoilOffsetPerShot
+            : recoil.RecoilOffsetPerShot;
+
+        recoil.ServerBloom = MathF.Min(
+            recoil.MaxSwayPenalty,
+            recoil.ServerBloom + bloomPerShot * recoil.RecoilKickMultiplier);
+
+        recoil.ServerRecoilEstimate = MathF.Min(
+            recoil.MaxRecoilOffset,
+            recoil.ServerRecoilEstimate + recoilPerShot * recoil.Kick * recoil.RecoilKickMultiplier * recoil.RecoilScale);
+    }
+
+    /// <summary>
+    /// Decays server-side bloom and recoil estimate over time.
+    /// Uses the same rates as the client for consistency.
+    /// </summary>
+    private void DecayServerBloom(float frameTime)
+    {
+        var query = EntityQueryEnumerator<GunRecoilComponent>();
+        while (query.MoveNext(out _, out var recoil))
+        {
+            if (recoil.ServerBloom <= 0f && recoil.ServerRecoilEstimate <= 0f)
+                continue;
+
+            recoil.ServerBloom = MathF.Max(0f,
+                recoil.ServerBloom - recoil.SwayPenaltyDecay * recoil.RecoverySpeed * frameTime);
+
+            recoil.ServerRecoilEstimate = MathF.Max(0f,
+                recoil.ServerRecoilEstimate - recoil.RecoilRecoveryRate * recoil.RecoverySpeed * frameTime);
+        }
     }
 }
 

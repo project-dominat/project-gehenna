@@ -25,6 +25,9 @@
   - type: GunRecoil
     baseSwayMultiplier: 2.4
     recoilKickMultiplier: 1.8
+    recoilScale: 1.2
+    recoilApproachRate: 22
+    recoilDampingRatio: 0.75
     recoverySpeed: 0.45
   - type: StaticPrice
     price: 500

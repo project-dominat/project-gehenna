@@ -57,6 +57,18 @@ public sealed partial class NPCRangedCombatComponent : Component
     public float ShootAccumulator;
 
     /// <summary>
+    /// Whether ranged combat should maintain deliberate aiming while this NPC has a gun.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    public bool UseAiming = true;
+
+    /// <summary>
+    /// Weapon that this runtime component started aiming, used for cleanup.
+    /// </summary>
+    [ViewVariables]
+    public EntityUid? AimingWeapon;
+
+    /// <summary>
     /// Sound to play if the target enters line of sight.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]

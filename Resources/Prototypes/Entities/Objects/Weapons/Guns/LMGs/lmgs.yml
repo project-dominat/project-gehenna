@@ -37,6 +37,9 @@
   - type: GunRecoil
     baseSwayMultiplier: 2
     recoilKickMultiplier: 1.6
+    recoilScale: 1.15
+    recoilApproachRate: 24
+    recoilDampingRatio: 0.72
     recoverySpeed: 0.55
   - type: ChamberMagazineAmmoProvider
     soundRack:

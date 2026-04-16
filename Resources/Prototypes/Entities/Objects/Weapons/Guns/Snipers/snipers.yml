@@ -28,7 +28,25 @@
   - type: GunRecoil
     baseSwayMultiplier: 1.7
     recoilKickMultiplier: 1.5
+    recoilScale: 1.65
+    recoilApproachRate: 22
+    recoilDampingRatio: 0.56
     recoverySpeed: 0.7
+  - type: WeaponSway
+    stillAmplitude: 0.025
+    movingAmplitude: 0.22
+    frequency: 0.9
+    maxSway: 0.42
+    noiseOctaves: 3
+    noiseLacunarity: 2.4
+    noiseGain: 0.35
+    breathAmplitude: 0.055
+    breathFrequency: 0.32
+    breathHoldMultiplier: 0.22
+    breathHoldMaxDuration: 4
+    breathHoldRecoveryRate: 0.7
+    breathHoldExhaustedMultiplier: 1.55
+    breathHoldMovementThreshold: 0.08
   - type: BallisticAmmoProvider
     capacity: 10
     proto: CartridgeLightRifle
@@ -90,6 +108,10 @@
   - type: Sharp
     butcherDelayModifier: 2 #It's a bayonet
   - type: GunRequiresWield
+  - type: Aiming
+    eyeOffset: 2.8
+    eyeOffsetSpeed: 0.24
+    pvsIncrease: 0.3
   - type: StaticPrice
     price: 500
 
@@ -128,6 +150,10 @@
   - type: EyeCursorOffset
     maxOffset: 3
     pvsIncrease: 0.3
+  - type: Aiming
+    eyeOffset: 3.6
+    eyeOffsetSpeed: 0.2
+    pvsIncrease: 0.4
   - type: StaticPrice
     price: 3500
 

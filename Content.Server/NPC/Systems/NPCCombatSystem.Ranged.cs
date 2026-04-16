@@ -54,6 +54,8 @@ public sealed partial class NPCCombatSystem
 
     private void OnRangedShutdown(EntityUid uid, NPCRangedCombatComponent component, ComponentShutdown args)
     {
+        StopRangedAiming(uid, component);
+
         if (TryComp<CombatModeComponent>(uid, out var combat))
         {
             _combat.SetInCombatMode(uid, false, combat);
@@ -98,10 +100,13 @@ public sealed partial class NPCCombatSystem
 
             if (!_gun.TryGetGun(uid, out var gun))
             {
+                StopRangedAiming(uid, comp);
                 comp.Status = CombatStatus.NoWeapon;
                 comp.ShootAccumulator = 0f;
                 continue;
             }
+
+            EnsureRangedAiming(uid, comp, gun);
 
             var ammoEv = new GetAmmoCountEvent();
             RaiseLocalEvent(gun, ref ammoEv);
@@ -207,5 +212,31 @@ public sealed partial class NPCCombatSystem
 
             _gun.AttemptShoot(uid, gun, targetCordinates, comp.Target);
         }
+    }
+
+    private void EnsureRangedAiming(EntityUid uid, NPCRangedCombatComponent component, Entity<GunComponent> gun)
+    {
+        if (!component.UseAiming)
+            return;
+
+        if (_aiming.TryGetAimingGun(uid, out var aimingGun) && aimingGun.Owner == gun.Owner)
+        {
+            component.AimingWeapon = gun.Owner;
+            return;
+        }
+
+        if (_aiming.TryStartAiming(uid, gun))
+            component.AimingWeapon = gun.Owner;
+    }
+
+    private void StopRangedAiming(EntityUid uid, NPCRangedCombatComponent component)
+    {
+        if (component.AimingWeapon is not { } aimingWeapon)
+            return;
+
+        if (TryComp<ActiveAimingComponent>(uid, out var active) && active.Weapon == aimingWeapon)
+            _aiming.TryStopAiming(uid, active);
+
+        component.AimingWeapon = null;
     }
 }

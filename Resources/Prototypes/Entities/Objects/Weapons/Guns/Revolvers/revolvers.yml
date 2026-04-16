@@ -35,6 +35,9 @@
   - type: GunRecoil
     baseSwayMultiplier: 0.65
     recoilKickMultiplier: 0.9
+    recoilScale: 1.2
+    recoilApproachRate: 30
+    recoilDampingRatio: 0.62
     recoverySpeed: 1.25
   - type: ContainerContainer
     containers:

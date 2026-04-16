@@ -15,6 +15,16 @@ public sealed class SharedAimingSystem : EntitySystem
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly MovementSpeedModifierSystem _movement = default!;
 
+    /// <summary>
+    /// Minimum time between ADS toggle events to prevent spam-toggling for recoil reset.
+    /// </summary>
+    private static readonly TimeSpan AdsToggleCooldown = TimeSpan.FromSeconds(0.3);
+
+    /// <summary>
+    /// Tracks the last time each user toggled ADS, for cooldown enforcement.
+    /// </summary>
+    private readonly Dictionary<EntityUid, TimeSpan> _lastAdsToggle = new();
+
     public override void Initialize()
     {
         base.Initialize();
@@ -32,6 +42,11 @@ public sealed class SharedAimingSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
+        // Gehenna edit start — ADS toggle cooldown
+        if (!CheckAdsToggleCooldown(user))
+            return;
+        // Gehenna edit end
+
         var gunUid = GetEntity(ev.Gun);
         if (!TryComp<GunComponent>(gunUid, out var gun))
             return;
@@ -44,6 +59,11 @@ public sealed class SharedAimingSystem : EntitySystem
         if (args.SenderSession.AttachedEntity is not { } user)
             return;
 
+        // Gehenna edit start — ADS toggle cooldown
+        if (!CheckAdsToggleCooldown(user))
+            return;
+        // Gehenna edit end
+
         var gunUid = GetEntity(ev.Gun);
         if (TryComp<ActiveAimingComponent>(user, out var active) &&
             active.Weapon != null &&
@@ -55,10 +75,25 @@ public sealed class SharedAimingSystem : EntitySystem
         TryStopAiming(user);
     }
 
+    /// <summary>
+    /// Checks and enforces ADS toggle cooldown. Returns true if the toggle is allowed.
+    /// </summary>
+    private bool CheckAdsToggleCooldown(EntityUid user)
+    {
+        var now = _timing.CurTime;
+
+        if (_lastAdsToggle.TryGetValue(user, out var lastToggle) &&
+            now - lastToggle < AdsToggleCooldown)
+        {
+            return false;
+        }
+
+        _lastAdsToggle[user] = now;
+        return true;
+    }
+
     private void OnActiveAimingShutdown(Entity<ActiveAimingComponent> ent, ref ComponentShutdown args)
     {
-        ent.Comp.CurrentEyeOffset = default;
-        ent.Comp.TargetEyeOffset = default;
         RefreshAimingEffects(ent.Owner);
     }
 
@@ -97,7 +132,26 @@ public sealed class SharedAimingSystem : EntitySystem
                 TryStopAiming(uid, active);
             }
         }
+
+        // Gehenna edit start — clean up stale cooldown entries
+        if (_lastAdsToggle.Count > 0)
+        {
+            var expiry = _timing.CurTime - AdsToggleCooldown - AdsToggleCooldown; // 2x cooldown = safe to purge
+            _cleanupBuffer.Clear();
+            foreach (var (uid, time) in _lastAdsToggle)
+            {
+                if (Deleted(uid) || time < expiry)
+                    _cleanupBuffer.Add(uid);
+            }
+            foreach (var uid in _cleanupBuffer)
+            {
+                _lastAdsToggle.Remove(uid);
+            }
+        }
+        // Gehenna edit end
     }
+
+    private readonly List<EntityUid> _cleanupBuffer = [];
 
     public bool CanStartAiming(EntityUid user, Entity<GunComponent> gun, bool checkCombatMode = true)
     {
@@ -134,8 +188,6 @@ public sealed class SharedAimingSystem : EntitySystem
         active = EnsureComp<ActiveAimingComponent>(user);
         active.Weapon = gun.Owner;
         active.StartedAt = _timing.CurTime;
-        active.CurrentEyeOffset = default;
-        active.TargetEyeOffset = default;
         Dirty(user, active);
 
         RefreshAimingEffects(user);

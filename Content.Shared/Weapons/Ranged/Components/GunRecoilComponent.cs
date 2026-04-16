@@ -13,16 +13,18 @@ public sealed partial class GunRecoilComponent : Component
     public const float DefaultMaxKick = 1f;
     public const float DefaultBaseSwayMultiplier = 1f;
     public const float DefaultRecoilKickMultiplier = 1f;
+    public const float DefaultRecoilScale = 1f;
     public const float DefaultRecoverySpeed = 1f;
     public const float DefaultLateralKick = 0.035f;
-    public const float DefaultSwayPenaltyPerShot = 0.035f;
-    public const float DefaultShotgunSwayPenaltyPerShot = 0.14f;
-    public const float DefaultMaxSwayPenalty = 0.45f;
-    public const float DefaultSwayPenaltyDecay = 0.7f;
+    public const float DefaultSwayPenaltyPerShot = 0.105f;
+    public const float DefaultShotgunSwayPenaltyPerShot = 0.42f;
+    public const float DefaultMaxSwayPenalty = 3.2f;
+    public const float DefaultSwayPenaltyDecay = 0.23f;
     public const float DefaultRecoilOffsetPerShot = 0.11f;
     public const float DefaultShotgunRecoilOffsetPerShot = 0.22f;
     public const float DefaultMaxRecoilOffset = 0.55f;
     public const float DefaultRecoilApproachRate = 28f;
+    public const float DefaultRecoilDampingRatio = 0.68f;
     public const float DefaultRecoilRecoveryRate = 1.9f;
 
     /// <summary>
@@ -44,6 +46,12 @@ public sealed partial class GunRecoilComponent : Component
     public float RecoilKickMultiplier = DefaultRecoilKickMultiplier;
 
     /// <summary>
+    /// Visual recoil impulse scale. This affects kickback without directly increasing bloom.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float RecoilScale = DefaultRecoilScale;
+
+    /// <summary>
     /// Recovery multiplier applied when recoil and bloom return to rest.
     /// </summary>
     [DataField, AutoNetworkedField]
@@ -51,7 +59,7 @@ public sealed partial class GunRecoilComponent : Component
 
     /// <summary>
     /// Random sideways kick added to the backwards virtual recoil.
-     /// </summary>
+    /// </summary>
     [DataField, AutoNetworkedField]
     public float LateralKick = DefaultLateralKick;
 
@@ -110,6 +118,12 @@ public sealed partial class GunRecoilComponent : Component
     public float RecoilApproachRate = DefaultRecoilApproachRate;
 
     /// <summary>
+    /// Damping ratio for visible recoil spring. Values below 1 allow a controlled overshoot.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public float RecoilDampingRatio = DefaultRecoilDampingRatio;
+
+    /// <summary>
     /// Rate at which the recoil target returns to the mouse position.
     /// </summary>
     [DataField, AutoNetworkedField]
@@ -128,8 +142,30 @@ public sealed partial class GunRecoilComponent : Component
     public Vector2 CurrentRecoilOffset;
 
     /// <summary>
+    /// Runtime velocity used by the visible recoil spring.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    public Vector2 CurrentRecoilVelocity;
+
+    /// <summary>
     /// Runtime spring target for crosshair recoil.
     /// </summary>
     [ViewVariables(VVAccess.ReadWrite)]
     public Vector2 TargetRecoilOffset;
+
+    // ── Server-side anti-cheat tracking ──
+
+    /// <summary>
+    /// Server-tracked sway bloom. Incremented per shot, decayed in Update.
+    /// Used to compute the maximum allowed aim deviation envelope.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    public float ServerBloom;
+
+    /// <summary>
+    /// Server-tracked upper-bound estimate of recoil offset magnitude.
+    /// Incremented per shot, decayed in Update.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    public float ServerRecoilEstimate;
 }

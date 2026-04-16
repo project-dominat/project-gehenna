@@ -6,6 +6,7 @@ using Content.Shared.Hands;
 using Content.Shared.Movement.Components;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
+using Content.Shared.Weapons.Ranged.Components;
 using Robust.Client.Timing;
 
 namespace Content.Client.Wieldable;
@@ -41,6 +42,10 @@ public sealed class WieldableSystem : SharedWieldableSystem
             return;
 
         if (!wieldableComp.Wielded)
+            return;
+
+        // Gun ADS is handled by ClientAimingSystem through RMB. Wielding alone should not pan the camera.
+        if (HasComp<GunComponent>(entity.Owner))
             return;
 
         var offset = _eyeOffset.OffsetAfterMouse(entity.Owner, null);
