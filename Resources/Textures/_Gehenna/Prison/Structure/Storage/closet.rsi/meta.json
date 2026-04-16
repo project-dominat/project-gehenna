@@ -6,6 +6,8 @@
   "states": [
     { "name": "planet_worker" },
     { "name": "planet_worker_door" },
-    { "name": "planet_worker_open" }
+    { "name": "planet_worker_open" },
+    { "name": "locked" },
+    { "name": "unlocked" }
   ]
 }

@@ -11,3 +11,74 @@
     sprite: _Gehenna/Prison/Clothing/Uniform/prison-worker-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonerGehenna1
+  name: prisoner uniform
+  suffix: "[Prison, 1]"
+  description: A worn uniform issued to inmates of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-1
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-1
+    equippedState: equipped-INNERCLOTHING-digi
+  - type: SuitSensor
+    mode: SensorCords
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonerGehenna2
+  name: prisoner uniform
+  suffix: "[Prison, 2]"
+  description: A worn uniform issued to inmates of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-2
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-2
+  - type: SuitSensor
+    mode: SensorCords
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonerGehenna3
+  name: prisoner uniform
+  suffix: "[Prison, 3]"
+  description: A worn uniform issued to inmates of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-3
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-uniform.rsi/prisoner-3
+  - type: SuitSensor
+    mode: SensorCords
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonBossBasic
+  name: prison warden uniform
+  suffix: "[Prison]"
+  description: A formal uniform worn by the warden of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-basic
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-basic
+  - type: SuitSensor
+    mode: SensorCords
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonBossBusiness
+  name: prison warden suit
+  suffix: "[Prison]"
+  description: A business suit tailored for the warden of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-business
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-worker-uniform.rsi/prisonboss-business
+  - type: SuitSensor
+    mode: SensorCords
