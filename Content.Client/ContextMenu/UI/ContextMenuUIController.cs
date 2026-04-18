@@ -44,6 +44,7 @@ namespace Content.Client.ContextMenu.UI
         public Action<ContextMenuElement, GUIBoundKeyEventArgs>? OnContextKeyEvent;
 
         private bool _setup;
+        private bool _closing;
 
         public void OnStateEntered(GameplayState state)
         {
@@ -82,12 +83,12 @@ namespace Content.Client.ContextMenu.UI
             if (!_setup)
                 return;
 
-            _setup = false;
-
             Close();
+            _setup = false;
             RootMenu.OnPopupHide -= Close;
             RootMenu.Dispose();
             RootMenu = default!;
+            Menus.Clear();
         }
 
         /// <summary>
@@ -95,11 +96,34 @@ namespace Content.Client.ContextMenu.UI
         /// </summary>
         public void Close()
         {
-            RootMenu.MenuBody.RemoveAllChildren();
-            CancelOpen?.Cancel();
-            CancelClose?.Cancel();
-            OnContextClosed?.Invoke();
-            RootMenu.Close();
+            if (!_setup || RootMenu == null || RootMenu.Disposed || _closing)
+                return;
+
+            _closing = true;
+
+            try
+            {
+                CloseSubMenus(RootMenu);
+
+                if (!RootMenu.MenuBody.Disposed)
+                    RootMenu.MenuBody.RemoveAllChildren();
+
+                Menus.Clear();
+                Menus.Push(RootMenu);
+
+                CancelOpen?.Cancel();
+                CancelOpen = null;
+                CancelClose?.Cancel();
+                CancelClose = null;
+                OnContextClosed?.Invoke();
+
+                if (RootMenu.Visible)
+                    RootMenu.Close();
+            }
+            finally
+            {
+                _closing = false;
+            }
         }
 
         /// <summary>
@@ -111,12 +135,15 @@ namespace Content.Client.ContextMenu.UI
         /// </remarks>
         public void CloseSubMenus(ContextMenuPopup? menu)
         {
-            if (menu == null || !menu.Visible)
+            if (menu == null || menu.Disposed)
                 return;
 
             while (Menus.TryPeek(out var subMenu) && subMenu != menu)
             {
-                Menus.Pop().Close();
+                Menus.Pop();
+
+                if (!subMenu.Disposed)
+                    subMenu.Close();
             }
 
             // ensure no accidental double-closing happens.
@@ -185,12 +212,18 @@ namespace Content.Client.ContextMenu.UI
                 return;
             }
 
+            if (topMenu.Disposed)
+                return;
+
             // If This is already the top most menu, do nothing.
             if (element.SubMenu == topMenu)
                 return;
 
             // Was the parent menu closed or disposed before an open timer completed?
-            if (element.Disposed || element.ParentMenu == null || !element.ParentMenu.Visible)
+            if (element.Disposed ||
+                element.ParentMenu == null ||
+                element.ParentMenu.Disposed ||
+                !element.ParentMenu.Visible)
                 return;
 
             // Close any currently open sub-menus up to this element's parent menu.
@@ -200,7 +233,7 @@ namespace Content.Client.ContextMenu.UI
             CancelOpen?.Cancel();
             CancelOpen = null;
 
-            if (element.SubMenu == null)
+            if (element.SubMenu == null || element.SubMenu.Disposed)
                 return;
 
             // open pop-up adjacent to the parent element. We want the sub-menu elements to align with this element

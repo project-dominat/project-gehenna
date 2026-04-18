@@ -22,6 +22,13 @@
       path: /Audio/Weapons/Guns/Gunshots/lmg.ogg
     soundEmpty:
       path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
+  - type: GunRecoil
+    baseSwayMultiplier: 2.4
+    recoilKickMultiplier: 1.8
+    recoilScale: 1.2
+    recoilApproachRate: 22
+    recoilDampingRatio: 0.75
+    recoverySpeed: 0.45
   - type: StaticPrice
     price: 500
   # No chamber because HMG may want its own

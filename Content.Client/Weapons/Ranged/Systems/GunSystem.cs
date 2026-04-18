@@ -7,6 +7,8 @@ using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
+using Content.Shared.Projectiles;
+using Content.Shared.Prototypes;
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
@@ -33,6 +35,10 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
+    // Gehenna edit start - stronger camera recoil feedback
+    private const float CameraRecoilVisualScale = 0.06f;
+    // Gehenna edit end
+
     [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
     [Dependency] private readonly IEyeManager _eyeManager = default!;
     [Dependency] private readonly IInputManager _inputManager = default!;
@@ -41,7 +47,9 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IStateManager _state = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly SharedCameraRecoilSystem _recoil = default!;
+    [Dependency] private readonly ClientAimingSystem _aiming = default!;
+    [Dependency] private readonly SharedCameraRecoilSystem _cameraRecoil = default!;
+    [Dependency] private readonly SharedGunRecoilSystem _gunRecoil = default!;
     [Dependency] private readonly SharedMapSystem _maps = default!;
     [Dependency] private readonly SharedTransformSystem _xform = default!;
     [Dependency] private readonly SpriteSystem _sprite = default!;
@@ -175,7 +183,9 @@ public sealed partial class GunSystem : SharedGunSystem
             return;
         }
 
-        var useKey = gun.Comp.UseKey ? EngineKeyFunctions.Use : EngineKeyFunctions.UseSecondary;
+        // Gehenna edit start - right click is reserved for deliberate aiming in combat mode
+        var useKey = EngineKeyFunctions.Use;
+        // Gehenna edit end
 
         if (_inputSystem.CmdStates.GetState(useKey) != BoundKeyState.Down && !gun.Comp.BurstActivated)
         {
@@ -197,8 +207,16 @@ public sealed partial class GunSystem : SharedGunSystem
             return;
         }
 
+        // Gehenna edit start - stable close-range aim coordinates
+        if (!_aiming.TryGetShootCoordinates(entity, gun, mousePos, out var aimCoordinates, out var rawAimCoordinates, out _))
+            return;
+        // Gehenna edit end
+
         // Define target coordinates relative to gun entity, so that network latency on moving grids doesn't fuck up the target location.
-        var coordinates = TransformSystem.ToCoordinates(entity, mousePos);
+        var coordinates = TransformSystem.ToCoordinates(entity, aimCoordinates);
+        // Gehenna edit start - raw aim target is the stable vector base, not the near-player cursor point
+        var rawMouseCoordinates = TransformSystem.ToCoordinates(entity, rawAimCoordinates);
+        // Gehenna edit end
 
         NetEntity? target = null;
         if (_state.CurrentState is GameplayStateBase screen)
@@ -206,11 +224,11 @@ public sealed partial class GunSystem : SharedGunSystem
 
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 
-
         RaisePredictiveEvent(new RequestShootEvent
         {
             Target = target,
             Coordinates = GetNetCoordinates(coordinates),
+            RawCoordinates = GetNetCoordinates(rawMouseCoordinates),
             Gun = GetNetEntity(gun),
             Continuous = _cfg.GetCVar(CCVars.ControlHoldToAttackRanged),
         });
@@ -229,9 +247,11 @@ public sealed partial class GunSystem : SharedGunSystem
 
         foreach (var (ent, shootable) in ammo)
         {
+            var spreadShot = IsSpreadShot(ent, shootable);
+
             if (throwItems)
             {
-                Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
+                Recoil(user, direction, gun, spreadShot);
                 if (IsClientSide(ent!.Value))
                     Del(ent.Value);
                 else
@@ -248,7 +268,7 @@ public sealed partial class GunSystem : SharedGunSystem
                         SetCartridgeSpent(ent!.Value, cartridge, true);
                         MuzzleFlash(gun, cartridge, worldAngle, user);
                         Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
-                        Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
+                        Recoil(user, direction, gun, spreadShot);
                         // TODO: Can't predict entity deletions.
                         //if (cartridge.DeleteOnSpawn)
                         //    Del(cartridge.Owner);
@@ -266,7 +286,7 @@ public sealed partial class GunSystem : SharedGunSystem
                 case AmmoComponent newAmmo:
                     MuzzleFlash(gun, newAmmo, worldAngle, user);
                     Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
-                    Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
+                    Recoil(user, direction, gun, spreadShot);
                     if (IsClientSide(ent!.Value))
                         Del(ent.Value);
                     else
@@ -274,18 +294,33 @@ public sealed partial class GunSystem : SharedGunSystem
                     break;
                 case HitscanAmmoComponent:
                     Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
-                    Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
+                    Recoil(user, direction, gun, spreadShot);
                     break;
             }
         }
     }
 
-    private void Recoil(EntityUid? user, Vector2 recoil, float recoilScalar)
+    private void Recoil(EntityUid? user, Vector2 recoil, Entity<GunComponent> gun, bool spreadShot)
     {
-        if (!Timing.IsFirstTimePredicted || user == null || recoil == Vector2.Zero || recoilScalar == 0)
+        if (!Timing.IsFirstTimePredicted || user == null || recoil == Vector2.Zero)
             return;
 
-        _recoil.KickCamera(user.Value, recoil.Normalized() * 0.5f * recoilScalar);
+        _aiming.ApplyShotFeedback(gun, recoil, spreadShot);
+
+        var cameraKick = _gunRecoil.GetCameraKick(gun, recoil) * CameraRecoilVisualScale;
+
+        if (cameraKick != Vector2.Zero)
+            _cameraRecoil.KickCamera(user.Value, cameraKick);
+    }
+
+    private bool IsSpreadShot(EntityUid? ent, IShootable shootable)
+    {
+        if (ent != null && HasComp<ProjectileSpreadComponent>(ent.Value))
+            return true;
+
+        return shootable is CartridgeAmmoComponent cartridge &&
+               ProtoManager.TryIndex<EntityPrototype>(cartridge.Prototype, out var prototype) &&
+               prototype.HasComponent<ProjectileSpreadComponent>();
     }
 
     protected override void Popup(string message, EntityUid? uid, EntityUid? user)

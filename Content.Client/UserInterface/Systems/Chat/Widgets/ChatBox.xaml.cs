@@ -115,7 +115,11 @@ public partial class ChatBox : UIWidget
     {
         var formatted = new FormattedMessage(3);
         formatted.PushColor(color);
-        formatted.AddMarkupOrThrow(message);
+        if (!formatted.TryAddMarkup(message, out var error))
+        {
+            _sawmill.Warning("Invalid chat markup received, rendering as plain text: {0}", error);
+            formatted.AddText(message);
+        }
         formatted.Pop();
         Contents.AddMessage(formatted, tagsAllowed: null);
     }

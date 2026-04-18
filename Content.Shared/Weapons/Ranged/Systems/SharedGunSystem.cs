@@ -1,9 +1,11 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Numerics;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Audio;
+using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
@@ -25,11 +27,15 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
+using Robust.Shared.Enums;
+using Robust.Shared.Log;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
@@ -42,9 +48,13 @@ public abstract partial class SharedGunSystem : EntitySystem
 {
     [Dependency] private readonly ActionBlockerSystem _actionBlockerSystem = default!;
     [Dependency] private readonly EntityWhitelistSystem _whitelistSystem = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
     [Dependency] private readonly INetManager _netManager = default!;
+    [Dependency] private readonly ISharedPlayerManager _players = default!;
     [Dependency] private readonly ItemSlotsSystem _slots = default!;
     [Dependency] private readonly RechargeBasicEntityAmmoSystem _recharge = default!;
+    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly ActorSystem _actors = default!;
     [Dependency] private readonly SharedCombatModeSystem _combatMode = default!;
     [Dependency] private readonly SharedHandsSystem _hands = default!;
     [Dependency] private readonly UseDelaySystem _useDelay = default!;
@@ -90,12 +100,31 @@ public abstract partial class SharedGunSystem : EntitySystem
     protected const string AmmoExamineColor = "yellow";
     protected const string FireRateExamineColor = "yellow";
     public const string ModeExamineColor = "cyan";
+    internal const string AimValidationSawmillName = "gun.aimvalidation";
+
+    private float _envelopeTolerance;
+    private bool _telemetryEnabled;
+    private int _telemetryThreshold;
+    private float _telemetryWindowSeconds;
+    private readonly Dictionary<NetUserId, PlayerAimStats> _aimStats = new();
+    private ISawmill _aimValidationSawmill = default!;
 
     public override void Initialize()
     {
         SubscribeAllEvent<RequestShootEvent>(OnShootRequest);
         SubscribeAllEvent<RequestStopShootEvent>(OnStopShootRequest);
         SubscribeLocalEvent<GunComponent, MeleeHitEvent>(OnGunMelee);
+
+        if (_netManager.IsServer)
+        {
+            _aimValidationSawmill = LogManager.GetSawmill(AimValidationSawmillName);
+            _players.PlayerStatusChanged += OnPlayerStatusChanged;
+
+            Subs.CVar(_cfg, CCVars.WeaponAimEnvelopeTolerance, v => _envelopeTolerance = v, true);
+            Subs.CVar(_cfg, CCVars.WeaponAimTelemetryEnabled, v => _telemetryEnabled = v, true);
+            Subs.CVar(_cfg, CCVars.WeaponAimTelemetryThreshold, v => _telemetryThreshold = v, true);
+            Subs.CVar(_cfg, CCVars.WeaponAimTelemetryWindowSeconds, v => _telemetryWindowSeconds = v, true);
+        }
 
         // Ammo providers
         InitializeBallistic();
@@ -115,6 +144,17 @@ public abstract partial class SharedGunSystem : EntitySystem
         SubscribeLocalEvent<GunComponent, CycleModeEvent>(OnCycleMode);
         SubscribeLocalEvent<GunComponent, HandSelectedEvent>(OnGunSelected);
         SubscribeLocalEvent<GunComponent, MapInitEvent>(OnMapInit);
+    }
+
+    public override void Shutdown()
+    {
+        if (_netManager.IsServer)
+        {
+            _players.PlayerStatusChanged -= OnPlayerStatusChanged;
+            _aimStats.Clear();
+        }
+
+        base.Shutdown();
     }
 
     private void OnMapInit(Entity<GunComponent> gun, ref MapInitEvent args)
@@ -141,6 +181,22 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
     }
 
+    private void OnPlayerStatusChanged(object? sender, SessionStatusEventArgs args)
+    {
+        if (args.NewStatus is SessionStatus.Disconnected or SessionStatus.Zombie)
+            _aimStats.Remove(args.Session.UserId);
+    }
+
+    /// <summary>
+    /// Tolerance multiplier for network jitter when validating aim deviation.
+    /// </summary>
+    private const float AimValidationTolerance = GunAimValidation.DefaultTolerance;
+
+    /// <summary>
+    /// Fallback maximum aim deviation in tiles when no sway/recoil data is available.
+    /// </summary>
+    private const float FallbackMaxDeviation = 1.5f;
+
     private void OnShootRequest(RequestShootEvent msg, EntitySessionEventArgs args)
     {
         var user = args.SenderSession.AttachedEntity;
@@ -155,11 +211,337 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (gun.Owner != GetEntity(msg.Gun))
             return;
 
-        gun.Comp.ShootCoordinates = GetCoordinates(msg.Coordinates);
+        var shootCoords = GetCoordinates(msg.Coordinates);
+
+        // Gehenna edit start — server-side aim deviation validation (envelope check)
+        if (_netManager.IsServer)
+        {
+            var validation = ValidateAimDeviationInternal(user.Value, gun, shootCoords, GetCoordinates(msg.RawCoordinates));
+            RecordAimTelemetry(user.Value, gun.Owner, validation);
+            RaiseLocalEvent(new GunAimValidationRecordedEvent(validation.Status));
+
+            if (validation.Status == AimValidationStatus.Rejected)
+            {
+                _aimValidationSawmill.Warning($"Rejected gun aim validation for {ToPrettyString(user.Value)} firing {ToPrettyString(gun.Owner)}: {validation.RejectReason ?? "unknown reason"} (deviation: {validation.Deviation}, max: {validation.MaxDeviation})");
+                return;
+            }
+
+            shootCoords = validation.Coordinates;
+        }
+        // Gehenna edit end
+
+        gun.Comp.ShootCoordinates = shootCoords;
         gun.Comp.Target = GetEntity(msg.Target);
         AttemptShoot(user.Value, gun);
         if (msg.Continuous)
             gun.Comp.ShotCounter = 0;
+    }
+
+    /// <summary>
+    /// Validates that the aim offset (difference between raw mouse and actual shoot coordinates)
+    /// is within the allowed envelope based on weapon sway, bloom, and recoil state.
+    /// If the deviation is too large, clamps the shoot coordinates to the envelope boundary.
+    /// </summary>
+    private AimValidationResult ValidateAimDeviationInternal(
+        EntityUid user,
+        Entity<GunComponent> gun,
+        EntityCoordinates shootCoords,
+        EntityCoordinates rawCoords)
+    {
+        var baseMaxDeviation = ComputeMaxAllowedDeviation(user, gun);
+
+        if (!TryResolveAimMapCoordinates(shootCoords, "shoot", out var shootMap, out var rejectReason))
+            return RejectAimValidation(baseMaxDeviation, rejectReason);
+
+        if (!TryResolveAimMapCoordinates(rawCoords, "raw", out var rawMap, out rejectReason))
+            return RejectAimValidation(baseMaxDeviation, rejectReason);
+
+        // Gehenna edit start - server validates the same lateral-only spread axis as the client
+        var originMap = TransformSystem.GetMapCoordinates(user);
+        var maxDeviation = baseMaxDeviation * GunAimValidation.ComputeAimDistanceSpreadMultiplier(
+            originMap.Position,
+            rawMap.Position);
+        var fallbackDirection = GetAimFallbackDirection(user, gun);
+        var classified = GunAimValidation.ClassifyLateralMapCoordinates(
+            shootMap,
+            rawMap,
+            originMap,
+            maxDeviation,
+            fallbackDirection);
+        // Gehenna edit end
+
+        if (classified.Status == AimValidationStatus.Rejected)
+        {
+            return new AimValidationResult(
+                AimValidationStatus.Rejected,
+                default,
+                classified.Deviation,
+                classified.MaxDeviation,
+                classified.RejectReason);
+        }
+
+        if (!TryComp(user, out TransformComponent? userXform))
+            return RejectAimValidation(maxDeviation, "user has no transform");
+
+        if (userXform.MapID != classified.Coordinates.MapId)
+            return RejectAimValidation(maxDeviation, "validated aim coordinates are not on the user's map");
+
+        var validatedCoords = shootCoords;
+        if (classified.Status == AimValidationStatus.Clamped)
+        {
+            validatedCoords = TransformSystem.ToCoordinates(user, classified.Coordinates);
+
+            if (!TransformSystem.IsValid(validatedCoords))
+                return RejectAimValidation(maxDeviation, "validated aim coordinates could not be converted to entity coordinates");
+        }
+
+        return new AimValidationResult(
+            classified.Status,
+            validatedCoords,
+            classified.Deviation,
+            classified.MaxDeviation,
+            null);
+    }
+
+    // Gehenna edit start - lateral-only aim envelope
+    private Vector2 GetAimFallbackDirection(EntityUid user, Entity<GunComponent> gun)
+    {
+        var direction = gun.Comp.DefaultDirection;
+        if (!IsFinite(direction) || direction.LengthSquared() <= GunAimValidation.AimAxisEpsilon)
+            direction = Vector2.UnitX;
+
+        direction = Vector2.Normalize(direction);
+
+        if (!Deleted(user))
+        {
+            var rotated = TransformSystem.GetWorldRotation(user).RotateVec(direction);
+            if (IsFinite(rotated) && rotated.LengthSquared() > GunAimValidation.AimAxisEpsilon)
+                return Vector2.Normalize(rotated);
+        }
+
+        return direction;
+    }
+
+    // Gehenna edit end
+
+    /// <summary>
+    /// Computes the maximum allowed aim deviation based on weapon state, ADS, movement, bloom, and recoil.
+    /// </summary>
+    private float ComputeMaxAllowedDeviation(EntityUid user, Entity<GunComponent> gun)
+    {
+        var sway = CompOrNull<WeaponSwayComponent>(gun.Owner);
+        var recoil = CompOrNull<GunRecoilComponent>(gun.Owner);
+        var isAiming = HasComp<ActiveAimingComponent>(user);
+
+        // Base sway envelope
+        float maxSway;
+        if (isAiming)
+            maxSway = sway?.MaxSway ?? WeaponSwayComponent.DefaultMaxSway;
+        else
+            maxSway = sway?.HipFireMaxSway ?? WeaponSwayComponent.DefaultHipFireMaxSway;
+
+        // Movement contribution
+        var movementPenalty = 0f;
+        if (TryComp<PhysicsComponent>(user, out var physics))
+        {
+            var velocity = Physics.GetMapLinearVelocity(user, physics).Length();
+            var velocityForMax = sway?.VelocityForMaxSway ?? WeaponSwayComponent.DefaultVelocityForMaxSway;
+            if (velocityForMax > 0f)
+            {
+                var sprintMult = sway?.SprintSwayMultiplier ?? WeaponSwayComponent.DefaultSprintSwayMultiplier;
+                var aimPenaltyMult = sway?.AimingMovementPenaltyMultiplier ??
+                                     WeaponSwayComponent.DefaultAimingMovementPenaltyMultiplier;
+                movementPenalty = GunAimValidation.ComputeMovementPenalty(
+                    maxSway,
+                    velocity,
+                    velocityForMax,
+                    sprintMult,
+                    isAiming,
+                    aimPenaltyMult);
+            }
+        }
+
+        // Server-tracked bloom and recoil
+        var bloom = recoil?.ServerBloom ?? 0f;
+        var recoilEstimate = recoil?.ServerRecoilEstimate ?? 0f;
+
+        var tolerance = float.IsNaN(_envelopeTolerance) || _envelopeTolerance <= 0f
+            ? AimValidationTolerance
+            : AimValidationTolerance * _envelopeTolerance;
+
+        return GunAimValidation.ComputeMaxAllowedDeviation(
+            maxSway,
+            movementPenalty,
+            bloom,
+            recoilEstimate,
+            tolerance);
+    }
+
+    private void RecordAimTelemetry(EntityUid user, EntityUid gun, AimValidationResult validation)
+    {
+        if (!_telemetryEnabled)
+            return;
+
+        if (!_actors.TryGetSession(user, out var session) || session == null)
+            return;
+
+        var userId = session.UserId;
+        var now = Timing.RealTime;
+        var window = TimeSpan.FromSeconds(_telemetryWindowSeconds);
+
+        if (!_aimStats.TryGetValue(userId, out var stats))
+        {
+            stats = new PlayerAimStats
+            {
+                WindowStart = now,
+                LastWarningAt = now - window,
+            };
+            _aimStats.Add(userId, stats);
+        }
+
+        if (now - stats.WindowStart >= window)
+        {
+            stats.AcceptedCount = 0;
+            stats.ClampedCount = 0;
+            stats.RejectedCount = 0;
+            stats.WindowStart = now;
+        }
+
+        switch (validation.Status)
+        {
+            case AimValidationStatus.Accepted:
+                stats.AcceptedCount++;
+                break;
+            case AimValidationStatus.Clamped:
+                stats.ClampedCount++;
+                break;
+            case AimValidationStatus.Rejected:
+                stats.RejectedCount++;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(validation.Status), validation.Status, null);
+        }
+
+        stats.LastDeviation = validation.Deviation;
+        stats.LastMaxDeviation = validation.MaxDeviation;
+        stats.LastGun = gun;
+
+        if (validation.Status != AimValidationStatus.Clamped ||
+            stats.ClampedCount < _telemetryThreshold ||
+            now - stats.LastWarningAt < window)
+        {
+            return;
+        }
+
+        _aimValidationSawmill.Warning(
+            $"Player {userId} ({ToPrettyString(user)}) exceeded clamp threshold: {stats.ClampedCount} clamps in {_telemetryWindowSeconds}s (last gun: {stats.LastGun}, last deviation: {FormatTelemetryFloat(stats.LastDeviation)}, max: {FormatTelemetryFloat(stats.LastMaxDeviation)})");
+        stats.LastWarningAt = now;
+    }
+
+    internal bool TryGetAimTelemetryStats(NetUserId userId, out AimTelemetryStatsSnapshot snapshot)
+    {
+        if (_aimStats.TryGetValue(userId, out var stats))
+        {
+            snapshot = new AimTelemetryStatsSnapshot(
+                stats.AcceptedCount,
+                stats.ClampedCount,
+                stats.RejectedCount,
+                stats.WindowStart,
+                stats.LastDeviation,
+                stats.LastMaxDeviation,
+                stats.LastGun,
+                stats.LastWarningAt);
+            return true;
+        }
+
+        snapshot = default;
+        return false;
+    }
+
+    private static string FormatTelemetryFloat(float value)
+    {
+        return float.IsFinite(value)
+            ? value.ToString("0.###", CultureInfo.InvariantCulture)
+            : "n/a";
+    }
+
+    private bool TryResolveAimMapCoordinates(
+        EntityCoordinates coordinates,
+        string label,
+        out MapCoordinates mapCoordinates,
+        [NotNullWhen(false)] out string? rejectReason)
+    {
+        mapCoordinates = default;
+        rejectReason = null;
+
+        if (!IsFinite(coordinates.Position))
+        {
+            rejectReason = $"{label} coordinates contain non-finite values";
+            return false;
+        }
+
+        if (!coordinates.EntityId.IsValid())
+        {
+            rejectReason = $"{label} coordinates have an invalid entity";
+            return false;
+        }
+
+        if (!Exists(coordinates.EntityId))
+        {
+            rejectReason = $"{label} coordinates entity does not exist";
+            return false;
+        }
+
+        if (!TryComp(coordinates.EntityId, out TransformComponent? _))
+        {
+            rejectReason = $"{label} coordinates entity has no transform";
+            return false;
+        }
+
+        try
+        {
+            mapCoordinates = TransformSystem.ToMapCoordinates(coordinates, logError: false);
+        }
+        catch (System.Exception e)
+        {
+            rejectReason = $"{label} coordinates could not be resolved to map coordinates: {e.GetType().Name}";
+            return false;
+        }
+
+        if (!IsFinite(mapCoordinates.Position))
+        {
+            rejectReason = $"{label} coordinates resolved to non-finite map coordinates";
+            return false;
+        }
+
+        if (mapCoordinates.MapId == MapId.Nullspace)
+        {
+            rejectReason = $"{label} coordinates resolved to nullspace";
+            return false;
+        }
+
+        if (!_mapSystem.MapExists(mapCoordinates.MapId))
+        {
+            rejectReason = $"{label} coordinates resolved to a missing map";
+            return false;
+        }
+
+        return true;
+    }
+
+    private static AimValidationResult RejectAimValidation(float maxDeviation, string? rejectReason)
+    {
+        return new AimValidationResult(
+            AimValidationStatus.Rejected,
+            default,
+            float.NaN,
+            maxDeviation,
+            rejectReason);
+    }
+
+    private static bool IsFinite(Vector2 position)
+    {
+        return float.IsFinite(position.X) && float.IsFinite(position.Y);
     }
 
     private void OnStopShootRequest(RequestStopShootEvent ev, EntitySessionEventArgs args)
@@ -408,6 +790,13 @@ public abstract partial class SharedGunSystem : EntitySystem
         Shoot(gun, ev.Ammo, fromCoordinates, toCoordinates.Value, out var userImpulse, user, throwItems: attemptEv.ThrowItems);
         var shotEv = new GunShotEvent(user, ev.Ammo);
         RaiseLocalEvent(gun, ref shotEv);
+
+        // Gehenna edit start — server-side bloom/recoil tracking for anti-cheat
+        if (_netManager.IsServer)
+        {
+            UpdateServerBloomOnShot(gun, ev.Ammo);
+        }
+        // Gehenna edit end
 
         if (!userImpulse || !TryComp<PhysicsComponent>(user, out var userPhysics))
             return true;
@@ -673,7 +1062,99 @@ public abstract partial class SharedGunSystem : EntitySystem
     {
         UpdateBattery(frameTime);
         UpdateBallistic(frameTime);
+
+        // Gehenna edit start — decay server-side bloom/recoil estimates
+        if (_netManager.IsServer)
+        {
+            DecayServerBloom(frameTime);
+        }
+        // Gehenna edit end
     }
+
+    /// <summary>
+    /// Increments server-side bloom and recoil estimate after a confirmed shot.
+    /// </summary>
+    private void UpdateServerBloomOnShot(Entity<GunComponent> gun, List<(EntityUid? Entity, IShootable Shootable)> ammo)
+    {
+        if (!TryComp<GunRecoilComponent>(gun.Owner, out var recoil))
+            return;
+
+        // Determine if any ammo in this shot is spread-type
+        var isSpread = false;
+        foreach (var (ent, shootable) in ammo)
+        {
+            if (ent != null && HasComp<ProjectileSpreadComponent>(ent.Value))
+            {
+                isSpread = true;
+                break;
+            }
+
+            if (shootable is CartridgeAmmoComponent cartridge &&
+                ProtoManager.TryIndex<EntityPrototype>(cartridge.Prototype, out var proto) &&
+                proto.Components.ContainsKey("ProjectileSpread"))
+            {
+                isSpread = true;
+                break;
+            }
+        }
+
+        var bloomPerShot = isSpread
+            ? recoil.ShotgunSwayPenaltyPerShot
+            : recoil.SwayPenaltyPerShot;
+        var recoilPerShot = isSpread
+            ? recoil.ShotgunRecoilOffsetPerShot
+            : recoil.RecoilOffsetPerShot;
+
+        recoil.ServerBloom = MathF.Min(
+            recoil.MaxSwayPenalty,
+            recoil.ServerBloom + bloomPerShot * recoil.RecoilKickMultiplier);
+
+        recoil.ServerRecoilEstimate = MathF.Min(
+            recoil.MaxRecoilOffset,
+            recoil.ServerRecoilEstimate + recoilPerShot * recoil.Kick * recoil.RecoilKickMultiplier * recoil.RecoilScale);
+    }
+
+    /// <summary>
+    /// Decays server-side bloom and recoil estimate over time.
+    /// Uses the same rates as the client for consistency.
+    /// </summary>
+    private void DecayServerBloom(float frameTime)
+    {
+        var query = EntityQueryEnumerator<GunRecoilComponent>();
+        while (query.MoveNext(out _, out var recoil))
+        {
+            if (recoil.ServerBloom <= 0f && recoil.ServerRecoilEstimate <= 0f)
+                continue;
+
+            recoil.ServerBloom = MathF.Max(0f,
+                recoil.ServerBloom - recoil.SwayPenaltyDecay * recoil.RecoverySpeed * frameTime);
+
+            recoil.ServerRecoilEstimate = MathF.Max(0f,
+                recoil.ServerRecoilEstimate - recoil.RecoilRecoveryRate * recoil.RecoverySpeed * frameTime);
+        }
+    }
+
+    private sealed class PlayerAimStats
+    {
+        public int AcceptedCount;
+        public int ClampedCount;
+        public int RejectedCount;
+        public TimeSpan WindowStart;
+        public float LastDeviation;
+        public float LastMaxDeviation;
+        public EntityUid LastGun;
+        public TimeSpan LastWarningAt;
+    }
+
+    internal readonly record struct AimTelemetryStatsSnapshot(
+        int AcceptedCount,
+        int ClampedCount,
+        int RejectedCount,
+        TimeSpan WindowStart,
+        float LastDeviation,
+        float LastMaxDeviation,
+        EntityUid LastGun,
+        TimeSpan LastWarningAt);
 }
 
 /// <summary>

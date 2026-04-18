@@ -31,6 +31,13 @@
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/smg.ogg
     defaultDirection: 1, 0
+  - type: GunRecoil
+    baseSwayMultiplier: 0.9
+    recoilKickMultiplier: 1
+    recoilScale: 0.75
+    recoilApproachRate: 34
+    recoilDampingRatio: 0.78
+    recoverySpeed: 1
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/smg_cock.ogg

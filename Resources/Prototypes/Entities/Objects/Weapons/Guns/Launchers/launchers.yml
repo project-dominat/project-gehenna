@@ -27,6 +27,13 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
+  - type: GunRecoil
+    baseSwayMultiplier: 2
+    recoilKickMultiplier: 1.6
+    recoilScale: 1.8
+    recoilApproachRate: 20
+    recoilDampingRatio: 0.54
+    recoverySpeed: 0.6
 
 - type: entity
   name: china lake

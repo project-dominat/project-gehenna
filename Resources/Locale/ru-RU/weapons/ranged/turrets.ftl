@@ -1,0 +1,13 @@
+# Компонент развёртываемой турели
+deployable-turret-component-activating = Развёртывание...
+deployable-turret-component-deactivating = Деактивация...
+deployable-turret-component-activate = Активировать
+deployable-turret-component-deactivate = Деактивировать
+deployable-turret-component-access-denied = Доступ запрещён
+deployable-turret-component-no-ammo = Боеприпасы израсходованы
+deployable-turret-component-is-broken = Турель сильно повреждена и требует ремонта
+deployable-turret-component-cannot-access-wires = Вы не можете получить доступ к техническому отсеку, пока турель активна
+
+# Уведомление станционного ИИ о турели
+station-ai-turret-component-name = { $name } ({ $address })
+station-ai-turret-component-is-attacking-warning = { CAPITALIZE($source) } вступил в контакт с враждебной целью.

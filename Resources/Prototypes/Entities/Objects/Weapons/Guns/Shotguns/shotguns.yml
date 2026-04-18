@@ -29,6 +29,13 @@
       path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
     soundEmpty:
       path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: GunRecoil
+    baseSwayMultiplier: 1.4
+    recoilKickMultiplier: 1.45
+    recoilScale: 1.45
+    recoilApproachRate: 24
+    recoilDampingRatio: 0.58
+    recoverySpeed: 0.75
   - type: BallisticAmmoProvider
     whitelist:
       tags:
@@ -77,6 +84,13 @@
       path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
     soundEmpty:
       path: /Audio/Weapons/Guns/Empty/empty.ogg
+  - type: GunRecoil
+    baseSwayMultiplier: 1.4
+    recoilKickMultiplier: 1.45
+    recoilScale: 1.45
+    recoilApproachRate: 24
+    recoilDampingRatio: 0.58
+    recoverySpeed: 0.75
   - type: ItemSlots
     slots:
       gun_magazine:

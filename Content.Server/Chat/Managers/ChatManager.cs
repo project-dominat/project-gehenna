@@ -338,6 +338,8 @@ internal sealed partial class ChatManager : IChatManager
 
     public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
     {
+        wrappedMessage = SanitizeWrappedMessage(message, wrappedMessage);
+
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
@@ -360,6 +362,8 @@ internal sealed partial class ChatManager : IChatManager
 
     public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, List<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
     {
+        wrappedMessage = SanitizeWrappedMessage(message, wrappedMessage);
+
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
@@ -394,6 +398,8 @@ internal sealed partial class ChatManager : IChatManager
 
     public void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
     {
+        wrappedMessage = SanitizeWrappedMessage(message, wrappedMessage);
+
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
@@ -409,6 +415,15 @@ internal sealed partial class ChatManager : IChatManager
         {
             _replay.RecordServerMessage(msg);
         }
+    }
+
+    private string SanitizeWrappedMessage(string message, string wrappedMessage)
+    {
+        if (FormattedMessage.ValidMarkup(wrappedMessage))
+            return wrappedMessage;
+
+        _sawmill.Warning("Invalid chat markup generated, sending escaped plain text fallback.");
+        return Loc.GetString("chat-manager-server-wrap-message", ("message", FormattedMessage.EscapeText(message)));
     }
 
     public bool MessageCharacterLimit(ICommonSession? player, string message)

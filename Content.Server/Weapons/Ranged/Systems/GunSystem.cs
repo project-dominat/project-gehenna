@@ -17,7 +17,6 @@ using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
-using Robust.Shared.Random;
 
 namespace Content.Server.Weapons.Ranged.Systems;
 
@@ -69,17 +68,19 @@ public sealed partial class GunSystem : SharedGunSystem
         var fromMap = TransformSystem.ToMapCoordinates(fromCoordinates);
         var toMap = TransformSystem.ToMapCoordinates(toCoordinates).Position;
         var mapDirection = toMap - fromMap.Position;
+        // Gehenna edit start - protect all ranged fire from near-zero close cursor directions
+        if (!IsUsableShotDirection(mapDirection))
+            mapDirection = GetFallbackShotDirection(gun, user);
+        // Gehenna edit end
         var mapAngle = mapDirection.ToAngle();
-        var angle = GetRecoilAngle(Timing.CurTime, gun, mapDirection.ToAngle());
+        // Gehenna edit start - ranged fire uses the exact aimed vector; pellet spread is projected to a lateral line below
+        gun.Comp.LastFire = gun.Comp.NextFire;
+        // Gehenna edit end
 
         // If applicable, this ensures the projectile is parented to grid on spawn, instead of the map.
         var fromEnt = MapManager.TryFindGridAt(fromMap, out var gridUid, out _)
             ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
             : new EntityCoordinates(_map.GetMapOrInvalid(fromMap.MapId), fromMap.Position);
-
-        // Update shot based on the recoil
-        toMap = fromMap.Position + angle.ToVec() * mapDirection.Length();
-        mapDirection = toMap - fromMap.Position;
         var gunVelocity = Physics.GetMapLinearVelocity(fromEnt);
 
         // I must be high because this was getting tripped even when true.
@@ -123,7 +124,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
                     // Something like ballistic might want to leave it in the container still
                     if (!cartridge.DeleteOnSpawn && !Containers.IsEntityInContainer(ent!.Value))
-                        EjectCartridge(ent.Value, angle);
+                        EjectCartridge(ent.Value, mapAngle);
 
                     Dirty(ent!.Value, cartridge);
                     break;
@@ -169,18 +170,19 @@ public sealed partial class GunSystem : SharedGunSystem
                 var spreadEvent = new GunGetAmmoSpreadEvent(ammoSpreadComp.Spread);
                 RaiseLocalEvent(gun, ref spreadEvent);
 
-                var angles = LinearSpread(mapAngle - spreadEvent.Spread / 2,
-                    mapAngle + spreadEvent.Spread / 2, ammoSpreadComp.Count);
+                // Gehenna edit start - projectile spread lives on the lateral aim axis, not in a forward cone
+                var directions = LateralSpread(mapDirection, spreadEvent.Spread, ammoSpreadComp.Count);
 
-                ShootOrThrow(ammoEnt, angles[0].ToVec(), gunVelocity, gun, user);
+                ShootOrThrow(ammoEnt, directions[0], gunVelocity, gun, user);
                 shotProjectiles.Add(ammoEnt);
 
                 for (var i = 1; i < ammoSpreadComp.Count; i++)
                 {
                     var newuid = Spawn(ammoSpreadComp.Proto, fromEnt);
-                    ShootOrThrow(newuid, angles[i].ToVec(), gunVelocity, gun, user);
+                    ShootOrThrow(newuid, directions[i], gunVelocity, gun, user);
                     shotProjectiles.Add(newuid);
                 }
+                // Gehenna edit end
             }
             else
             {
@@ -214,6 +216,67 @@ public sealed partial class GunSystem : SharedGunSystem
         ShootProjectile(uid, mapDirection, gunVelocity, gun, user, gun.Comp.ProjectileSpeedModified);
     }
 
+    // Gehenna edit start - stable close-range shot fallback
+    private Vector2 GetFallbackShotDirection(Entity<GunComponent> gun, EntityUid? user)
+    {
+        var direction = gun.Comp.DefaultDirection;
+        if (!IsUsableShotDirection(direction))
+            direction = Vector2.UnitX;
+
+        direction = direction.Normalized();
+
+        if (user is { } userUid && Exists(userUid))
+        {
+            var rotated = TransformSystem.GetWorldRotation(userUid).RotateVec(direction);
+            if (IsUsableShotDirection(rotated))
+                return rotated.Normalized();
+        }
+
+        return direction;
+    }
+
+    private static bool IsUsableShotDirection(Vector2 direction)
+    {
+        return float.IsFinite(direction.X) &&
+               float.IsFinite(direction.Y) &&
+               direction.LengthSquared() > 0.0001f;
+    }
+    // Gehenna edit end
+
+    // Gehenna edit start - lateral-only projectile spread
+    private Vector2[] LateralSpread(Vector2 baseDirection, Angle spread, int intervals)
+    {
+        intervals = Math.Max(intervals, 1);
+        var directions = new Vector2[intervals];
+
+        if (!IsUsableShotDirection(baseDirection))
+            baseDirection = Vector2.UnitX;
+
+        var forward = baseDirection.Normalized();
+        var lateral = new Vector2(-forward.Y, forward.X);
+        var distance = MathF.Max(baseDirection.Length(), 1f);
+        var halfAngle = Math.Min(Math.Abs(spread.Theta) * 0.5, Math.PI / 2 - 0.001);
+        var halfWidth = (float) Math.Tan(halfAngle) * distance;
+
+        if (intervals == 1 || halfWidth <= 0f)
+        {
+            directions[0] = forward;
+            return directions;
+        }
+
+        for (var i = 0; i < intervals; i++)
+        {
+            var t = MathHelper.Lerp(-1f, 1f, i / (intervals - 1f));
+            var target = forward * distance + lateral * halfWidth * t;
+            directions[i] = IsUsableShotDirection(target)
+                ? target.Normalized()
+                : forward;
+        }
+
+        return directions;
+    }
+    // Gehenna edit end
+
     /// <summary>
     /// Gets a linear spread of angles between start and end.
     /// </summary>
@@ -231,21 +294,6 @@ public sealed partial class GunSystem : SharedGunSystem
         }
 
         return angles;
-    }
-
-    private Angle GetRecoilAngle(TimeSpan curTime, GunComponent component, Angle direction)
-    {
-        var timeSinceLastFire = (curTime - component.LastFire).TotalSeconds;
-        var newTheta = MathHelper.Clamp(component.CurrentAngle.Theta + component.AngleIncreaseModified.Theta - component.AngleDecayModified.Theta * timeSinceLastFire, component.MinAngleModified.Theta, component.MaxAngleModified.Theta);
-        component.CurrentAngle = new Angle(newTheta);
-        component.LastFire = component.NextFire;
-
-        // Convert it so angle can go either side.
-        var random = Random.NextFloat(-0.5f, 0.5f);
-        var spread = component.CurrentAngle.Theta * random;
-        var angle = new Angle(direction.Theta + component.CurrentAngle.Theta * random);
-        DebugTools.Assert(spread <= component.MaxAngleModified.Theta);
-        return angle;
     }
 
     protected override void Popup(string message, EntityUid? uid, EntityUid? user) { }

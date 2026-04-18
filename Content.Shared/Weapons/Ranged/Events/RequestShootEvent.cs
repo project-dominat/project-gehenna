@@ -15,9 +15,15 @@ public sealed class RequestShootEvent : EntityEventArgs
     public NetEntity Gun;
 
     /// <summary>
-    /// The location the player is shooting at.
+    /// The location the player is shooting at (includes sway/recoil offset).
     /// </summary>
     public NetCoordinates Coordinates;
+
+    /// <summary>
+    /// The raw mouse position without sway/recoil offset.
+    /// Used by the server for aim deviation validation.
+    /// </summary>
+    public NetCoordinates RawCoordinates;
 
     /// <summary>
     /// The target the player is shooting at, if any.

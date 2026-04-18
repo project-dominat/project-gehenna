@@ -29,6 +29,7 @@ public sealed class HitscanBasicDamageSystem : EntitySystem
         {
             Target = args.Data.HitEntity.Value,
             DamageDealt = damageDealt,
+            Shooter = args.Data.Shooter,
         };
 
         RaiseLocalEvent(ent, ref damageEvent);

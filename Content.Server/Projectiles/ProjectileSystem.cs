@@ -70,6 +70,9 @@ public sealed class ProjectileSystem : SharedProjectileSystem
                 $"Projectile {ToPrettyString(uid):projectile} shot by {ToPrettyString(component.Shooter!.Value):user} hit {otherName:target} and dealt {damage:damage} damage");
 
             component.ProjectileSpent = !TryPenetrate((uid, component), damage, damageRequired);
+
+            var hitEv = new ProjectileDamageAppliedEvent(component.Shooter.Value, target, damage);
+            RaiseLocalEvent(uid, ref hitEv);
         }
         else
         {

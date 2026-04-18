@@ -163,7 +163,11 @@ public sealed partial class TriggerSystem
         if (xform.Anchored && ent.Comp.CanUnanchor)
             _transform.Unanchor(target.Value, xform);
         else if (ent.Comp.CanAnchor)
+        {
+            // Anchoring while still inside a container violates container removal invariants.
+            _transform.AttachToGridOrMap(target.Value, xform);
             _transform.AnchorEntity(target.Value, xform);
+        }
 
         if (ent.Comp.RemoveOnTrigger)
             RemCompDeferred<AnchorOnTriggerComponent>(target.Value);

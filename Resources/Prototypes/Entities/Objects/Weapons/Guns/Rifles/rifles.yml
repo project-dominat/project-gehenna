@@ -25,6 +25,13 @@
       - SemiAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/batrifle.ogg
+  - type: GunRecoil
+    baseSwayMultiplier: 1.5
+    recoilKickMultiplier: 1.2
+    recoilScale: 1.1
+    recoilApproachRate: 28
+    recoilDampingRatio: 0.66
+    recoverySpeed: 0.8
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/sf_rifle_cock.ogg
@@ -206,6 +213,10 @@
   - type: EyeCursorOffset
     maxOffset: 2
     pvsIncrease: 0.2
+  - type: Aiming
+    eyeOffset: 2
+    eyeOffsetSpeed: 0.28
+    pvsIncrease: 0.2
   - type: StaticPrice
     price: 1500 #3x lecter
   - type: Gun
@@ -265,6 +276,10 @@
   - type: EyeCursorOffset
     maxOffset: 2
     pvsIncrease: 0.2
+  - type: Aiming
+    eyeOffset: 2.4
+    eyeOffsetSpeed: 0.26
+    pvsIncrease: 0.25
   - type: SpeedModifiedOnWield
     walkModifier: 0.9
     sprintModifier: 0.9

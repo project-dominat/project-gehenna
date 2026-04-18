@@ -34,6 +34,13 @@
       - FullAuto
     soundGunshot:
       path: /Audio/Weapons/Guns/Gunshots/pistol.ogg
+  - type: GunRecoil
+    baseSwayMultiplier: 0.5
+    recoilKickMultiplier: 0.65
+    recoilScale: 0.8
+    recoilApproachRate: 36
+    recoilDampingRatio: 0.76
+    recoverySpeed: 1.45
   - type: ChamberMagazineAmmoProvider
     soundRack:
       path: /Audio/Weapons/Guns/Cock/pistol_cock.ogg

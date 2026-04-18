@@ -1,6 +1,7 @@
 using Content.Server.Interaction;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Weapons.Melee;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -24,6 +25,7 @@ public sealed partial class NPCCombatSystem : EntitySystem
     [Dependency] private readonly NPCSteeringSystem _steering = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedMeleeWeaponSystem _melee = default!;
+    [Dependency] private readonly SharedAimingSystem _aiming = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     /// <summary>
