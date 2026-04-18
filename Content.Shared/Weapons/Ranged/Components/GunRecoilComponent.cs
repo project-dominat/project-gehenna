@@ -9,20 +9,24 @@ namespace Content.Shared.Weapons.Ranged.Components;
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class GunRecoilComponent : Component
 {
-    public const float DefaultKick = 0.5f;
-    public const float DefaultMaxKick = 1f;
+    // Gehenna edit start - stronger unrestricted weapon recoil feedback
+    public const float DefaultKick = 0.75f;
+    public const float DefaultMaxKick = 0f;
+    // Gehenna edit end
     public const float DefaultBaseSwayMultiplier = 1f;
     public const float DefaultRecoilKickMultiplier = 1f;
     public const float DefaultRecoilScale = 1f;
     public const float DefaultRecoverySpeed = 1f;
-    public const float DefaultLateralKick = 0.035f;
-    public const float DefaultSwayPenaltyPerShot = 0.105f;
-    public const float DefaultShotgunSwayPenaltyPerShot = 0.42f;
-    public const float DefaultMaxSwayPenalty = 3.2f;
-    public const float DefaultSwayPenaltyDecay = 0.23f;
-    public const float DefaultRecoilOffsetPerShot = 0.11f;
-    public const float DefaultShotgunRecoilOffsetPerShot = 0.22f;
-    public const float DefaultMaxRecoilOffset = 0.55f;
+    // Gehenna edit start - stronger recoil bloom defaults
+    public const float DefaultLateralKick = 0.0055f;
+    public const float DefaultSwayPenaltyPerShot = 0.17f;
+    public const float DefaultShotgunSwayPenaltyPerShot = 0.4f;
+    public const float DefaultMaxSwayPenalty = 2.5f;
+    public const float DefaultSwayPenaltyDecay = 0.93f;
+    public const float DefaultRecoilOffsetPerShot = 0.16f;
+    public const float DefaultShotgunRecoilOffsetPerShot = 0.32f;
+    public const float DefaultMaxRecoilOffset = 0.85f;
+    // Gehenna edit end
     public const float DefaultRecoilApproachRate = 28f;
     public const float DefaultRecoilDampingRatio = 0.68f;
     public const float DefaultRecoilRecoveryRate = 1.9f;

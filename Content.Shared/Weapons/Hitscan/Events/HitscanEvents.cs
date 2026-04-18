@@ -107,4 +107,9 @@ public record struct HitscanDamageDealtEvent
     /// The amount of damage that the target was dealt.
     /// </summary>
     public DamageSpecifier DamageDealt;
+
+    /// <summary>
+    /// The entity that fired the hitscan, if any.
+    /// </summary>
+    public EntityUid? Shooter;
 }

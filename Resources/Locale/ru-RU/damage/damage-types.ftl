@@ -1,0 +1,14 @@
+damage-type-asphyxiation = Асфиксия
+damage-type-bloodloss = Кровопотеря
+damage-type-blunt = Тупой
+damage-type-cellular = Клеточный
+damage-type-caustic = Каустический
+damage-type-cold = Холод
+damage-type-heat = Жар
+damage-type-piercing = Колющий
+damage-type-poison = Яд
+damage-type-radiation = Радиация
+damage-type-shock = Удар током
+damage-type-slash = Режущий
+damage-type-structural = Структурный
+damage-type-holy = Святой

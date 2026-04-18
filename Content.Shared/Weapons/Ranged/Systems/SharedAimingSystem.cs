@@ -80,6 +80,10 @@ public sealed class SharedAimingSystem : EntitySystem
     /// </summary>
     private bool CheckAdsToggleCooldown(EntityUid user)
     {
+        // Prediction replays must not mutate cooldown state or ADS reconciliation diverges.
+        if (_timing.InPrediction)
+            return true;
+
         var now = _timing.CurTime;
 
         if (_lastAdsToggle.TryGetValue(user, out var lastToggle) &&

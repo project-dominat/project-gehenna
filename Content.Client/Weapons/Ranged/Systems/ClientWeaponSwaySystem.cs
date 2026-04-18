@@ -1,8 +1,10 @@
 using System.Numerics;
+using Content.Shared.CCVar;
 using Content.Shared.Movement.Components;
 using Content.Shared.Wieldable.Components;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Client.GameObjects;
+using Robust.Shared.Configuration;
 using Robust.Shared.Input;
 using Robust.Shared.Noise;
 using Robust.Shared.Physics.Components;
@@ -18,11 +20,13 @@ public sealed class ClientWeaponSwaySystem : EntitySystem
     [Dependency] private readonly IRobustRandom _random = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
     [Dependency] private readonly InputSystem _inputSystem = default!;
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
 
     private readonly Dictionary<EntityUid, AimRecoilState> _fallbackRecoil = new();
     private readonly List<EntityUid> _fallbackRemoveBuffer = [];
     private readonly Dictionary<EntityUid, AimBreathState> _breathHold = new();
     private readonly List<EntityUid> _breathRemoveBuffer = [];
+    private float _swayMaxMultiplier;
 
     /// <summary>
     /// Noise generator for the X axis of weapon sway.
@@ -35,6 +39,13 @@ public sealed class ClientWeaponSwaySystem : EntitySystem
     /// Uses a different seed to produce independent movement.
     /// </summary>
     private readonly FastNoiseLite _noiseY = new(1337);
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        Subs.CVar(_cfg, CCVars.WeaponAimSwayMaxMultiplier, v => _swayMaxMultiplier = v, true);
+    }
 
     public bool TryGetSwayOffset(
         EntityUid user,
@@ -66,6 +77,9 @@ public sealed class ClientWeaponSwaySystem : EntitySystem
         var maxSway = deliberateAim
             ? sway?.MaxSway ?? WeaponSwayComponent.DefaultMaxSway
             : sway?.HipFireMaxSway ?? WeaponSwayComponent.DefaultHipFireMaxSway;
+        var maxSwayMultiplier = float.IsFinite(_swayMaxMultiplier) && _swayMaxMultiplier > 0f
+            ? _swayMaxMultiplier
+            : 1f;
         var breath = GetBreathSample(user, sway, deliberateAim, movementFactor);
 
         amplitude = MathHelper.Lerp(stillAmplitude, movingAmplitude, movementFactor);
@@ -93,7 +107,7 @@ public sealed class ClientWeaponSwaySystem : EntitySystem
 
         var swayPenalty = GetSwayPenalty(weapon);
         amplitude += swayPenalty;
-        var maxBloomedSway = maxSway + swayPenalty;
+        var maxBloomedSway = maxSway * maxSwayMultiplier + swayPenalty;
 
         // Gehenna edit start — Simplex noise sway replaces sin/cos oscillation
         var t = (float)_timing.CurTime.TotalSeconds;

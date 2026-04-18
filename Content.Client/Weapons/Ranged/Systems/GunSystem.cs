@@ -35,8 +35,9 @@ namespace Content.Client.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
-    private const float CameraRecoilVisualScale = 0.02f;
-    private const float MaxCameraRecoilVisualKick = 0.035f;
+    // Gehenna edit start - stronger camera recoil feedback
+    private const float CameraRecoilVisualScale = 0.06f;
+    // Gehenna edit end
 
     [Dependency] private readonly AnimationPlayerSystem _animPlayer = default!;
     [Dependency] private readonly IEyeManager _eyeManager = default!;
@@ -206,16 +207,20 @@ public sealed partial class GunSystem : SharedGunSystem
             return;
         }
 
-        _aiming.TryGetShootCoordinates(entity, gun, mousePos, out var aimCoordinates, out _);
+        // Gehenna edit start - stable close-range aim coordinates
+        if (!_aiming.TryGetShootCoordinates(entity, gun, mousePos, out var aimCoordinates, out var rawAimCoordinates, out _))
+            return;
+        // Gehenna edit end
 
         // Define target coordinates relative to gun entity, so that network latency on moving grids doesn't fuck up the target location.
         var coordinates = TransformSystem.ToCoordinates(entity, aimCoordinates);
-        // Raw mouse position (no sway/recoil) for server-side aim validation.
-        var rawMouseCoordinates = TransformSystem.ToCoordinates(entity, new MapCoordinates(mousePos.Position, mousePos.MapId));
+        // Gehenna edit start - raw aim target is the stable vector base, not the near-player cursor point
+        var rawMouseCoordinates = TransformSystem.ToCoordinates(entity, rawAimCoordinates);
+        // Gehenna edit end
 
         NetEntity? target = null;
         if (_state.CurrentState is GameplayStateBase screen)
-            target = GetNetEntity(screen.GetClickedEntity(aimCoordinates));
+            target = GetNetEntity(screen.GetClickedEntity(mousePos));
 
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 
@@ -303,8 +308,6 @@ public sealed partial class GunSystem : SharedGunSystem
         _aiming.ApplyShotFeedback(gun, recoil, spreadShot);
 
         var cameraKick = _gunRecoil.GetCameraKick(gun, recoil) * CameraRecoilVisualScale;
-        if (cameraKick.Length() > MaxCameraRecoilVisualKick)
-            cameraKick = cameraKick.Normalized() * MaxCameraRecoilVisualKick;
 
         if (cameraKick != Vector2.Zero)
             _cameraRecoil.KickCamera(user.Value, cameraKick);

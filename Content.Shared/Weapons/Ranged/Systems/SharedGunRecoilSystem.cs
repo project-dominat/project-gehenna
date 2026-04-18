@@ -1,10 +1,23 @@
 using System.Numerics;
+using Content.Shared.CCVar;
 using Content.Shared.Weapons.Ranged.Components;
+using Robust.Shared.Configuration;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
 
 public sealed class SharedGunRecoilSystem : EntitySystem
 {
+    [Dependency] private readonly IConfigurationManager _cfg = default!;
+
+    private float _recoilKickMultiplier;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        Subs.CVar(_cfg, CCVars.WeaponAimRecoilKickMultiplier, v => _recoilKickMultiplier = v, true);
+    }
+
     public Vector2 GetCameraKick(Entity<GunComponent> gun, Vector2 recoilDirection)
     {
         if (recoilDirection == Vector2.Zero)
@@ -34,6 +47,10 @@ public sealed class SharedGunRecoilSystem : EntitySystem
         if (maxKick > 0f && result.Length() > maxKick)
             result = result.Normalized() * maxKick;
 
-        return result;
+        var multiplier = float.IsFinite(_recoilKickMultiplier)
+            ? _recoilKickMultiplier
+            : 1f;
+
+        return result * multiplier;
     }
 }
