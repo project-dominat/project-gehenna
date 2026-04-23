@@ -109,6 +109,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("TEXT")
                         .HasColumnName("message");
 
+                    b.Property<string>("RawMessage")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("raw_message");
+
                     b.Property<int>("Type")
                         .HasColumnType("INTEGER")
                         .HasColumnName("type");

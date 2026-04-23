@@ -1,0 +1,26 @@
+ent-CableBase = { "" }
+    .desc = { "" }
+
+ent-CableHV = ВВ кабель
+    .desc = Оранжевый высоковольтный кабель.
+
+ent-CableHVUncuttable = { ent-CableHV }
+    .suffix = неразрезаемые
+    .desc = { ent-CableHV.desc }
+
+ent-CableMV = СВ кабель
+    .desc = Средневольтный кабель.
+
+ent-CableMVUncuttable = { ent-CableMV }
+    .suffix = неразрезаемые
+    .desc = { ent-CableMV.desc }
+
+ent-CableApcExtension = НВ кабель
+    .desc = Кабель, используемый для подключения устройств к ЛКП.
+
+ent-CableApcExtensionUncuttable = { ent-CableApcExtension }
+    .suffix = неразрезаемые
+    .desc = { ent-CableApcExtension.desc }
+
+ent-CableDet = взрывной шнур
+    .desc = Спагетти для тех, кто ненавидит стены.

@@ -1,12 +1,12 @@
 - type: entity
   parent: BaseSecurityPDA
-  id: PrisonWorkerPDA
-  name: prison worker PDA
-  suffix: "[Prison]"
-  description: A rugged PDA issued to Gehenna prison staff.
+  id: PrisonBossPDA
+  name: prison warden PDA
+  suffix: "Prison"
+  description: A high-authority PDA belonging to the warden of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Objects/Devices/pda.rsi
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-boss.rsi
     layers:
     - map: ["enum.PdaVisualLayers.Base"]
       state: pda-space-prison-boss
@@ -31,7 +31,311 @@
     borderColor: "#4a5c6e"
     accentVColor: "#8b9bb4"
   - type: Icon
-    sprite: _Gehenna/Prison/Objects/Devices/pda.rsi
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-boss.rsi
     state: pda-space-prison-boss
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BaseSecurityPDA
+  id: PrisonOfficerPDA
+  name: prison officer PDA
+  suffix: "Prison"
+  description: A standard-issue PDA for Gehenna prison officers.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-worker.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-officer
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-officer
+  - type: PdaBorderColor
+    borderColor: "#3a4a5e"
+    accentVColor: "#6a7a9a"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-worker.rsi
+    state: pda-space-prison-officer
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BaseSecurityPDA
+  id: PrisonHeavyOfficerPDA
+  name: prison heavy officer PDA
+  suffix: "Prison"
+  description: A reinforced PDA issued to senior Gehenna prison officers.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-betterworker.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-heavy-officer
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-heavy-officer
+  - type: PdaBorderColor
+    borderColor: "#2a3a5a"
+    accentVColor: "#5a7a9a"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-betterworker.rsi
+    state: pda-space-prison-heavy-officer
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BasePDA
+  id: PrisonNewbiePDA
+  name: prison trainee PDA
+  suffix: "Prison"
+  description: A basic PDA given to new recruits of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-newbie.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-trainee-partial
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-trainee-partial
+  - type: PdaBorderColor
+    borderColor: "#8a8a8a"
+    accentVColor: "#aaaaaa"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-newbie.rsi
+    state: pda-space-prison-trainee-partial
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BasePDA
+  id: PrisonDoctorPDA
+  name: prison doctor PDA
+  suffix: "Prison"
+  description: A medical PDA for the doctor stationed at Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-doctor.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-doctor
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-doctor
+  - type: PdaBorderColor
+    borderColor: "#1a7a3a"
+    accentVColor: "#22aa55"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-doctor.rsi
+    state: pda-space-prison-doctor
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BasePDA
+  id: PrisonEngineerPDA
+  name: prison engineer PDA
+  suffix: "Prison"
+  description: A technical PDA for the engineer working at Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-engineer.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-engineer-screen-point
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: EngineeringIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-engineer-screen-point
+  - type: PdaBorderColor
+    borderColor: "#7a5500"
+    accentVColor: "#cc9922"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-engineer.rsi
+    state: pda-space-prison-engineer-screen-point
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BasePDA
+  id: PrisonScientistPDA
+  name: prison scientist PDA
+  suffix: "Prison"
+  description: A research PDA for the scientist assigned to Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-scientist.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-scientist
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-scientist
+  - type: PdaBorderColor
+    borderColor: "#6a00aa"
+    accentVColor: "#9922cc"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-scientist.rsi
+    state: pda-space-prison-scientist
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BasePDA
+  id: PrisonPrisoneerPDA
+  name: prisoner PDA
+  suffix: "Prison"
+  description: A locked-down PDA issued to inmates at Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-prisoneer.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-prisoner-screen-X
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-prisoner-screen-X
+  - type: PdaBorderColor
+    borderColor: "#886633"
+    accentVColor: "#aa8844"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-prisoneer.rsi
+    state: pda-space-prison-prisoner-screen-X
+  - type: Item
+    sprite: Objects/Devices/pda.rsi
+
+- type: entity
+  parent: BasePDA
+  id: PrisonPrisoneerCrackedPDA
+  name: prisoner PDA
+  suffix: "[Prison, Cracked]"
+  description: A battered, cracked PDA that's clearly seen better days inside Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-prisoneer-cracked.rsi
+    layers:
+    - map: ["enum.PdaVisualLayers.Base"]
+      state: pda-space-prison-prisoner-screen-X-cracked
+    - map: ["enum.PdaVisualLayers.Flashlight"]
+      state: light_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+    - map: ["enum.PdaVisualLayers.IdLight"]
+      state: id_overlay
+      sprite: Objects/Devices/pda.rsi
+      shader: unshaded
+      visible: false
+  - type: Pda
+    id: SecurityIDCard
+  - type: Appearance
+    appearanceDataInit:
+     enum.PdaVisuals.PdaType:
+       !type:String
+       pda-space-prison-prisoner-screen-X-cracked
+  - type: PdaBorderColor
+    borderColor: "#555555"
+    accentVColor: "#777777"
+  - type: Icon
+    sprite: _Gehenna/Prison/Objects/Devices/pda-prison-prisoneer-cracked.rsi
+    state: pda-space-prison-prisoner-screen-X-cracked
   - type: Item
     sprite: Objects/Devices/pda.rsi

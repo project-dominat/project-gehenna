@@ -1,0 +1,16 @@
+entity-effect-status-effect-Stun = оглушение
+entity-effect-status-effect-KnockedDown = опрокидывание
+entity-effect-status-effect-Jitter = дрожь
+entity-effect-status-effect-TemporaryBlindness = слепота
+entity-effect-status-effect-SeeingRainbows = галлюцинации
+entity-effect-status-effect-Muted = немота
+entity-effect-status-effect-Stutter = заикание
+entity-effect-status-effect-ForcedSleep = потеря сознания
+entity-effect-status-effect-Drunk = опьянение
+entity-effect-status-effect-PressureImmunity = иммунитет к давлению
+entity-effect-status-effect-Pacified = боевая пацификация
+entity-effect-status-effect-RatvarianLanguage = ратварианские языковые шаблоны
+entity-effect-status-effect-StaminaModifier = изменённая выносливость
+entity-effect-status-effect-RadiationProtection = защита от радиации
+entity-effect-status-effect-Drowsiness = сонливость
+entity-effect-status-effect-Adrenaline = адреналин

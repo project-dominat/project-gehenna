@@ -215,6 +215,11 @@ public sealed class MappingState : GameplayStateBase
 
     private void ReloadPrototypes()
     {
+        _allPrototypes.Clear();
+        _allPrototypesDict.Clear();
+        _idDict.Clear();
+        _prototypes.Clear();
+
         var entities = new MappingPrototype(null, Loc.GetString("mapping-entities")) { Children = new List<MappingPrototype>() };
         _prototypes.Add(entities);
 
@@ -276,13 +281,18 @@ public sealed class MappingState : GameplayStateBase
 
     private MappingPrototype? Register<T>(T? prototype, string id, MappingPrototype topLevel) where T : class, IPrototype, IInheritingPrototype
     {
+        EntityPrototype? hiddenEntity = null;
+
         {
             if (prototype == null &&
                 _prototypeManager.TryIndex(id, out prototype) &&
                 prototype is EntityPrototype entity)
             {
                 if (entity.HideSpawnMenu || entity.Abstract)
+                {
+                    hiddenEntity = entity;
                     prototype = null;
+                }
             }
         }
 
@@ -301,12 +311,20 @@ public sealed class MappingState : GameplayStateBase
             }
             else
             {
-                var name = node.TryGet("name", out ValueDataNode? nameNode)
-                    ? nameNode.Value
-                    : id;
+                var name = hiddenEntity?.Name ??
+                    (node.TryGet("name", out ValueDataNode? nameNode)
+                        ? nameNode.Value
+                        : id);
 
-                if (node.TryGet("suffix", out ValueDataNode? suffix))
-                    name = $"{name} [{suffix.Value}]";
+                var suffix = hiddenEntity?.EditorSuffix;
+                if (string.IsNullOrWhiteSpace(suffix) &&
+                    node.TryGet("suffix", out ValueDataNode? suffixNode))
+                {
+                    suffix = suffixNode.Value;
+                }
+
+                if (!string.IsNullOrWhiteSpace(suffix))
+                    name = $"{name} [{suffix}]";
 
                 mapping = new MappingPrototype(prototype, name);
                 _allPrototypes.Add(mapping);

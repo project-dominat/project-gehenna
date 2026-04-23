@@ -1,0 +1,47 @@
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterApronPrisonBotanist
+  name: prison botanist apron
+  suffix: "Prison"
+  description: A sturdy apron worn by the botanist working in Gehenna prison's greenhouse.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Prisoneer/Botanist.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Prisoneer/Botanist.rsi
+  - type: Tag
+    tags:
+    - ClothMade
+
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterApronPrisonChief
+  name: prison cook apron
+  suffix: "Prison"
+  description: An apron worn by the cook working in Gehenna prison's kitchen.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Prisoneer/Chief.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Prisoneer/Chief.rsi
+  - type: Tag
+    tags:
+    - ClothMade
+
+- type: entity
+  parent: ClothingOuterStorageBase
+  id: ClothingOuterApronPrisonFactory
+  name: prison factory apron
+  suffix: "Prison"
+  description: A heavy-duty apron worn by prisoners working in Gehenna prison's factory.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Prisoneer/Factory-worker.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Prisoneer/Factory-worker.rsi
+  - type: Tag
+    tags:
+    - ClothMade

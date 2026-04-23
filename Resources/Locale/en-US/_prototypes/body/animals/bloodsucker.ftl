@@ -1,0 +1,2 @@
+ent-OrganBloodsucker = { "" }
+    .suffix = bloodsucker

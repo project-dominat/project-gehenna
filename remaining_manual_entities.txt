@@ -1,0 +1,460 @@
+﻿remaining_manual=228
+
+TOP FILES
+15 | Entities\Objects\Misc\tiles.yml
+  FloorTileItemDarkSlatsContinuous | name=dark steel continuous slat tile | suffix=
+  FloorTileItemDarkVerticalSlatsBordered | name=dark steel bordered vertical slat tile | suffix=
+  FloorTileItemDarkHorizontalSlatsBordered | name=dark steel bordered horizontal slat tile | suffix=
+  FloorTileItemSteelSlatsContinuous | name=steel continuous slat tile | suffix=
+  FloorTileItemSteelVerticalSlatsBordered | name=steel vertical bordered slat tile | suffix=
+  FloorTileItemSteelHorizontalSlatsBordered | name=steel horizontal bordered slat tile | suffix=
+  FloorTileItemWhiteVerticalSlatsBordered | name=white steel vertical bordered slat tile | suffix=
+  FloorTileItemWhiteSlatsContinuous | name=white steel continuous slat tile | suffix=
+  FloorTileItemWhiteHorizontalSlatsBordered | name=white steel horizontal bordered slat tile | suffix=
+  FloorTileItemIronsandConcrete | name=iron sand concrete tile | suffix=
+  FloorTileItemIronsandConcreteMono | name=iron sand concrete mono tile | suffix=
+  FloorTileItemIronsandConcreteSmooth | name=iron sand concrete smooth | suffix=
+  FloorTileItemAstroIronsand | name=astro-ironsand | suffix=
+  FloorTileItemAstroIronsandBorderless | name=borderless astro-ironsand | suffix=
+  FloorTileItemDesertAstroSand | name=desert astro-sand | suffix=
+
+9 | Entities\Markers\Spawners\Random\toy.yml
+  ToySpawner90 | name=Toy Spawner | suffix=90
+  PlushieSpawner50 | name=Plushie Spawner | suffix=50
+  SpacemenFigurineSpawner90 | name=Spacemen Minifigure Spawner | suffix=90
+  MechFigurineSpawner50 | name=Mech Figurine Spawner | suffix=50
+  ToyWeaponSpawner90 | name=Toy Weapon Spawner | suffix=90
+  CapGunSpawner90 | name=Cap Gun Spawner | suffix=90
+  MiscToySpawner90 | name=Miscellaneous Toy Spawner | suffix=90
+  ToySoundMakerSpawner90 | name=Toy Sound Maker Spawner | suffix=90
+  CrayonSpawner90 | name=Crayon Spawner | suffix=90
+
+6 | Entities\Markers\Spawners\nuke_ops_spawners.yml
+  NukeOpsLootSpawner | name=nuke ops loot spawner | suffix=
+  NukeOpsWeaponSpawner | name=nuke ops weapon spawner | suffix=
+  NukeOpsMedkitBruteSpawner | name=nuke ops brute medkit spawner | suffix=
+  NukeOpsMedkitSpawner | name=nuke ops general medkit spawner | suffix=
+  NukeOpsGrenadeSpawner | name=nuke ops grenade spawner | suffix=
+  NukeOpsAmmoSpawner | name=nuke ops ammo spawner | suffix=
+
+6 | Entities\Objects\Fun\Plushies\plushies.yml
+  PlushieLizard #Weh! | name=lizard plushie | suffix=
+  PlushieExperiment #Arf! | name=experiment plushie | suffix=
+  PlushieRainbowLizard #Weh but gay | name=rainbow lizard plushie | suffix=
+  PlushieSpaceLizard #ᵂᵉʰ! | name=space lizard plushie | suffix=
+  PlushieLizardInversed #Hew! | name=drazil plushie | suffix=
+  PlushieVulp | name=vulpkanin plushie | suffix=
+
+6 | Entities\Objects\Specific\Kitchen\equipment.yml
+  MortarAndPestle | name=mortar and pestle | suffix=
+  MortarAndPestleMakeshift | name=makeshift mortar and pestle | suffix=
+  HandheldJuicer | name=handheld juicer | suffix=
+  HandheldJuicerMakeshift | name=makeshift juicer | suffix=
+  IncompleteMortarAndPestle | name=incomplete mortar and pestle | suffix=
+  IncompleteHandheldJuicer | name=incomplete handheld juicer | suffix=
+
+5 | Body\Species\diona.yml
+  AppearanceDiona | name=diona appearance | suffix=
+  OrganDiona | name= | suffix=Diona
+  OrganDionaBrainNymphing | name= | suffix=Diona, Nymphing
+  OrganDionaLungsNymphing | name= | suffix=Diona, Nymphing
+  OrganDionaStomachNymphing | name= | suffix=Diona, Nymphing
+
+5 | Entities\Objects\Fun\Tabletop\checkers.yml
+  *checkerboard | name=checkerboard | suffix=
+  *pieceWhite | name=white checker piece | suffix=
+  *crownWhite | name=white checker crown | suffix=
+  *pieceBlack | name=black checker piece | suffix=
+  *crownBlack | name=black checker crown | suffix=
+
+5 | Entities\Objects\Fun\Tabletop\dnd.yml
+  *GrassBoard | name=grass battlemap | suffix=
+  *MoonBoard | name=grass battlemap | suffix=
+  *SandBoard | name=sand battlemap | suffix=
+  *SnowBoard | name=snow battlemap | suffix=
+  *ShipBoard | name=ship battlemap | suffix=
+
+5 | Entities\Objects\Specific\Robotics\borg_modules.yml
+  BorgModulePrying | name=prying module | suffix=
+  BorgModuleDiagnosis # todo: reuse when med refractor is finished | name=diagnosis cyborg module | suffix=
+  BorgModuleAdvancedTopical | name=advanced first aid cyborg module | suffix=
+  XenoborgModuleTileGun | name=tile gun xenoborg module | suffix=
+  XenoborgModuleJump | name=xenoborg jump module | suffix=
+
+5 | Entities\Structures\Decoration\statues.yml
+  BaseIronsandStatue | name= | suffix=
+  StatueIronsandSmall | name=ironsand small statue | suffix=
+  StatueIronsandSmall2 | name=ironsand small statue | suffix=
+  StatueIronsandTall | name=ironsand tall statue | suffix=
+  StatueIronsandTall2 | name=ironsand tall statue | suffix=
+
+4 | Actions\types.yml
+  ActionShootWater | name=Spray water! | suffix=
+  ActionJumpBoost | name=Jump boost | suffix=
+  ActionVulpkaninGravityJump | name=Leap | suffix=
+  ActionIntrinsicStore | name=Store | suffix=
+
+4 | Body\Species\slime.yml
+  AppearanceSlimePerson | name=SlimePerson appearance | suffix=
+  OrganSlimePerson | name= | suffix=slime person
+  OrganSlimePersonCore | name=sentient slime core | suffix=
+  OrganSlimePersonLungs | name=gas sacs | suffix=
+
+4 | Entities\Objects\Fun\crayons.yml
+  CrayonInedible | name=crayon | suffix=
+  CrayonInfinite # should not be player available to prevent decal spam | name=infinite crayon | suffix=
+  CrayonBorg | name=electric crayon | suffix=
+  CrayonBoxEmpty | name=crayon box | suffix=
+
+4 | Entities\Objects\Weapons\Guns\Projectiles\projectiles.yml
+  StickyHandPalm | name=sticky hand palm | suffix=
+  BulletLaserMagnum | name=magnum laser bolt | suffix=
+  BulletLaserWindowPiercingMagnum | name=magnum window-piercing bolt | suffix=
+  EnergyCrossbowBolt | name=energy bolt | suffix=
+
+3 | Entities\Mobs\NPCs\animals.yml
+  MobMonkeySyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink | name= | suffix=NukeOps
+  MobKoboldSyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink | name= | suffix=NukeOps
+  MobDionaNymphAccent # No talky. For non-brain & wild nymphs | name= | suffix=Accent
+
+3 | Entities\Mobs\NPCs\living_light.yml
+  MobLuminousPersonSalvage | name= | suffix=Salvage Ruleset
+  MobLuminousObjectSalvage | name= | suffix=Salvage Ruleset
+  MobLuminousEntitySalvage | name= | suffix=Salvage Ruleset
+
+3 | Entities\Objects\Devices\Syndicate_Gadgets\reinforcement_teleporter.yml
+  ReinforcementRadioSyndicateNukeops # Reinforcement radio exclusive to nukeops uplink | name=nuclear operative radio | suffix=NukeOps
+  ReinforcementRadioSyndicateAncestorNukeops # Reinforcement radio exclusive to nukeops uplink | name= | suffix=NukeOps
+  ReinforcementRadioSyndicateCyborgAssault # Reinforcement radio exclusive to nukeops uplink | name=syndicate assault cyborg reinforcement radio | suffix=NukeOps
+
+3 | Entities\Objects\Specific\Chapel\bibles.yml
+  BibleNarsie | name=tome of nar'sie | suffix=
+  BibleHonk | name=mirth of the honkmother | suffix=
+  BibleRatvar | name=tablet of ratvar | suffix=
+
+3 | Entities\Structures\ironsand_steps.yml
+  IronsandStep | name=ironsand step | suffix=
+  IronsandStepConvexCorner | name=ironsand step convex corner | suffix=
+  IronsandStepConcaveCorner | name=ironsand step concave corner | suffix=
+
+3 | Objectives\traitor.yml
+  KillStationAiObjective | name= | suffix=
+  SupercritAnomaliesObjective | name= | suffix=
+  HijackTradeStationObjective | name=Hijack the Automated Trade Station. | suffix=
+
+3 | _Gehenna\Prison\Structures\Storage\locker_prison.yml
+  LockerPrisonDoctor | name=prison doctor's locker | suffix=Prison
+  LockerPrisonEngineer | name=prison engineer's locker | suffix=Prison
+  LockerPrisonHoS | name=prison warden's locker | suffix=Prison
+
+2 | Body\Species\arachnid.yml
+  AppearanceArachnid | name=arachnid appearance | suffix=
+  OrganArachnid | name= | suffix=Arachnid
+
+2 | Body\Species\dwarf.yml
+  AppearanceDwarf | name=dwarf appearance | suffix=
+  OrganDwarf | name= | suffix=Dwarf
+
+2 | Body\Species\gingerbread.yml
+  AppearanceGingerbread | name=gingerbread appearance | suffix=
+  OrganGingerbread | name= | suffix=gingerbread
+
+2 | Body\Species\skeleton.yml
+  AppearanceSkeletonPerson | name=skeletonperson appearance | suffix=
+  OrganSkeletonPerson | name= | suffix=SkeletonPerson
+
+2 | Body\Species\vox.yml
+  AppearanceVox | name=vox appearance | suffix=
+  OrganVox | name= | suffix=Vox
+
+2 | Catalog\Fills\Backpacks\duffelbag.yml
+  ClothingBackpackDuffelSyndicateFilledMedicine | name=syndicate medicine duffel bag | suffix=
+  ClothingBackpackChameleonFillAgent | name= | suffix=Fill, Chameleon, Syndie
+
+2 | Catalog\Fills\Boxes\emergency.yml
+  BoxSurvivalMilitaryDouble | name= | suffix=Military O2
+  BoxSurvivalMilitaryDoubleNitrogen | name= | suffix=Military N2
+
+2 | Catalog\Fills\Boxes\general.yml
+  BoxCardboardSmall | name=small cardboard box | suffix=
+  BoxStamps | name=stamp box | suffix=
+
+2 | Entities\Clothing\Hands\gloves.yml
+  ClothingHandsGlovesBoxingRiggedBase | name= | suffix=Rigged
+  GlovesBoxingRiggedRandomSpawner | name=random rigged boxing glove spawner | suffix=
+
+2 | Entities\Clothing\Head\hats.yml
+  ClothingHeadHatFedoraPress | name=press fedora | suffix=
+  ClothingHeadHatMitreClown | name=honkmother mitre | suffix=
+
+2 | Entities\Markers\Spawners\rooms.yml
+  SpawnPointHeadOfSecurityWeapon | name=head of security weapon spawner | suffix=
+  SpawnPointWardenWeapon | name=warden weapon spawner | suffix=
+
+2 | Entities\Markers\Spawners\Random\toy_tabletop.yml
+  BoardGameSpawner100 | name=Board Game Spawner | suffix=100
+  BattleMapSpawner100 | name=Battle Map Spawner | suffix=100
+
+2 | Entities\Mobs\NPCs\simplemob.yml
+  SimpleSpaceMobBase # Mob without barotrauma, freezing and asphyxiation (for space carps!?) | name= | suffix=AI
+  SimpleMobBase # for air breathers | name= | suffix=AI
+
+2 | Entities\Mobs\Player\mothershipcore.yml
+  ActionXenoborgControlMonitor | name=Xenoborgs Control Console | suffix=
+  ActionXenoborgCameraMonitor | name=Xenoborgs Camera Monitor | suffix=
+
+2 | Entities\Objects\Devices\pda.yml
+  NinjaPDA | name=ninja PDA | suffix=
+  ChameleonAgentPDA | name= | suffix=Chameleon, Agent ID
+
+2 | Entities\Objects\Devices\station_map.yml
+  HandheldStationMapStatic | name= | suffix=Handheld, Works Off-Station
+  HandheldStationMapNukeops | name=target station map | suffix=Handheld, NukeOps
+
+2 | Entities\Objects\Devices\travel_camera.yml
+  TravelCamera | name=travel camera | suffix=
+  BasePhotograph | name=photograph | suffix=
+
+2 | Entities\Objects\Fun\sports.yml
+  TennisBall | name=tennis ball | suffix=
+  EvilBeachBall | name= | suffix=EVIL/ADMEME
+
+2 | Entities\Objects\Misc\folders.yml
+  BoxFolderFill # Include this as a parent prototype to add 0-5 random papers to a folder's inventory when spawned. | name= | suffix=Filled
+  BoxFolderFillThreePapers # Like BoxFolderFill, but always has exactly three sheets of standard paper; use for things that should always be consistent, e.g roundstart items | name= | suffix=3 papers
+
+2 | Entities\Objects\Specific\Chemistry\chemistry-bottles.yml
+  ChemistryBottleCharcoal | name= | suffix=charcoal
+  ChemistryBottleLaughter | name= | suffix=laughter
+
+2 | Entities\Objects\Specific\Chemistry\chemistry-vials.yml
+  ChemistryEmptyVial | name=vial | suffix=
+  ChemistryEmptyVialSmall | name=mini vial | suffix=
+
+2 | Entities\Objects\Weapons\Guns\tile_gun.yml
+  WeaponTileGun | name=tile gun | suffix=
+  WeaponTileGunEmpty | name= | suffix=empty
+
+2 | Entities\Objects\Weapons\Guns\Revolvers\revolvers.yml
+  WeaponRevolverMatebaAP # For deathsquad | name= | suffix=armor-piercing
+  WeaponRevolverPythonAP # For the uplink. | name= | suffix=armor-piercing
+
+2 | Entities\StatusEffects\body.yml
+  StatusEffectAnticoagulant # Decreases the amount of blood coagulation when bleeding. | name=thin blood | suffix=
+  StatusEffectHemorrhage # Increases the amount of blood lost when bleeding. | name=hemorrhage | suffix=
+
+2 | Entities\Structures\Doors\MaterialDoors\material_doors.yml
+  IronstoneDoor | name=ironstone door | suffix=
+  EncrustedIronstoneDoor | name=encrusted ironstone door | suffix=
+
+2 | Entities\Structures\Furniture\potted_plants.yml
+  PottedPlantBioluminscent #PottedPlant9 but i didn't want map conflicts | name=bioluminescent potted plant | suffix=
+  PottedPlantRD #PottedPlant25 | name=RD's potted plant | suffix=
+
+2 | Entities\Structures\Furniture\toilet.yml
+  ToiletFilled | name= | suffix=Empty, Random Cistern Loot
+  ToiletDirtyWaterFilled | name= | suffix=Dirty Water, Random Cistern Loot
+
+2 | Entities\Structures\Machines\reagent_grinder.yml
+  KitchenReagentGrinderBeaker | name= | suffix=beaker
+  KitchenReagentGrinderBeakerLarge | name= | suffix=large beaker
+
+2 | Entities\Structures\Specific\Anomaly\cores.yml
+  AnomalyCoreFleshInert # Can be microwaved to turn it into a massive piece of meat | name= | suffix=Flesh, Inert
+  AnomalyCoreFloraInert #Turns into a seed that grows into artifexium | name= | suffix=Flora, Inert
+
+2 | Entities\Structures\Walls\asteroid.yml
+  IronSandstone | name=ironsandstone | suffix=no ore yield
+  IronSandstoneMining | name=ironsandstone | suffix=higher ore yield
+
+1 | Actions\changeling.yml
+  ActionChangelingStore | name=DNA Store | suffix=
+
+1 | Body\Animals\animal.yml
+  OrganAnimal | name= | suffix=Animal
+
+1 | Body\Animals\bloodsucker.yml
+  OrganBloodsucker | name= | suffix=bloodsucker
+
+1 | Body\Animals\ruminant.yml
+  OrganRuminantStomach | name= | suffix=Ruminant
+
+1 | Catalog\Fills\Boxes\syndicate.yml
+  SyndimovCircuitKit | name=syndimov circuit kit | suffix=
+
+1 | Catalog\Fills\Items\toolboxes.yml
+  FoolboxFilled | name= | suffix=Filled
+
+1 | Entities\Clothing\Ears\headsets.yml
+  ClothingHeadsetNinja | name=green headset | suffix=
+
+1 | Entities\Clothing\Hands\specific.yml
+  ClothingHandsChameleon # doesn't protect from electricity or heat | name=black gloves | suffix=Chameleon
+
+1 | Entities\Clothing\Head\hardsuit-helmets.yml
+  ClothingHeadHelmetHardsuitLuxury #DO NOT MAP - https://github.com/space-wizards/space-station-14/pull/19738#issuecomment-1703486738 | name=luxury mining hardsuit helmet | suffix=
+
+1 | Entities\Clothing\Head\scraphelmet.yml
+  ClothingHeadHelmetScrap #When we get the tech for it this bad boy needs to be given a vision reduction when equipped. 1-2 tiles less than normal should be good. | name=scrap helmet | suffix=
+
+1 | Entities\Clothing\OuterClothing\hardsuits.yml
+  ClothingOuterHardsuitLuxury #DO NOT MAP - https://github.com/space-wizards/space-station-14/pull/19738#issuecomment-1703486738 | name=luxury mining hardsuit | suffix=
+
+1 | Entities\Markers\Spawners\jobs.yml
+  SpawnPointAnyJob # used for integration tests so we don't need to map every single job spawner on the test map | name=any job spawn point | suffix=
+
+1 | Entities\Markers\Spawners\Random\salvage.yml
+  SalvageLivingLightSpawner | name=Salvage Living Light Spawner | suffix=100
+
+1 | Entities\Markers\Spawners\Random\soap.yml
+  RandomSlip100 | name=random slip spawner | suffix=
+
+1 | Entities\Markers\Spawners\Random\trash.yml
+  RandomBananaPeel90 | name=random banana peel spawner | suffix=
+
+1 | Entities\Mobs\NPCs\flesh.yml
+  BaseMobFleshSalvage #This one is immune to space! | name=aberrant flesh | suffix=Salvage Ruleset
+
+1 | Entities\Mobs\Player\dragon.yml
+  BloodSmoke | name=smoke | suffix=
+
+1 | Entities\Mobs\Player\human.yml
+  MobHumanSyndicateAgentNukeops # Reinforcement exclusive to nukeops uplink | name= | suffix=Human, NukeOps
+
+1 | Entities\Mobs\Player\ratvar.yml
+  MobRatvarBase #can't have the clockwork justiciar be associated with his (im)mortal enemy | name=Ratvar | suffix=
+
+1 | Entities\Objects\Consumable\Drinks\drinks_bottles_glass.yml
+  DrinkBeerGrowler # todo Needs to be renamed DrinkBeerBottleFullGrowler | name=beer growler  # beer it is. coffee. beer? coff-ee? be-er? c-o... b-e | suffix=
+
+1 | Entities\Objects\Consumable\Food\meat.yml
+  FoodMeatChickenFriedVox | name=mystery fried chicken | suffix=
+
+1 | Entities\Objects\Consumable\Food\Baked\bread.yml
+  FoodBreadNutriBatard | name=nutri-bâtard | suffix=
+
+1 | Entities\Objects\Devices\chameleon_projector.yml
+  ChameleonProjectorNoBattery | name=chameleon projector | suffix=
+
+1 | Entities\Objects\Devices\holoprojectors.yml
+  HoloprojectorBorg | name=holosign projector | suffix=borg
+
+1 | Entities\Objects\Fun\orbs.yml
+  Magic9Ball | name=magic 9 ball | suffix=
+
+1 | Entities\Objects\Fun\weapons.yml
+  WeaponStickyHand | name=sticky hand | suffix=
+
+1 | Entities\Objects\Fun\Tabletop\backgammon.yml
+  *BackgammonBoard | name=backgammon | suffix=
+
+1 | Entities\Objects\Fun\Tabletop\base.yml
+  BaseBoardEntity # Board item | name=board | suffix=
+
+1 | Entities\Objects\Fun\Tabletop\chess.yml
+  *ChessBoard | name=chessboard | suffix=
+
+1 | Entities\Objects\Fun\Tabletop\parchis.yml
+  *ParchisBoard | name=parchís | suffix=
+
+1 | Entities\Objects\Misc\paper.yml
+  PaperCNCSheet # legally gray zone of using "D&D" and "DND" | name=character sheet | suffix=
+
+1 | Entities\Objects\Misc\parcel_wrap.yml
+  WrappedParcelHumanoid | name=wrapped parcel | suffix=
+
+1 | Entities\Objects\Misc\subdermal_implants.yml
+  VoiceMaskImplant | name=identity mask implant | suffix=
+
+1 | Entities\Objects\Shields\shields.yml
+  BaseRepairableShield | name=base repairable shield | suffix=
+
+1 | Entities\Objects\Specific\Chemistry\paper_centrifuge.yml
+  HandheldMixerPaperCentrifuge | name=paper centrifuge | suffix=
+
+1 | Entities\Objects\Specific\Janitorial\janitor.yml
+  WireBrushElectrical | name=electrical wire brush | suffix=
+
+1 | Entities\Objects\Specific\Janitorial\soap.yml
+  BaseSoap | name=soap | suffix=
+
+1 | Entities\Objects\Specific\Medical\defib.yml
+  DefibrillatorCompact # This should be a research item at some point | name=compact defibrillator | suffix=
+
+1 | Entities\Objects\Specific\Research\anomaly.yml
+  AnomalyScannerAdmin | name=admin anomaly scanner | suffix=Admin
+
+1 | Entities\Objects\Tools\glowstick.yml
+  GlowstickGreen | name=green glowstick | suffix=
+
+1 | Entities\Objects\Tools\hijack_beacon.yml
+  HijackBeacon | name=hijack beacon | suffix=
+
+1 | Entities\Objects\Weapons\Bombs\detonator.yml
+  WiredDetonator | name=detonator cap | suffix=
+
+1 | Entities\Objects\Weapons\Bombs\funny.yml
+  SnapPopExplosive | name= | suffix=explosive
+
+1 | Entities\Objects\Weapons\Guns\Ammunition\Magazines\light_rifle.yml
+  MagazineLightRifleBox | name=L6 SAW magazine box (.30 rifle) | suffix=
+
+1 | Entities\Objects\Weapons\Guns\Ammunition\Magazines\pistol.yml
+  BaseMagazinePistolSubMachineGun  # Yeah it's weird but it's pistol caliber | name=SMG magazine (.35 auto) | suffix=
+
+1 | Entities\Objects\Weapons\Guns\Ammunition\Projectiles\shotgun.yml
+  PelletGrapeshot #tally fucking ho | name=grapeshot pellet | suffix=
+
+1 | Entities\Objects\Weapons\Guns\Launchers\launchers.yml
+  WeaponLauncherHydraLethal | name= | suffix=frag
+
+1 | Entities\Objects\Weapons\Guns\Rifles\rifles.yml
+  WeaponRifleLecterXL8 | name=XL8 | suffix=
+
+1 | Entities\Objects\Weapons\Guns\SMGs\smgs.yml
+  WeaponSubMachineGunC20rROW | name=C-20r ROW #I think ROW stands for Recharging Onboard Weapon so i'm following the L6C's example | suffix=
+
+1 | Entities\Objects\Weapons\Melee\e_sword.yml
+  CyborgEnergySwordDouble # why is this invalid if ID is BorgEnergySwordDouble | name= | suffix=One-Handed, For Borgs
+
+1 | Entities\Objects\Weapons\Melee\knife.yml
+  UtilityKnife | name=utility knife | suffix=
+
+1 | Entities\Objects\Weapons\Melee\mining.yml
+  BaseWeaponCrusher # Crusher? But I... | name=crusher | suffix=
+
+1 | Entities\Structures\gates.yml
+  RandomGate | name=random gate | suffix=
+
+1 | Entities\Structures\Decoration\bonfire.yml
+  BonfireStake | name=bonfire with stake | suffix=
+
+1 | Entities\Structures\Machines\vending_machines.yml
+  VendingMachineBoozeSyndicate # syndie booze-o-mat for nukie outpost | name=Bruise-O-Mat | suffix=
+
+1 | Entities\Structures\Machines\Computers\computers.yml
+  ComputerNukieDelivery | name=syndicate delivery computer | suffix=
+
+1 | Entities\Structures\Power\Generation\generators.yml
+  GeneratorWallmountAPULV | name=shuttle LV APU | suffix=
+
+1 | Entities\Structures\Specific\Cargo\mailcart.yml
+  MailCart | name=mail cart | suffix=
+
+1 | Entities\Structures\Wallmounts\Signs\bar_sign.yml
+  BarSignEmped | name=glitchy bar sign | suffix=
+
+1 | Entities\Structures\Wallmounts\Signs\posters.yml
+  PosterLegitBotanyFear | name=Fear of hydroponics | suffix=
+
+1 | Entities\Structures\Walls\walls.yml
+  WallIronsandCobblebrick | name=ironsand brick wall | suffix=
+
+1 | Entities\Virtual\mind.yml
+  MindBase | name=mind | suffix=
+
+1 | XenoArch\effects.yml
+  XenoArtifactHostileFaunaSpawn | name= | suffix=
+
+1 | _Gehenna\Prison\Structures\Storage\chest_prison.yml
+  ChestDrawerPrisonGehenna | name=prison bedside table | suffix=Prison

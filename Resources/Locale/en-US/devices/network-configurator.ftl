@@ -53,3 +53,5 @@ network-configurator-item-status-label = Mode: {$mode}
 # command
 cmd-clearnetworklinkoverlays-desc = Clear all network link overlays.
 cmd-clearnetworklinkoverlays-help = Usage: clearnetworklinkoverlays
+
+network-configurator-ui-link-menu-title = Network Configurator

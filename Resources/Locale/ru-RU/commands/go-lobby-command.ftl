@@ -1,0 +1,7 @@
+cmd-golobby-help = Использование: голобби / голобби <preset>
+
+cmd-golobby-success = Включение лобби и перезапуск раунда.
+
+cmd-golobby-success-with-preset = Включение лобби и перезапуск раунда с пресетом {$preset}.
+
+cmd-golobby-desc = Включает лобби и перезапускает раунд.

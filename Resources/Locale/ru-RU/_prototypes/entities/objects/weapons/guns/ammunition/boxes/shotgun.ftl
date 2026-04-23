@@ -1,0 +1,29 @@
+ent-BaseAmmoProvider = { ent-BaseItem }
+    .desc = { ent-BaseItem.desc }
+
+ent-AmmoProviderShotgunShell = { ent-BaseAmmoProvider }
+    .desc = { ent-BaseAmmoProvider.desc }
+
+ent-BoxBeanbag = коробка травматических 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }
+
+ent-BoxLethalshot = коробка дроби 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }
+
+ent-BoxShotgunSlug = коробка пуль 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }
+
+ent-BoxShotgunFlare = коробка осветительных 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }
+
+ent-BoxShotgunIncendiary = коробка зажигательных 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }
+
+ent-BoxShotgunUranium = коробка урановых 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }
+
+ent-BoxShotgunPractice = коробка учебных 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }
+
+ent-BoxShellTranquilizer = коробка транквилизаторов 12 калибра
+    .desc = { ent-AmmoProviderShotgunShell.desc }

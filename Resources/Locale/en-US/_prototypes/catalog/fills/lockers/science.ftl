@@ -1,0 +1,2 @@
+ent-LockerScienceFilled = { "" }
+    .suffix = Filled

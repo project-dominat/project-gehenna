@@ -24,6 +24,16 @@ public static class Palettes
     public static readonly ColorPalette Gold = ColorPalette.FromHexBase("#a88b5e");
     public static readonly ColorPalette Maroon = ColorPalette.FromHexBase("#9b2236");
 
+    // Gehenna / Dominat Ordinata palette — «тоталитарный архив»
+    // Coal: глубокий чёрный/уголь, базовый фон панелей
+    public static readonly ColorPalette Coal = ColorPalette.FromHexBase("#14141a", lightnessShift: 0.035f);
+    // DeepGold: золото Домината — акцент, рамки, активные элементы
+    public static readonly ColorPalette DeepGold = ColorPalette.FromHexBase("#b08840", lightnessShift: 0.05f, chromaShift: 0.005f);
+    // Blood: запрет/угроза, классификационная плашка
+    public static readonly ColorPalette Blood = ColorPalette.FromHexBase("#6b0f0f", lightnessShift: 0.05f, chromaShift: 0.01f);
+    // Parchment: пергаментный текст (теплый кремовый)
+    public static readonly ColorPalette Parchment = ColorPalette.FromHexBase("#d4cdb8");
+
     // Intended to be used with `ModulateSelf` to darken / lighten something
     public static readonly ColorPalette AlphaModulate = ColorPalette.FromHexBase("#ffffff");
 

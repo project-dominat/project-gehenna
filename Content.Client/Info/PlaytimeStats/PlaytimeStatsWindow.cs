@@ -13,8 +13,9 @@ public sealed partial class PlaytimeStatsWindow : FancyWindow
 {
     [Dependency] private readonly JobRequirementsManager _jobRequirementsManager = default!;
     private ISawmill _sawmill = Logger.GetSawmill("PlaytimeStatsWindow");
-    private readonly Color _altColor = Color.FromHex("#292B38");
-    private readonly Color _defaultColor = Color.FromHex("#2F2F3B");
+    private readonly Color _headerColor = Color.FromHex("#6b4f1f");
+    private readonly Color _altColor = Color.FromHex("#1a1a22");
+    private readonly Color _defaultColor = Color.FromHex("#14141a");
     private bool _useAltColor;
 
     public PlaytimeStatsWindow()
@@ -30,7 +31,12 @@ public sealed partial class PlaytimeStatsWindow : FancyWindow
     {
         var header = new PlaytimeStatsHeader();
         header.OnHeaderClicked += HeaderClicked;
-        header.BackgroundColorPlaytimePanel.PanelOverride = new StyleBoxFlat(_altColor);
+        header.BackgroundColorPlaytimePanel.PanelOverride = new StyleBoxFlat
+        {
+            BackgroundColor = _headerColor,
+            BorderColor = Color.FromHex("#b08840"),
+            BorderThickness = new Thickness(1),
+        };
         RolesPlaytimeList.AddChild(header);
     }
 
@@ -66,7 +72,12 @@ public sealed partial class PlaytimeStatsWindow : FancyWindow
 
         foreach (var entry in sortedEntries)
         {
-            var styleBox = new StyleBoxFlat { BackgroundColor = _useAltColor ? _altColor : _defaultColor };
+            var styleBox = new StyleBoxFlat
+            {
+                BackgroundColor = _useAltColor ? _altColor : _defaultColor,
+                BorderColor = Color.FromHex("#2a2a35"),
+                BorderThickness = new Thickness(1),
+            };
             entry.UpdateShading(styleBox);
             RolesPlaytimeList.AddChild(entry);
             _useAltColor ^= true;
@@ -92,7 +103,12 @@ public sealed partial class PlaytimeStatsWindow : FancyWindow
 
         foreach (var entry in sortedEntries)
         {
-            var styleBox = new StyleBoxFlat { BackgroundColor = _useAltColor ? _altColor : _defaultColor };
+            var styleBox = new StyleBoxFlat
+            {
+                BackgroundColor = _useAltColor ? _altColor : _defaultColor,
+                BorderColor = Color.FromHex("#2a2a35"),
+                BorderThickness = new Thickness(1),
+            };
             entry.UpdateShading(styleBox);
             RolesPlaytimeList.AddChild(entry);
             _useAltColor ^= true;
@@ -124,7 +140,12 @@ public sealed partial class PlaytimeStatsWindow : FancyWindow
         if (TimeSpan.TryParse(playtimeString, out var playtime))
         {
             var entry = new PlaytimeStatsEntry(role, playtime,
-                new StyleBoxFlat(_useAltColor ? _altColor : _defaultColor));
+                new StyleBoxFlat
+                {
+                    BackgroundColor = _useAltColor ? _altColor : _defaultColor,
+                    BorderColor = Color.FromHex("#2a2a35"),
+                    BorderThickness = new Thickness(1),
+                });
             RolesPlaytimeList.AddChild(entry);
             _useAltColor ^= true;
         }

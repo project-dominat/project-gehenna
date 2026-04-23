@@ -23,3 +23,5 @@ comp-gas-canister-ui-pressure = {$pressure} kPa
 # Canister gas tank slot
 
 comp-gas-canister-slot-name-gas-tank = Gas tank
+
+comp-gas-canister-ui-window-title = Canister

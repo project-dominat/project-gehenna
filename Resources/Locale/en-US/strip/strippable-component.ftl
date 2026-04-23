@@ -22,3 +22,5 @@ strip-all-verb-get-data-text = Strip All
 
 strippable-bound-user-interface-stripping-menu-title = {CAPITALIZE($ownerName)}'s inventory
 strippable-bound-user-interface-stripping-menu-ensnare-button = Remove Leg Restraints
+
+stripping-window-title = Stripping

@@ -1,0 +1,2 @@
+ent-ClothingHeadEyeBaseFlipped = { "" }
+    .suffix = flipped

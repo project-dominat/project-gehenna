@@ -130,6 +130,50 @@ public sealed class AddTests : GameTest
     }
 
     [Test]
+    public async Task LocalizedLogSearchWorksForDisplayAndRawText()
+    {
+        var pair = Pair;
+        var server = pair.Server;
+
+        var sAdminLogSystem = server.ResolveDependency<IAdminLogManager>();
+        var guid = Guid.NewGuid().ToString();
+
+        await server.WaitPost(() =>
+        {
+            sAdminLogSystem.Add(LogType.Chat, LogImpact.Low, $"Server announcement: {guid}");
+        });
+
+        SharedAdminLog log = default;
+
+        await PoolManager.WaitUntil(server, async () =>
+        {
+            var logs = await sAdminLogSystem.CurrentRoundLogs(new LogFilter
+            {
+                Search = "Server announcement"
+            });
+
+            if (logs.Count == 0)
+                return false;
+
+            log = logs.First();
+            return true;
+        });
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(log.Message, Does.StartWith("Сообщение сервера:"));
+            Assert.That(log.RawMessage, Does.StartWith("Server announcement:"));
+        });
+
+        var localizedLogs = await sAdminLogSystem.CurrentRoundLogs(new LogFilter
+        {
+            Search = "Сообщение сервера"
+        });
+
+        Assert.That(localizedLogs.Count, Is.GreaterThan(0));
+    }
+
+    [Test]
     [TestCase(500)]
     public async Task BulkAddLogs(int amount)
     {

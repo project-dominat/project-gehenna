@@ -1,12 +1,14 @@
 using System.Numerics;
 using Content.Client.CombatMode;
 using Content.Client.Weapons.Ranged.Systems;
+using Content.Shared.CCVar;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.Graphics;
 using Robust.Client.Input;
 using Robust.Client.Player;
 using Robust.Client.UserInterface;
+using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
@@ -25,20 +27,13 @@ public sealed class AimingCrosshairOverlay : Overlay
     private readonly ClientAimingSystem _aiming;
     private readonly SharedTransformSystem _transform;
     private readonly IGameTiming _timing;
+    // Gehenna-Edit: settings-driven crosshair
+    private readonly IConfigurationManager _cfg;
 
-    private const float BaseGap = 6f;
-    private const float BaseLength = 10f;
-    // Gehenna edit start - make crosshair bloom read as the active firing envelope
-    private const float SpreadScale = 2.4f;
-    // Gehenna edit end
-    private const float MinCrosshairRadius = 7f;
     private const float MaxCrosshairRadius = 150f;
     private const float MinLineAlpha = 0.62f;
     private const float MaxLineAlpha = 0.96f;
-    private const float BaseLineWidth = 2.4f;
-    private const float OutlineLinePadding = 2.4f;
-    private const float CenterDotRadius = 2.2f;
-    private const float CenterDotOutlineRadius = 3.8f;
+    private const float CenterDotOutlineBonus = 1.6f;
     private const float FiringBloomThreshold = 0.08f;
     private const float ReloadCooldownMultiplier = 1.5f;
     private const float FiringImpactDecay = 4.2f;
@@ -72,7 +67,8 @@ public sealed class AimingCrosshairOverlay : Overlay
         SharedGunSystem guns,
         ClientAimingSystem aiming,
         SharedTransformSystem transform,
-        IGameTiming timing)
+        IGameTiming timing,
+        IConfigurationManager cfg)
     {
         _entManager = entManager;
         _eye = eye;
@@ -83,10 +79,15 @@ public sealed class AimingCrosshairOverlay : Overlay
         _aiming = aiming;
         _transform = transform;
         _timing = timing;
+        _cfg = cfg;
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
+        // Gehenna-Edit: early-out when player disabled the crosshair
+        if (!_cfg.GetCVar(CCVars.CrosshairEnabled))
+            return false;
+
         return _aiming.ShouldDrawLocalCrosshair(out _, out _);
     }
 
@@ -104,21 +105,37 @@ public sealed class AimingCrosshairOverlay : Overlay
         var bloom = GetBloom(gun.Owner, gun.Comp);
         var ammoCount = _guns.GetAmmoCount(gun.Owner);
         var isReloading = state == CrosshairState.Reloading;
+
+        // Gehenna-Edit: resolve tunables from config
+        var baseGap = _cfg.GetCVar(CCVars.CrosshairGap);
+        var baseLength = _cfg.GetCVar(CCVars.CrosshairLength);
+        var spreadScale = _cfg.GetCVar(CCVars.CrosshairSpreadScale);
+        var spreadRailEnabled = _cfg.GetCVar(CCVars.CrosshairSpreadRail);
+        var hitFlashEnabled = _cfg.GetCVar(CCVars.CrosshairHitFlash);
+
         // Gehenna edit start - render the real lateral bullet envelope instead of a small abstract bloom
-        var hasSpreadRail = TryGetLateralSpreadRail(
-            center,
-            out var railStart,
-            out var railEnd,
-            out var railRadiusPixels,
-            out var envelopeSpread);
+        var hasSpreadRail = false;
+        Vector2 railStart = default, railEnd = default;
+        float railRadiusPixels = 0f;
+        float envelopeSpread = 0f;
+        if (spreadRailEnabled)
+        {
+            hasSpreadRail = TryGetLateralSpreadRail(
+                center,
+                out railStart,
+                out railEnd,
+                out railRadiusPixels,
+                out envelopeSpread);
+        }
         var displaySpread = Math.Max(visualSpread, envelopeSpread);
-        var spreadRadius = BaseGap + MathF.Min(displaySpread * EyeManager.PixelsPerMeter * SpreadScale, MaxCrosshairRadius - BaseGap);
+        var spreadRadius = baseGap + MathF.Min(displaySpread * EyeManager.PixelsPerMeter * spreadScale, MaxCrosshairRadius - baseGap);
         // Gehenna edit end
-        var gap = Math.Clamp(spreadRadius, MinCrosshairRadius, MaxCrosshairRadius) * uiScale;
-        var length = BaseLength * MathHelper.Lerp(1f, 0.72f, bloom) * uiScale;
+        // Gehenna-Edit: honour the configured base gap as the real minimum
+        var gap = Math.Clamp(spreadRadius, baseGap, MaxCrosshairRadius) * uiScale;
+        var length = baseLength * MathHelper.Lerp(1f, 0.72f, bloom) * uiScale;
 
         _drawTime = (float)_timing.CurTime.TotalSeconds;
-        UpdateFiringImpact(gun.Owner, state, bloom, _drawTime);
+        UpdateFiringImpact(gun.Owner, state, bloom, _drawTime, hitFlashEnabled);
         UpdateReloadProgress(gun.Owner, gun.Comp, isReloading);
 
         if (hasSpreadRail)
@@ -127,7 +144,44 @@ public sealed class AimingCrosshairOverlay : Overlay
         DrawCrosshair(args.ScreenHandle, center, gap, length, uiScale, bloom, ammoCount);
     }
 
-    public void NotifyHit() => _hitFlashIntensity = Math.Max(_hitFlashIntensity, 1.0f);
+    public void NotifyHit()
+    {
+        // Gehenna-Edit: respect the hit-flash toggle
+        if (!_cfg.GetCVar(CCVars.CrosshairHitFlash))
+            return;
+
+        _hitFlashIntensity = Math.Max(_hitFlashIntensity, 1.0f);
+    }
+
+    private Color ApplyBloomTint(Color baseColor, float bloom)
+    {
+        if (!_cfg.GetCVar(CCVars.CrosshairBloomTint))
+            return baseColor;
+
+        bloom = Math.Clamp(bloom, 0f, 1f);
+        if (bloom <= 0f)
+            return baseColor;
+
+        // Multiplicatively push the user color through white -> yellow -> red as bloom rises.
+        var bloomColor = GetBloomColor(bloom);
+        return new Color(
+            baseColor.R * bloomColor.R,
+            baseColor.G * bloomColor.G,
+            baseColor.B * bloomColor.B,
+            baseColor.A);
+    }
+
+    private Color GetSpreadRailBaseColor(float bloom)
+    {
+        var colorString = _cfg.GetCVar(CCVars.CrosshairSpreadRailColor);
+        Color baseColor;
+        if (!string.IsNullOrEmpty(colorString) && Color.TryFromHex(colorString) is { } railColor)
+            baseColor = railColor;
+        else
+            baseColor = Color.TryFromHex(_cfg.GetCVar(CCVars.CrosshairColor)) ?? Color.White;
+
+        return ApplyBloomTint(baseColor, bloom);
+    }
 
     // Gehenna edit start - lateral-only spread visualization
     private bool TryGetLateralSpreadRail(
@@ -245,14 +299,28 @@ public sealed class AimingCrosshairOverlay : Overlay
         if (delta.LengthSquared() <= 0.001f)
             return;
 
+        // Gehenna-Edit: pull settings
+        var outlineEnabled = _cfg.GetCVar(CCVars.CrosshairOutline);
+        var centerDotEnabled = _cfg.GetCVar(CCVars.CrosshairCenterDot);
+        var hitFlashEnabled = _cfg.GetCVar(CCVars.CrosshairHitFlash);
+        var opacity = Math.Clamp(_cfg.GetCVar(CCVars.CrosshairOpacity), 0f, 1f);
+        var baseLineWidth = _cfg.GetCVar(CCVars.CrosshairLineWidth);
+        var baseGap = _cfg.GetCVar(CCVars.CrosshairGap);
+        var outlineThickness = _cfg.GetCVar(CCVars.CrosshairOutlineThickness);
+        var centerDotRadius = _cfg.GetCVar(CCVars.CrosshairCenterDotRadius);
+        var dynamicLineWidth = _cfg.GetCVar(CCVars.CrosshairDynamicLineWidth);
+
         var axis = delta.Normalized();
         var capAlpha = MathHelper.Lerp(0.92f, 0.75f, Math.Clamp(bloom, 0f, 1f));
-        var cap = GetBloomColor(bloom).WithAlpha(capAlpha);
-        if (_hitFlashIntensity > 0f)
-            cap = Color.InterpolateBetween(cap, Color.White.WithAlpha(capAlpha), _hitFlashIntensity);
-        var shadow = Color.Black.WithAlpha(0.82f);
-        var lineWidth = MathHelper.Lerp(1.6f, 3.4f, Math.Clamp(bloom, 0f, 1f)) * uiScale;
-        var outlineWidth = lineWidth + 2.8f * uiScale;
+        var railBase = GetSpreadRailBaseColor(bloom);
+        var cap = railBase.WithAlpha(Math.Clamp(capAlpha * opacity, 0f, 1f));
+        if (hitFlashEnabled && _hitFlashIntensity > 0f)
+            cap = Color.InterpolateBetween(cap, Color.White.WithAlpha(Math.Clamp(capAlpha * opacity, 0f, 1f)), _hitFlashIntensity);
+        var shadow = Color.Black.WithAlpha(Math.Clamp(0.82f * opacity, 0f, 1f));
+        var lineWidth = dynamicLineWidth
+            ? MathHelper.Lerp(baseLineWidth * 0.7f, baseLineWidth * 1.4f, Math.Clamp(bloom, 0f, 1f)) * uiScale
+            : baseLineWidth * uiScale;
+        var outlineWidth = lineWidth + outlineThickness * uiScale;
         var capLength = Math.Clamp(radiusPixels * 0.05f, 6f * uiScale, 8f * uiScale);
         var shadowOffset = new Vector2(1f, 1f) * uiScale;
 
@@ -261,25 +329,31 @@ public sealed class AimingCrosshairOverlay : Overlay
 
         // Center crosshair: 4 separate arms with dynamic inner gap + center dot
         // Inner gap expands with bloom so the crosshair breathes with firing/movement
-        var innerGap = Math.Clamp(gap * 0.18f, BaseGap * uiScale, BaseGap * 3f * uiScale);
+        var innerGap = Math.Clamp(gap * 0.18f, baseGap * uiScale, baseGap * 3f * uiScale);
         var arm = armLength;
 
         // Shadow pass
-        DrawThickLine(screen, center + shadowOffset + new Vector2(innerGap, 0f), center + shadowOffset + new Vector2(innerGap + arm, 0f), shadow, outlineWidth);
-        DrawThickLine(screen, center + shadowOffset - new Vector2(innerGap, 0f), center + shadowOffset - new Vector2(innerGap + arm, 0f), shadow, outlineWidth);
-        DrawThickLine(screen, center + shadowOffset + new Vector2(0f, innerGap), center + shadowOffset + new Vector2(0f, innerGap + arm), shadow, outlineWidth);
-        DrawThickLine(screen, center + shadowOffset - new Vector2(0f, innerGap), center + shadowOffset - new Vector2(0f, innerGap + arm), shadow, outlineWidth);
-        screen.DrawCircle(center + shadowOffset, CenterDotOutlineRadius * uiScale, shadow, true);
+        if (outlineEnabled)
+        {
+            DrawThickLine(screen, center + shadowOffset + new Vector2(innerGap, 0f), center + shadowOffset + new Vector2(innerGap + arm, 0f), shadow, outlineWidth);
+            DrawThickLine(screen, center + shadowOffset - new Vector2(innerGap, 0f), center + shadowOffset - new Vector2(innerGap + arm, 0f), shadow, outlineWidth);
+            DrawThickLine(screen, center + shadowOffset + new Vector2(0f, innerGap), center + shadowOffset + new Vector2(0f, innerGap + arm), shadow, outlineWidth);
+            DrawThickLine(screen, center + shadowOffset - new Vector2(0f, innerGap), center + shadowOffset - new Vector2(0f, innerGap + arm), shadow, outlineWidth);
+            if (centerDotEnabled)
+                screen.DrawCircle(center + shadowOffset, (centerDotRadius + CenterDotOutlineBonus) * uiScale, shadow, true);
+        }
         // Color pass
         DrawThickLine(screen, center + new Vector2(innerGap, 0f), center + new Vector2(innerGap + arm, 0f), cap, lineWidth);
         DrawThickLine(screen, center - new Vector2(innerGap, 0f), center - new Vector2(innerGap + arm, 0f), cap, lineWidth);
         DrawThickLine(screen, center + new Vector2(0f, innerGap), center + new Vector2(0f, innerGap + arm), cap, lineWidth);
         DrawThickLine(screen, center - new Vector2(0f, innerGap), center - new Vector2(0f, innerGap + arm), cap, lineWidth);
-        screen.DrawCircle(center, CenterDotRadius * uiScale, cap, true);
+        if (centerDotEnabled)
+            screen.DrawCircle(center, centerDotRadius * uiScale, cap, true);
 
         void DrawCap(Vector2 position)
         {
-            DrawThickLine(screen, position + shadowOffset - axis * capLength, position + shadowOffset + axis * capLength, shadow, outlineWidth);
+            if (outlineEnabled)
+                DrawThickLine(screen, position + shadowOffset - axis * capLength, position + shadowOffset + axis * capLength, shadow, outlineWidth);
             DrawThickLine(screen, position - axis * capLength, position + axis * capLength, cap, lineWidth);
         }
     }
@@ -358,7 +432,7 @@ public sealed class AimingCrosshairOverlay : Overlay
         return bloom;
     }
 
-    private void UpdateFiringImpact(EntityUid gun, CrosshairState state, float bloom, float now)
+    private void UpdateFiringImpact(EntityUid gun, CrosshairState state, float bloom, float now, bool hitFlashEnabled)
     {
         if (_lastGun != gun)
         {
@@ -371,7 +445,11 @@ public sealed class AimingCrosshairOverlay : Overlay
 
         var frameTime = Math.Clamp(now - _lastDrawTime, 0f, 0.1f);
         _firingImpact = MathF.Max(0f, _firingImpact - FiringImpactDecay * frameTime);
-        _hitFlashIntensity = MathF.Max(0f, _hitFlashIntensity - HitFlashDecay * frameTime);
+        // Gehenna-Edit: skip hit-flash decay when feature is disabled
+        if (hitFlashEnabled)
+            _hitFlashIntensity = MathF.Max(0f, _hitFlashIntensity - HitFlashDecay * frameTime);
+        else
+            _hitFlashIntensity = 0f;
 
         if (state == CrosshairState.Firing && bloom > _lastBloom + FiringImpactBloomStep)
         {
@@ -418,32 +496,48 @@ public sealed class AimingCrosshairOverlay : Overlay
         float bloom,
         int ammoCount)
     {
+        // Gehenna-Edit: read dynamic settings
+        var opacity = Math.Clamp(_cfg.GetCVar(CCVars.CrosshairOpacity), 0f, 1f);
+        var outlineEnabled = _cfg.GetCVar(CCVars.CrosshairOutline);
+        var centerDotEnabled = _cfg.GetCVar(CCVars.CrosshairCenterDot);
+        var baseLineWidth = _cfg.GetCVar(CCVars.CrosshairLineWidth);
+        var baseGap = _cfg.GetCVar(CCVars.CrosshairGap);
+        var outlineThickness = _cfg.GetCVar(CCVars.CrosshairOutlineThickness);
+        var centerDotRadius = _cfg.GetCVar(CCVars.CrosshairCenterDotRadius);
+
         // Gehenna edit start - firing bloom should pulse visibly on sustained fire
         var impactScale = 1f + _firingImpact * 0.55f;
         gap *= impactScale;
         length *= 1f + _firingImpact * 0.3f;
         // Gehenna edit end
-        gap = Math.Clamp(gap, MinCrosshairRadius * uiScale, MaxCrosshairRadius * uiScale);
+        gap = Math.Clamp(gap, baseGap * uiScale, MaxCrosshairRadius * uiScale);
 
         bloom = Math.Clamp(bloom, 0f, 1f);
-        var shadow = Color.Black.WithAlpha(0.84f);
+        var shadow = Color.Black.WithAlpha(Math.Clamp(0.84f * opacity, 0f, 1f));
         var shadowOffset = new Vector2(1f, 1f) * uiScale;
-        var lineWidth = MathHelper.Lerp(BaseLineWidth, BaseLineWidth * 0.85f, bloom) * uiScale;
-        var outlineWidth = lineWidth + OutlineLinePadding * uiScale;
+        var lineWidth = MathHelper.Lerp(baseLineWidth, baseLineWidth * 0.85f, bloom) * uiScale;
+        var outlineWidth = lineWidth + outlineThickness * uiScale;
 
         if (ammoCount <= 0)
         {
             var blink = 0.45f + MathF.Sin(_drawTime * 9f) * 0.2f;
-            var emptyColor = Color.Red.WithAlpha(blink);
-            var emptyShadow = Color.Black.WithAlpha(0.65f);
+            var emptyColor = Color.Red.WithAlpha(Math.Clamp(blink * opacity, 0f, 1f));
+            var emptyShadow = Color.Black.WithAlpha(Math.Clamp(0.65f * opacity, 0f, 1f));
             var size = Math.Clamp((gap + length * 0.7f) * 0.75f, 9f * uiScale, 22f * uiScale);
 
-            DrawThickLine(screen, center + shadowOffset + new Vector2(-size, -size), center + shadowOffset + new Vector2(size, size), emptyShadow, outlineWidth);
-            DrawThickLine(screen, center + shadowOffset + new Vector2(size, -size), center + shadowOffset + new Vector2(-size, size), emptyShadow, outlineWidth);
+            if (outlineEnabled)
+            {
+                DrawThickLine(screen, center + shadowOffset + new Vector2(-size, -size), center + shadowOffset + new Vector2(size, size), emptyShadow, outlineWidth);
+                DrawThickLine(screen, center + shadowOffset + new Vector2(size, -size), center + shadowOffset + new Vector2(-size, size), emptyShadow, outlineWidth);
+            }
             DrawThickLine(screen, center + new Vector2(-size, -size), center + new Vector2(size, size), emptyColor, lineWidth);
             DrawThickLine(screen, center + new Vector2(size, -size), center + new Vector2(-size, size), emptyColor, lineWidth);
-            screen.DrawCircle(center, CenterDotOutlineRadius * uiScale, emptyShadow, true);
-            screen.DrawCircle(center, CenterDotRadius * uiScale, emptyColor, true);
+            if (centerDotEnabled)
+            {
+                if (outlineEnabled)
+                    screen.DrawCircle(center, (centerDotRadius + CenterDotOutlineBonus) * uiScale, emptyShadow, true);
+                screen.DrawCircle(center, centerDotRadius * uiScale, emptyColor, true);
+            }
         }
     }
 

@@ -1,0 +1,63 @@
+ent-SeatBase = chair
+    .desc = You sit in this. Either by will or force.
+
+ent-UnanchoredChairBase = chair
+
+ent-ChairBase = chair
+
+ent-OfficeChairBase = chair
+
+ent-StoolBase = stool
+
+ent-Chair = chair
+
+ent-ChairGreyscale = chair
+    .suffix = White
+
+ent-Stool = stool
+    .desc = Apply butt.
+
+ent-StoolBar = bar stool
+
+ent-ChairBrass = brass chair
+
+ent-ChairOfficeLight = white office chair
+
+ent-ChairOfficeDark = dark office chair
+
+ent-ComfyChair = comfy chair
+    .desc = It looks comfy.
+
+ent-ChairPilotSeat = pilot seat
+    .desc = The pilot seat of a prestigious ship.
+
+ent-ChairWood = wooden chair
+
+ent-ChairRitual = ritual chair
+    .desc = Looks uncomfortable.
+
+ent-ChairMeat = meat chair
+    .desc = Uncomfortably sweaty.
+
+ent-ChairCursed = cursed chair
+    .desc = It's staring back.
+
+ent-ChairWeb = web chair
+    .desc = For true web developers.
+
+ent-ChairFolding = folding chair
+    .desc = If you carry six of these you become the coolest kid at church.
+
+ent-ChairFoldingSpawnFolded = { "" }
+    .suffix = folded
+
+ent-SteelBench = steel bench
+    .desc = A long chair made for a metro. Really standard design.
+
+ent-CardStool = cardboard stool
+    .desc = Make sure you sit *really* gently.
+
+ent-WoodenBench = wooden bench
+    .desc = Did you get a splinter? Well, at least it’s eco friendly.
+
+ent-ChairXeno = xeno chair

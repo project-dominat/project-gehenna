@@ -1,0 +1,4 @@
+comp-generator-failsafe = { $target } сотрясается, когда срабатывает система защиты!
+
+
+comp-generator-failsafe-disabled = Что-то перегорело внутри { $target }...

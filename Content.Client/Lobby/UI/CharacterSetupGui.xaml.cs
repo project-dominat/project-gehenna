@@ -27,6 +27,7 @@ namespace Content.Client.Lobby.UI
         [Dependency] private readonly IConfigurationManager _cfg = default!;
         [Dependency] private readonly ISharedPlayerManager _playerManager = default!;
 
+        private static readonly Color PanelSurface = Color.FromHex("#2a2833");
         private readonly Button _createNewCharacterButton;
 
         public event Action<int>? SelectCharacter;
@@ -36,16 +37,7 @@ namespace Content.Client.Lobby.UI
         {
             RobustXamlLoader.Load(this);
             IoCManager.InjectDependencies(this);
-
-            var panelTex = _resourceCache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png");
-            var back = new StyleBoxTexture
-            {
-                Texture = panelTex,
-                Modulate = new Color(37, 37, 42)
-            };
-            back.SetPatchMargin(StyleBox.Margin.All, 10);
-
-            BackgroundPanel.PanelOverride = back;
+            ApplyGehennaTheme();
 
             _createNewCharacterButton = new Button
             {
@@ -65,6 +57,19 @@ namespace Content.Client.Lobby.UI
             StatsButton.OnPressed += _ => new PlaytimeStatsWindow().OpenCentered();
 
             _cfg.OnValueChanged(CCVars.SeeOwnNotes, p => AdminRemarksButton.Visible = p, true);
+        }
+
+        private void ApplyGehennaTheme()
+        {
+            var panelTex = _resourceCache.GetTexture("/Textures/Interface/Nano/button.svg.96dpi.png");
+            var box = new StyleBoxTexture
+            {
+                Texture = panelTex,
+                Modulate = PanelSurface,
+            };
+
+            box.SetPatchMargin(StyleBox.Margin.All, 10);
+            BackgroundPanel.PanelOverride = box;
         }
 
         /// <summary>

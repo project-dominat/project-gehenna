@@ -1,0 +1,47 @@
+ent-ResearchDisk = диск исследовательских очков (1000)
+    .desc = Диск для сервера РНД, содержащий 1000 очков.
+
+ent-ResearchDisk5000 = диск исследовательских очков (5000)
+    .desc = Диск для сервера РНД, содержащий 5000 очков.
+
+ent-ResearchDisk10000 = диск исследовательских очков (10000)
+    .desc = Диск для сервера РНД, содержащий 10000 очков.
+
+ent-ResearchDiskDebug = диск исследовательских очков
+    .desc = Диск для сервера РНД, содержащий столько очков, сколько вам надо.
+    .suffix = ДЕБАГ, НЕ МАППИТЬ
+
+ent-TechnologyDisk = технологический диск
+    .desc = Диск для сервера РНД, содержащий исследованную технологию.
+
+ent-TechnologyDiskT1 = { ent-TechnologyDisk }
+    .suffix = Уровень 1
+    .desc = { ent-TechnologyDisk.desc }
+
+ent-TechnologyDiskT2 = { ent-TechnologyDisk }
+    .suffix = Уровень 2
+    .desc = { ent-TechnologyDisk.desc }
+
+ent-TechnologyDiskT3 = { ent-TechnologyDisk }
+    .suffix = Уровень 3
+    .desc = { ent-TechnologyDisk.desc }
+
+ent-TechnologyDiskIndustrial = { ent-TechnologyDisk }
+    .suffix = Промышленность
+    .desc = { ent-TechnologyDisk.desc }
+
+ent-TechnologyDiskArsenal = { ent-TechnologyDisk }
+    .suffix = Арсенал
+    .desc = { ent-TechnologyDisk.desc }
+
+ent-TechnologyDiskExperimental = { ent-TechnologyDisk }
+    .suffix = Экспериментальная
+    .desc = { ent-TechnologyDisk.desc }
+
+ent-TechnologyDiskCivilianServices = { ent-TechnologyDisk }
+    .suffix = Гражданские службы
+    .desc = { ent-TechnologyDisk.desc }
+
+ent-TechnologyDiskRare = { ent-TechnologyDisk }
+    .suffix = Редкий
+    .desc = { ent-TechnologyDisk.desc }

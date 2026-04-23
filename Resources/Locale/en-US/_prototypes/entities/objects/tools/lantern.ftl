@@ -1,0 +1,2 @@
+ent-LanternFlash = { "" }
+    .suffix = Flash

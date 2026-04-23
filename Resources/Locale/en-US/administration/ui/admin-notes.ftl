@@ -89,3 +89,5 @@ admin-remarks-title = Admin remarks
 
 # Misc
 system-user = [System]
+
+admin-notes-window-title-loading = Loading...

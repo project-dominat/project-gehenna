@@ -1,0 +1,58 @@
+ent-BaseRock = { "" }
+    .desc = Очень тяжёлый.
+
+ent-BaseTree = { "" }
+    .desc = { "" }
+
+ent-BaseTreeSnow = { ent-BaseTree }
+    .desc = { ent-BaseTree.desc }
+
+ent-BaseTreeLarge = { ent-BaseTree }
+    .desc = { ent-BaseTree.desc }
+
+ent-BaseTreeConifer = { ent-BaseTree }
+    .desc = { ent-BaseTree.desc }
+
+ent-FloraRockSolid = валун
+    .desc = { ent-BaseRock.desc }
+
+ent-FloraStalagmite = сталагмит
+    .desc = Каменный шип природного происхождения.
+
+ent-FloraGreyStalagmite = серый сталагмит
+    .desc = { ent-FloraStalagmite.desc }
+
+ent-FloraTree = дерево
+    .desc = { ent-BaseTree.desc }
+
+ent-FloraTreeSnow = заснеженное дерево
+    .desc = { ent-BaseTreeSnow.desc }
+
+ent-FloraTreeStump = пень
+    .desc = { ent-BaseTreeSnow.desc }
+
+ent-FloraTreeLarge = большое дерево
+    .desc = { ent-BaseTreeLarge.desc }
+
+ent-FloraTreeConifer = заснеженная хвоя
+    .desc = { ent-BaseTreeConifer.desc }
+
+ent-FloraTreeChristmas01 = рождественская ель
+    .desc = { ent-BaseTreeConifer.desc }
+
+ent-FloraTreeChristmas02 = рождественская ель
+    .desc = { ent-BaseTreeConifer.desc }
+    .suffix = Подарки
+
+ent-FloraTreeChristmas03 = рождественская ель
+    .suffix = Безумные подарки
+    .desc = { ent-FloraTreeChristmas02.desc }
+
+ent-FloraTreeStumpConifer = пень
+    .desc = { ent-BaseTreeConifer.desc }
+
+ent-ShadowTree = тёмное дерево
+    .desc = Листья шепчутся о тебе.
+
+ent-LightTree = светящееся дерево
+    .desc = Удивительное дерево, наполненное странной энергией.

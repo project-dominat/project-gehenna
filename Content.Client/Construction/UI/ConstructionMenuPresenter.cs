@@ -46,6 +46,7 @@ namespace Content.Client.Construction.UI
 
         private const string FavoriteCatName = "construction-category-favorites";
         private const string ForAllCategoryName = "construction-category-all";
+        private static readonly Color GridSelectionTint = Color.FromHex("#d4a960");
 
         private bool CraftingAvailable
         {
@@ -192,6 +193,7 @@ namespace Content.Client.Construction.UI
             var recipesList = _constructionView.Recipes;
             var recipesGrid = _constructionView.RecipesGrid;
             recipesGrid.RemoveAllChildren();
+            _recipeButtons.Clear();
 
             _constructionView.RecipesGridScrollContainer.Visible = _constructionView.GridViewButtonPressed;
             _constructionView.Recipes.Visible = !_constructionView.GridViewButtonPressed;
@@ -214,7 +216,9 @@ namespace Content.Client.Construction.UI
             {
                 var protoView = new EntityPrototypeView()
                 {
+                    SetSize = new Vector2(48f),
                     Scale = new Vector2(1.2f),
+                    Stretch = SpriteView.StretchMode.Fill,
                 };
                 protoView.SetPrototype(recipe.TargetPrototype);
 
@@ -224,14 +228,15 @@ namespace Content.Client.Construction.UI
                     Name = recipe.Prototype.Name,
                     ToolTip = recipe.Prototype.Name,
                     ToggleMode = true,
+                    SetSize = new Vector2(56f),
                     Children = { protoView },
                 };
 
                 var itemButtonPanelContainer = new PanelContainer
                 {
-                    PanelOverride = new StyleBoxFlat { BackgroundColor = StyleNano.ButtonColorDefault },
                     Children = { itemButton },
                 };
+                itemButtonPanelContainer.SetOnlyStyleClass(StyleClass.PanelDark);
 
                 itemButton.OnToggled += buttonToggledEventArgs =>
                 {
@@ -311,9 +316,8 @@ namespace Content.Client.Construction.UI
             if (button.Parent is not PanelContainer buttonPanel)
                 return;
 
-            button.Children.Single().Modulate = select ? Color.Green : Color.White;
-            var buttonColor = select ? StyleNano.ButtonColorDefault : Color.Transparent;
-            buttonPanel.PanelOverride = new StyleBoxFlat { BackgroundColor = buttonColor };
+            button.Children.Single().Modulate = select ? GridSelectionTint : Color.White;
+            buttonPanel.SetOnlyStyleClass(select ? StyleClass.PanelLight : StyleClass.PanelDark);
         }
 
         private void PopulateCategories(string? selectCategory = null)

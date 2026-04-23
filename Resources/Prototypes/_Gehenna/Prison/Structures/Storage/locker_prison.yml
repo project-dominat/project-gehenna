@@ -2,7 +2,7 @@
   parent: LockerBaseSecure
   id: LockerPrisonGehenna
   name: prisoner property locker
-  suffix: "[Prison]"
+  suffix: "Prison"
   description: A secure locker for storing inmates' personal belongings.
   components:
   - type: Appearance
@@ -31,5 +31,113 @@
     stateBaseClosed: planet_worker
     stateDoorOpen: planet_worker_open
     stateDoorClosed: planet_worker_door
+  - type: AccessReader
+    access: [["Security"]]
+
+- type: entity
+  parent: LockerBaseSecure
+  id: LockerPrisonDoctor
+  name: prison doctor's locker
+  suffix: "Prison"
+  description: A medical locker assigned to the doctor serving at Gehenna prison.
+  components:
+  - type: Appearance
+  - type: Sprite
+    sprite: _Gehenna/Prison/Structure/Storage/closet.rsi
+    noRot: true
+    layers:
+    - state: doctor
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: doctor_door
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+      sprite: Structures/Storage/closet.rsi
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+      sprite: Structures/Storage/closet.rsi
+    - state: paper
+      visible: false
+      sprite: Structures/Storage/closet_labels.rsi
+      offset: "-0.065,0"
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: EntityStorageVisuals
+    stateBaseClosed: doctor
+    stateDoorOpen: doctor_open
+    stateDoorClosed: doctor_door
+  - type: AccessReader
+    access: [["Medical"]]
+
+- type: entity
+  parent: LockerBaseSecure
+  id: LockerPrisonEngineer
+  name: prison engineer's locker
+  suffix: "Prison"
+  description: A technical locker assigned to the engineer working at Gehenna prison.
+  components:
+  - type: Appearance
+  - type: Sprite
+    sprite: _Gehenna/Prison/Structure/Storage/closet.rsi
+    noRot: true
+    layers:
+    - state: eng
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: eng_door
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+      sprite: Structures/Storage/closet.rsi
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+      sprite: Structures/Storage/closet.rsi
+    - state: paper
+      visible: false
+      sprite: Structures/Storage/closet_labels.rsi
+      offset: "-0.065,0"
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: EntityStorageVisuals
+    stateBaseClosed: eng
+    stateDoorOpen: eng_open
+    stateDoorClosed: eng_door
+  - type: AccessReader
+    access: [["Engineering"]]
+
+- type: entity
+  parent: LockerBaseSecure
+  id: LockerPrisonHoS
+  name: prison warden's locker
+  suffix: "Prison"
+  description: A personal locker belonging to the warden of Gehenna prison.
+  components:
+  - type: Appearance
+  - type: Sprite
+    sprite: _Gehenna/Prison/Structure/Storage/closet.rsi
+    noRot: true
+    layers:
+    - state: hos
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: hos_door
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+      sprite: Structures/Storage/closet.rsi
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+      sprite: Structures/Storage/closet.rsi
+    - state: paper
+      visible: false
+      sprite: Structures/Storage/closet_labels.rsi
+      offset: "-0.065,0"
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: EntityStorageVisuals
+    stateBaseClosed: hos
+    stateDoorOpen: hos_open
+    stateDoorClosed: hos_door
   - type: AccessReader
     access: [["Security"]]

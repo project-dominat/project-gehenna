@@ -82,7 +82,7 @@ public sealed class ClientAimingSystem : EntitySystem
 
         TryInitializeInvisibleCursor();
 
-        _overlay.AddOverlay(new AimingCrosshairOverlay(EntityManager, _eyeManager, _input, _player, _combatMode, _gun, this, _transform, _timing));
+        _overlay.AddOverlay(new AimingCrosshairOverlay(EntityManager, _eyeManager, _input, _player, _combatMode, _gun, this, _transform, _timing, _cfg));
     }
 
     private void OnGunHitConfirmed(GunHitConfirmedEvent ev)

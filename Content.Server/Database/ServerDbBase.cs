@@ -871,6 +871,11 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
             // Save me from SQLite
             var query = StartAdminLogsQuery(db, filter);
 
+            if (!string.IsNullOrWhiteSpace(filter?.Search))
+            {
+                query = db.SearchLogs(query, filter.Search);
+            }
+
             if (filter == null)
             {
                 return query.OrderBy(log => log.Date);
@@ -979,7 +984,7 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
                     players[i] = log.Players[i].PlayerUserId;
                 }
 
-                yield return new SharedAdminLog(log.Id, log.Type, log.Impact, log.Date, log.Message, players);
+                yield return new SharedAdminLog(log.Id, log.Type, log.Impact, log.Date, log.Message, players, log.RawMessage);
             }
         }
 

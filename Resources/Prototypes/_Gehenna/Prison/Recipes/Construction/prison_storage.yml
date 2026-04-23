@@ -1,0 +1,11 @@
+- type: construction
+  id: GehennaPrisonChestDrawer
+  graph: GehennaPrisonChestDrawer
+  startNode: start
+  targetNode: chestDrawer
+  category: construction-category-storage
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked

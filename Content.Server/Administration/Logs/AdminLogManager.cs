@@ -306,7 +306,7 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
 
     public override void Add(LogType type, LogImpact impact, [System.Runtime.CompilerServices.InterpolatedStringHandlerArgument("")] ref LogStringHandler handler)
     {
-        var message = handler.ToStringAndClear();
+        var rawMessage = handler.ToStringAndClear();
         if (!Enabled)
             return;
 
@@ -323,12 +323,13 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
         var players = GetPlayers(handler.Values, id);
 
         // PostgreSQL does not support storing null chars in text values.
-        if (message.Contains('\0'))
+        if (rawMessage.Contains('\0'))
         {
-            _sawmill.Error($"Null character detected in admin log message '{message}'! LogType: {type}, LogImpact: {impact}");
-            message = message.Replace("\0", "");
+            _sawmill.Error($"Null character detected in admin log message '{rawMessage}'! LogType: {type}, LogImpact: {impact}");
+            rawMessage = rawMessage.Replace("\0", "");
         }
 
+        var message = LocalizeMessage(type, rawMessage);
         var log = new AdminLog
         {
             Id = id,
@@ -337,11 +338,12 @@ public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogMa
             Impact = impact,
             Date = DateTime.UtcNow,
             Message = message,
+            RawMessage = rawMessage,
             Json = json,
             Players = players,
         };
 
-        DoAdminAlerts(players, message, impact, handler);
+        DoAdminAlerts(players, rawMessage, impact, handler);
 
         if (preRound)
         {

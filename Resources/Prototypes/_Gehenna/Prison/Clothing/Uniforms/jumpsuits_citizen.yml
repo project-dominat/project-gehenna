@@ -1,0 +1,44 @@
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonCitizenEngineer
+  name: prison engineer uniform
+  suffix: "Prison"
+  description: A work uniform for the engineer serving at Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/Citizen/Engineer.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/Citizen/Engineer.rsi
+  - type: SuitSensor
+    mode: SensorCords
+    randomMode: false
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonCitizenMedic
+  name: prison medic uniform
+  suffix: "Prison"
+  description: A medical uniform for the doctor stationed at Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/Citizen/Medic.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/Citizen/Medic.rsi
+  - type: SuitSensor
+    mode: SensorCords
+    randomMode: false
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonCitizenScientist
+  name: prison scientist uniform
+  suffix: "Prison"
+  description: A research uniform for the scientist assigned to Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/Citizen/Science.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/Citizen/Science.rsi
+  - type: SuitSensor
+    mode: SensorCords
+    randomMode: false

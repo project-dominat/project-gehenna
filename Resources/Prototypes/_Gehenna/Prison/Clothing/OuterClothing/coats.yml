@@ -1,0 +1,18 @@
+- type: entity
+  parent: [ ClothingOuterArmorWarden, BaseSecurityContraband ]
+  id: ClothingOuterCoatPrisonBoss
+  name: prison warden's armored coat
+  suffix: "Prison"
+  description: A distinguished armored coat worn by the warden of Gehenna prison. Sturdy enough to handle any trouble from the inmates.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Worker/prisonboss-coat.rsi
+    state: icon
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/OuterClothing/Worker/prisonboss-coat.rsi
+    equipSound:
+      path: /Audio/Items/jumpsuit_equip.ogg
+  - type: Tag
+    tags:
+    - ClothMade
+    - WhitelistChameleon

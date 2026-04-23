@@ -5,7 +5,7 @@
     <BoxContainer Orientation="Vertical">
         <ItemList Name="PaletteList" VerticalExpand="True" Access="Public"/>
         <BoxContainer Orientation="Horizontal">
-            <Label Text="Palette"/>
+            <Label Text="{Loc 'decal-placer-window-palette'}"/>
             <OptionButton Name="Palettes"/>
         </BoxContainer>
     </BoxContainer>

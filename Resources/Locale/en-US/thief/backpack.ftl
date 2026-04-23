@@ -62,3 +62,9 @@ thief-backpack-category-smuggler-description =
     Don't forget to link your fulton.
     Includes: Fulton beacon, 10 fultons, 3 smoke grenades,
     and an invisible crate to hide valuable loot.
+
+thief-backpack-set-name-placeholder = Set
+
+thief-backpack-set-select-placeholder = Select
+
+thief-backpack-set-description-placeholder = Description

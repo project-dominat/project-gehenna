@@ -1,0 +1,35 @@
+<Control xmlns="https://spacestation14.io"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:ui="clr-namespace:Content.Client.Options.UI">
+    <BoxContainer Orientation="Vertical">
+        <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+            <BoxContainer Orientation="Vertical" Margin="8">
+                <Label Text="{Loc 'ui-options-crosshair-header-general'}"
+                       StyleClasses="LabelKeyText"/>
+                <CheckBox Name="EnabledCheckBox" Text="{Loc 'ui-options-crosshair-enabled'}" />
+                <ui:OptionColorSlider Name="ColorSlider"
+                                      Title="{Loc 'ui-options-crosshair-color'}"
+                                      Example="{Loc 'ui-options-crosshair-color-example'}"/>
+                <ui:OptionSlider Name="OpacitySlider" Title="{Loc 'ui-options-crosshair-opacity'}" />
+
+                <Label Text="{Loc 'ui-options-crosshair-header-shape'}"
+                       StyleClasses="LabelKeyText"/>
+                <ui:OptionSlider Name="GapSlider" Title="{Loc 'ui-options-crosshair-gap'}" />
+                <ui:OptionSlider Name="LengthSlider" Title="{Loc 'ui-options-crosshair-length'}" />
+                <ui:OptionSlider Name="LineWidthSlider" Title="{Loc 'ui-options-crosshair-line-width'}" />
+                <CheckBox Name="DynamicLineWidthCheckBox" Text="{Loc 'ui-options-crosshair-dynamic-line-width'}" />
+                <CheckBox Name="CenterDotCheckBox" Text="{Loc 'ui-options-crosshair-center-dot'}" />
+                <ui:OptionSlider Name="CenterDotRadiusSlider" Title="{Loc 'ui-options-crosshair-center-dot-radius'}" />
+                <CheckBox Name="OutlineCheckBox" Text="{Loc 'ui-options-crosshair-outline'}" />
+                <ui:OptionSlider Name="OutlineThicknessSlider" Title="{Loc 'ui-options-crosshair-outline-thickness'}" />
+
+                <Label Text="{Loc 'ui-options-crosshair-header-feedback'}"
+                       StyleClasses="LabelKeyText"/>
+                <CheckBox Name="BloomTintCheckBox" Text="{Loc 'ui-options-crosshair-bloom-tint'}" />
+                <CheckBox Name="HitFlashCheckBox" Text="{Loc 'ui-options-crosshair-hit-flash'}" />
+                <CheckBox Name="SpreadRailCheckBox" Text="{Loc 'ui-options-crosshair-spread-rail'}" />
+            </BoxContainer>
+        </ScrollContainer>
+        <ui:OptionsTabControlRow Name="Control" Access="Public" />
+    </BoxContainer>
+</Control>

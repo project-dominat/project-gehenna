@@ -300,7 +300,10 @@ namespace Content.Server.Database
 
         public virtual IQueryable<AdminLog> SearchLogs(IQueryable<AdminLog> query, string searchText)
         {
-            return query.Where(log => EF.Functions.Like(log.Message, "%" + searchText + "%"));
+            var search = searchText.ToLowerInvariant();
+            return query.Where(log =>
+                log.Message.ToLower().Contains(search) ||
+                log.RawMessage != null && log.RawMessage.ToLower().Contains(search));
         }
 
         public abstract int CountAdminLogs();
@@ -630,6 +633,8 @@ namespace Content.Server.Database
         [Required] public DateTime Date { get; set; }
 
         [Required] public string Message { get; set; } = default!;
+
+        public string? RawMessage { get; set; }
 
         [Required, Column(TypeName = "jsonb")] public JsonDocument Json { get; set; } = default!;
 

@@ -319,11 +319,7 @@ namespace Content.Server.Database
 
         protected override IQueryable<AdminLog> StartAdminLogsQuery(ServerDbContext db, LogFilter? filter = null)
         {
-            IQueryable<AdminLog> query = db.AdminLog;
-            if (filter?.Search != null)
-                query = query.Where(log => EF.Functions.Like(log.Message, $"%{filter.Search}%"));
-
-            return query;
+            return db.AdminLog;
         }
 
         public override async Task<int> AddAdminNote(AdminNote note)

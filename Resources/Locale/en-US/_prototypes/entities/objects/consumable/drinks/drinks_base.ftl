@@ -1,0 +1,2 @@
+ent-DrinkBaseEmptyTrash = { "" }
+    .suffix = Empty

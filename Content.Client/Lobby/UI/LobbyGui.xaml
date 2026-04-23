@@ -9,7 +9,9 @@
     xmlns:lobbyUi="clr-namespace:Content.Client.Lobby.UI"
     xmlns:info="clr-namespace:Content.Client.Info"
     xmlns:widgets="clr-namespace:Content.Client.UserInterface.Systems.Chat.Widgets">
-    <!-- Background -->
+    <!-- Solid dark background (Gehenna — no random art) -->
+    <PanelContainer Name="SolidBackground" Access="Public" VerticalExpand="True" HorizontalExpand="True" />
+    <!-- Background (kept for compatibility; texture is always null under Gehenna). -->
     <TextureRect Access="Public" VerticalExpand="True" HorizontalExpand="True" Name="Background"
                  Stretch="KeepAspectCovered" />
     <BoxContainer Name="MainContainer" VerticalExpand="True" HorizontalExpand="True" Orientation="Horizontal"
@@ -25,7 +27,7 @@
                             <BoxContainer Orientation="Vertical" HorizontalAlignment="Center" MaxWidth="800">
                                 <info:LinkBanner Name="LinkBanner" VerticalExpand="false" HorizontalAlignment="Center"
                                                  Margin="3 3 3 3" />
-                                <controls:StripeBack>
+                                <controls:StripeBack Name="ReadyStripe" StyleClasses="LobbyStripe">
                                     <BoxContainer Orientation="Horizontal" SeparationOverride="6" Margin="3 3 3 3">
                                         <cc:UICommandButton Command="observe" Name="ObserveButton" Access="Public"
                                                             Text="{Loc 'ui-lobby-observe-button'}"
@@ -53,7 +55,7 @@
                     <!-- Left Bot Panel -->
                     <BoxContainer Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                         <info:DevInfoBanner Name="DevInfoBanner" VerticalExpand="false" Margin="3 3 3 3" />
-                        <PanelContainer StyleClasses="BackgroundPanel" Margin="3 3 3 3">
+                        <PanelContainer Name="LeftBottomPanel" StyleClasses="BackgroundPanel" Margin="3 3 3 3">
                             <BoxContainer Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="3 3 3 3">
                                 <RichTextLabel Name="LobbySong" Access="Public" HorizontalAlignment="Left" />
                                 <RichTextLabel Name="LobbyBackground" Access="Public" HorizontalAlignment="Left" />
@@ -69,8 +71,16 @@
             <PanelContainer Name="RightSide" Access="Public" StyleClasses="BackgroundPanel" HorizontalAlignment="Right" VerticalExpand="True"
                             VerticalAlignment="Stretch">
                 <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                    <!-- Classification strip (Dominat Ordinata — «СОВ. СЕКРЕТНО») -->
+                    <PanelContainer Name="ClassificationStrip" Access="Public">
+                        <BoxContainer Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                      Margin="8 3 8 3">
+                            <Label Name="ClassificationLabel" Access="Public" VAlign="Center"
+                                   HorizontalAlignment="Center" />
+                        </BoxContainer>
+                    </PanelContainer>
                     <!-- Top row -->
-                    <BoxContainer Orientation="Horizontal" MinSize="0 40" Name="HeaderContainer" Access="Public"
+                    <BoxContainer Orientation="Horizontal" MinSize="0 48" Name="HeaderContainer" Access="Public"
                                   SeparationOverride="4">
                         <Label Name="ServerName" Access="Public" StyleClasses="LabelHeadingBigger" VAlign="Center"
                                HorizontalExpand="True" HorizontalAlignment="Center" />

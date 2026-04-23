@@ -1,0 +1,29 @@
+ent-BaseShellShotgun = 12-калиберная гильза
+    .desc = { ent-BaseCartridge.desc }
+
+ent-ShellShotgunBeanbag = резиновая пуля 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }
+
+ent-ShellShotgunSlug = пуля 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }
+
+ent-ShellShotgunFlare = фальшфейер 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }
+
+ent-ShellShotgun = дробь 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }
+
+ent-ShellShotgunIncendiary = зажигательная дробь 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }
+
+ent-ShellShotgunPractice = учебный 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }
+
+ent-ShellTranquilizer = транквилизатор 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }
+
+ent-ShellShotgunImprovised = самодельная картечь 12 калибра
+    .desc = Самодельная дробь 12 калибра, выстреливающая острой стеклянной шрапнелью. Разброс так велик, что и по слону попасть невозможно.
+
+ent-ShellShotgunUranium = урановая дробь 12 калибра
+    .desc = { ent-BaseShellShotgun.desc }

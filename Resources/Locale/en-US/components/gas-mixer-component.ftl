@@ -7,3 +7,5 @@ comp-gas-mixer-ui-mixer-set = Set
 comp-gas-mixer-ui-mixer-max = Max
 
 comp-gas-mixer-ui-needs-anchor = Anchor it first!
+
+comp-gas-mixer-ui-window-title = Gas Mixer

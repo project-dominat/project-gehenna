@@ -1,0 +1,27 @@
+- type: constructionGraph
+  id: GehennaPrisonChestDrawer
+  start: start
+  graph:
+    - node: start
+      actions:
+        - !type:DestroyEntity {}
+      edges:
+        - to: chestDrawer
+          completed:
+            - !type:SnapToGrid {}
+          steps:
+            - material: WoodPlank
+              amount: 5
+              doAfter: 3
+
+    - node: chestDrawer
+      entity: ChestDrawerPrisonGehenna
+      edges:
+        - to: start
+          completed:
+            - !type:SpawnPrototype
+              prototype: MaterialWoodPlank1
+              amount: 5
+          steps:
+            - tool: Prying
+              doAfter: 3

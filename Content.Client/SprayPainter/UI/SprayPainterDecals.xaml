@@ -16,7 +16,7 @@
         <BoxContainer Orientation="Vertical">
             <ColorSelectorSliders Name="ColorSelector" IsAlphaVisible="True">
                 <BoxContainer HorizontalAlignment="Right" VerticalAlignment="Top" SetHeight="29">
-                    <Button Name="ColorPalette" Text="Palette" />
+                    <Button Name="ColorPalette" Text="{Loc 'decal-placer-window-palette'}" />
                     <Button Name="ColorPicker" ToggleMode="True">
                         <TextureRect TexturePath="/Textures/Interface/eyedropper.svg.png" Stretch="KeepAspectCentered" SetSize="16 16" />
                     </Button>

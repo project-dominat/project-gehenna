@@ -1,0 +1,226 @@
+FILE _Gehenna/Prison/Structures/Storage/locker_prison.yml (4)
+  LockerPrisonDoctor | name=prison doctor's locker | desc=A medical locker assigned to the doctor serving at Gehenna prison. | suffix="Prison"
+  LockerPrisonEngineer | name=prison engineer's locker | desc=A technical locker assigned to the engineer working at Gehenna prison. | suffix="Prison"
+  LockerPrisonGehenna | name=prisoner property locker | desc=A secure locker for storing inmates' personal belongings. | suffix="Prison"
+  LockerPrisonHoS | name=prison warden's locker | desc=A personal locker belonging to the warden of Gehenna prison. | suffix="Prison"
+
+FILE Entities/Mobs/NPCs/living_light.yml (3)
+  MobLuminousEntitySalvage | name=None | desc=None | suffix="Salvage Ruleset"
+  MobLuminousObjectSalvage | name=None | desc=None | suffix="Salvage Ruleset"
+  MobLuminousPersonSalvage | name=None | desc=None | suffix="Salvage Ruleset"
+
+FILE Entities/Objects/Fun/crayons.yml (3)
+  CrayonBorg | name=electric crayon | desc=Supposedly the most delicious crayon type in all the universes; unfortunately, you cannot eat. | suffix=None
+  CrayonBoxEmpty | name=crayon box | desc=It's a box of crayons. | suffix=None
+  CrayonInedible | name=crayon | desc=A colourful crayon. A forbidden flavor. | suffix=None
+
+FILE Entities/Objects/Specific/Chapel/bibles.yml (3)
+  BibleHonk | name=mirth of the honkmother | desc="Oh great and glorious Mother, Mistress of Mirth, Matron of Mask and Merriments, Blessed is she amongst us jesters." | suffix=None
+  BibleNarsie | name=tome of nar'sie | desc="What could possibly go wrong with a book covered in blood?" | suffix=None
+  BibleRatvar | name=tablet of ratvar | desc="A holy relic of the Clockwork Cult, blessed by the Clockwork Justice, Ratvar." | suffix=None
+
+FILE Objectives/traitor.yml (3)
+  HijackTradeStationObjective | name=Hijack the Automated Trade Station. | desc=Your uplink has been authorized one hijack beacon. Deploy it on the Automated Trade Station and defend it whilst it hijacks the trade station. | suffix=None
+  KillStationAiObjective | name=None | desc=Nanotrasen proudly boasts about their state of the art artificial intelligence. Remind them it's just another toy that can be broken. | suffix=None
+  SupercritAnomaliesObjective | name=None | desc=Nanotrasen is very interested in anomalies with potentially catastrophic consequences. Introduce them to the fire they're playing with. | suffix=None
+
+FILE _Gehenna/Prison/Clothing/OuterClothing/aprons.yml (3)
+  ClothingOuterApronPrisonBotanist | name=prison botanist apron | desc=A sturdy apron worn by the botanist working in Gehenna prison's greenhouse. | suffix="Prison"
+  ClothingOuterApronPrisonChief | name=prison cook apron | desc=An apron worn by the cook working in Gehenna prison's kitchen. | suffix="Prison"
+  ClothingOuterApronPrisonFactory | name=prison factory apron | desc=A heavy-duty apron worn by prisoners working in Gehenna prison's factory. | suffix="Prison"
+
+FILE _Gehenna/Prison/Clothing/Uniforms/jumpsuits_citizen.yml (3)
+  ClothingUniformJumpsuitPrisonCitizenEngineer | name=prison engineer uniform | desc=A work uniform for the engineer serving at Gehenna prison. | suffix="Prison"
+  ClothingUniformJumpsuitPrisonCitizenMedic | name=prison medic uniform | desc=A medical uniform for the doctor stationed at Gehenna prison. | suffix="Prison"
+  ClothingUniformJumpsuitPrisonCitizenScientist | name=prison scientist uniform | desc=A research uniform for the scientist assigned to Gehenna prison. | suffix="Prison"
+
+FILE Catalog/Fills/Boxes/general.yml (2)
+  BoxCardboardSmall | name=small cardboard box | desc=A small cardboard box for storing things. | suffix=None
+  BoxStamps | name=stamp box | desc=A small box containing stamps. | suffix=None
+
+FILE Entities/Clothing/Head/hats.yml (2)
+  ClothingHeadHatFedoraPress | name=press fedora | desc=It has a little note stuck in the band saying "PRESS". Practically an all-access pass! | suffix=None
+  ClothingHeadHatMitreClown | name=honkmother mitre | desc=It's hard for parishoners to see a banana peel on the floor when they're looking up at your glorious chapeau. | suffix=None
+
+FILE Entities/Mobs/Player/mothershipcore.yml (2)
+  ActionXenoborgCameraMonitor | name=Xenoborgs Camera Monitor | desc=View the Xenoborgs Camera Monitor | suffix=None
+  ActionXenoborgControlMonitor | name=Xenoborgs Control Console | desc=View the Xenoborgs Control Console | suffix=None
+
+FILE Entities/Objects/Devices/pda.yml (2)
+  ChameleonAgentPDA | name=None | desc=None | suffix=Chameleon, Agent ID
+  NinjaPDA | name=ninja PDA | desc=You stealthy bastard, you! | suffix=None
+
+FILE Entities/Objects/Devices/travel_camera.yml (2)
+  BasePhotograph | name=photograph | desc=None | suffix=None
+  TravelCamera | name=travel camera | desc=A picture says more than a thousand words. Comes with an ultrabright flash and internal recharging photo roll. | suffix=None
+
+FILE Entities/Objects/Fun/sports.yml (2)
+  EvilBeachBall | name=None | desc=Someone's drawn ">:3c" on the side of this beach ball in indelible ink. | suffix=EVIL/ADMEME
+  TennisBall | name=tennis ball | desc=A fuzzy orb of endless betrayal. | suffix=None
+
+FILE Entities/Objects/Misc/folders.yml (2)
+  BoxFolderFill | name=None | desc=None | suffix=Filled
+  BoxFolderFillThreePapers | name=None | desc=None | suffix=3 papers
+
+FILE Entities/Objects/Specific/Chemistry/chemistry-vials.yml (2)
+  ChemistryEmptyVial | name=vial | desc=A small vial. | suffix=None
+  ChemistryEmptyVialSmall | name=mini vial | desc=A smaller vial. | suffix=None
+
+FILE Entities/Structures/Doors/MaterialDoors/material_doors.yml (2)
+  EncrustedIronstoneDoor | name=encrusted ironstone door | desc=A stone door covered in nacreous blobs of an unknown substance. | suffix=None
+  IronstoneDoor | name=ironstone door | desc=A mysterious door made of rune-etched stone. | suffix=None
+
+FILE _Gehenna/Prison/Clothing/Head/hats_prison.yml (2)
+  ClothingHeadHatPrisonBoss | name=prison warden cap | desc=A distinguished cap worn by the warden of Gehenna prison. | suffix="Prison"
+  ClothingHeadHatPrisonWorker | name=prison officer cap | desc=A sturdy cap worn by Gehenna prison officers. | suffix="Prison"
+
+FILE Actions/changeling.yml (1)
+  ActionChangelingStore | name=DNA Store | desc=Opens the ability store. | suffix=None
+
+FILE Body/Animals/bloodsucker.yml (1)
+  OrganBloodsucker | name=None | desc=None | suffix=bloodsucker
+
+FILE Body/Species/gingerbread.yml (1)
+  AppearanceGingerbread | name=gingerbread appearance | desc=None | suffix=None
+
+FILE Body/Species/skeleton.yml (1)
+  AppearanceSkeletonPerson | name=skeletonperson appearance | desc=None | suffix=None
+
+FILE Body/Species/slime.yml (1)
+  OrganSlimePersonLungs | name=gas sacs | desc=None | suffix=None
+
+FILE Catalog/Fills/Backpacks/duffelbag.yml (1)
+  ClothingBackpackDuffelSyndicateFilledMedicine | name=syndicate medicine duffel bag | desc=A large duffel bag containing essential medicinal reagents. | suffix=None
+
+FILE Catalog/Fills/Boxes/emergency.yml (1)
+  BoxSurvivalMilitaryDouble | name=None | desc=It's a box with basic internals inside. This one is labelled to contain an double extended-capacity tank. | suffix=Military O2
+
+FILE Catalog/Fills/Boxes/syndicate.yml (1)
+  SyndimovCircuitKit | name=syndimov circuit kit | desc=A kit containing an electronics board with the Syndimov lawset and a Syndicate ID. | suffix=None
+
+FILE Entities/Clothing/Ears/headsets.yml (1)
+  ClothingHeadsetNinja | name=green headset | desc=Who could refuse to wear this stylish black and green headset? | suffix=None
+
+FILE Entities/Mobs/Player/dragon.yml (1)
+  BloodSmoke | name=smoke | desc=None | suffix=None
+
+FILE Entities/Objects/Consumable/Food/Baked/bread.yml (1)
+  FoodBreadNutriBatard | name=nutri-bâtard | desc=bon 'pétite! | suffix=None
+
+FILE Entities/Objects/Consumable/Food/meat.yml (1)
+  FoodMeatChickenFriedVox | name=mystery fried chicken | desc=“Eleven secret herbs and… oh no. That’s not chicken." | suffix=None
+
+FILE Entities/Objects/Devices/chameleon_projector.yml (1)
+  ChameleonProjectorNoBattery | name=chameleon projector | desc=Holoparasite technology used to create a hard-light replica of any object around you. Disguise is destroyed when picked up or deactivated. | suffix=None
+
+FILE Entities/Objects/Devices/holoprojectors.yml (1)
+  HoloprojectorBorg | name=holosign projector | desc=A modified holographic sign projector for use in custodial cyborgs. Automatically self-charges. | suffix=borg
+
+FILE Entities/Objects/Devices/station_map.yml (1)
+  HandheldStationMapNukeops | name=target station map | desc=Displays a readout of the target station. | suffix=Handheld, NukeOps
+
+FILE Entities/Objects/Fun/Plushies/plushies.yml (1)
+  PlushieVulp | name=vulpkanin plushie | desc=An adorable stuffed toy that resembles a vulpkanin. Yip! Yap! | suffix=None
+
+FILE Entities/Objects/Fun/Tabletop/backgammon.yml (1)
+  *BackgammonBoard | name=backgammon | desc=None | suffix=None
+
+FILE Entities/Objects/Fun/Tabletop/checkers.yml (1)
+  *checkerboard | name=checkerboard | desc=None | suffix=None
+
+FILE Entities/Objects/Fun/Tabletop/chess.yml (1)
+  *ChessBoard | name=chessboard | desc=None | suffix=None
+
+FILE Entities/Objects/Fun/orbs.yml (1)
+  Magic9Ball | name=magic 9 ball | desc=An endless source of wisdom... Now with a speaker included! | suffix=None
+
+FILE Entities/Objects/Fun/weapons.yml (1)
+  WeaponStickyHand | name=sticky hand | desc=They're saying you're reaching. They're saying it's a stretch. You'll show them all, and you'll stick it to them. | suffix=None
+
+FILE Entities/Objects/Misc/parcel_wrap.yml (1)
+  WrappedParcelHumanoid | name=wrapped parcel | desc=Something wrapped up in paper. It's suspiciously human-shaped. | suffix=None
+
+FILE Entities/Objects/Misc/subdermal_implants.yml (1)
+  VoiceMaskImplant | name=identity mask implant | desc=This implant allows you to change your identity at will. | suffix=None
+
+FILE Entities/Objects/Shields/shields.yml (1)
+  BaseRepairableShield | name=base repairable shield | desc=A repairable shield! | suffix=None
+
+FILE Entities/Objects/Specific/Chemistry/paper_centrifuge.yml (1)
+  HandheldMixerPaperCentrifuge | name=paper centrifuge | desc=A small portable makeshift centrifuge. Works by rotating the paper sheets when its cords are pulled. | suffix=None
+
+FILE Entities/Objects/Specific/Janitorial/janitor.yml (1)
+  WireBrushElectrical | name=electrical wire brush | desc=A bristly steel wire brush with a moving head, allowing for a way easier time cleaning. | suffix=None
+
+FILE Entities/Objects/Specific/Janitorial/soap.yml (1)
+  BaseSoap | name=soap | desc=None | suffix=None
+
+FILE Entities/Objects/Specific/Research/anomaly.yml (1)
+  AnomalyScannerAdmin | name=admin anomaly scanner | desc=A hand-held scanner built to collect information on various anomalous objects. This one seems to have a few extra features. | suffix=Admin
+
+FILE Entities/Objects/Tools/hijack_beacon.yml (1)
+  HijackBeacon | name=hijack beacon | desc=A device that bypasses the firewall on Nanotrasen-brand Automated Trade Stations. | suffix=None
+
+FILE Entities/Objects/Weapons/Bombs/detonator.yml (1)
+  WiredDetonator | name=detonator cap | desc=A detonator cap. | suffix=None
+
+FILE Entities/Objects/Weapons/Guns/Ammunition/Magazines/light_rifle.yml (1)
+  MagazineLightRifleBox | name="L6 SAW magazine box (.30 rifle)" | desc=Box containing a 100-round belt of linked .30 rifle rounds, used by light machine guns such as the L6. Intended to hold general-purpose kinetic ammunition. | suffix=None
+
+FILE Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml (1)
+  EnergyCrossbowBolt | name=energy bolt | desc=This'll hurt. | suffix=None
+
+FILE Entities/Objects/Weapons/Guns/Rifles/rifles.yml (1)
+  WeaponRifleLecterXL8 | name=XL8 | desc=|- | suffix=None
+
+FILE Entities/Objects/Weapons/Guns/SMGs/smgs.yml (1)
+  WeaponSubMachineGunC20rROW | name=C-20r ROW | desc=A burst-fire C-20r submachine gun for use by cyborgs. Creates .35 caliber ammo on the fly from an internal ammo fabricator, which slowly self-charges. | suffix=None
+
+FILE Entities/Objects/Weapons/Guns/tile_gun.yml (1)
+  WeaponTileGun | name=tile gun | desc=A strange gun that shoots tiles. Shoot them with the floor! | suffix=None
+
+FILE Entities/Objects/Weapons/Melee/knife.yml (1)
+  UtilityKnife | name=utility knife | desc=A knife with a retractable, tiny blade. Useful as a box cutter and letter opener, among other things. | suffix=None
+
+FILE Entities/Structures/Decoration/bonfire.yml (1)
+  BonfireStake | name=bonfire with stake | desc=A sinister bonfire with a stake for... ceremonial purposes. Best not to ask. | suffix=None
+
+FILE Entities/Structures/Machines/Computers/computers.yml (1)
+  ComputerNukieDelivery | name=syndicate delivery computer | desc="A computer that can bluespace in certain equipment for Nuclear Operations. \nThe circuitboard is integrated into the frame and can't be recovered if deconstructed." | suffix=None
+
+FILE Entities/Structures/Power/Generation/generators.yml (1)
+  GeneratorWallmountAPULV | name=shuttle LV APU | desc=An advanced auxiliary power unit for a shuttle. | suffix=None
+
+FILE Entities/Structures/Specific/Cargo/mailcart.yml (1)
+  MailCart | name=mail cart | desc=Deliver packages with style and efficiency. | suffix=None
+
+FILE Entities/Structures/Wallmounts/Signs/bar_sign.yml (1)
+  BarSignEmped | name=glitchy bar sign | desc=You imagine a good smack might fix it. | suffix=None
+
+FILE Entities/Structures/Wallmounts/Signs/posters.yml (1)
+  PosterLegitBotanyFear | name="Fear of hydroponics" | desc="Think three times before opening the airlock to hydroponics, a red threat might be hiding there." | suffix=None
+
+FILE Entities/Structures/Walls/walls.yml (1)
+  WallIronsandCobblebrick | name=ironsand brick wall | desc=The pale, rounded shapes that make up this wall look strikingly different from the iron sands they were allegedly made from. | suffix=None
+
+FILE Entities/Structures/gates.yml (1)
+  RandomGate | name=random gate | desc=A logic gate that outputs a random signal when input changes. | suffix=None
+
+FILE Entities/Structures/ironsand_steps.yml (1)
+  IronsandStep | name=ironsand step | desc=Takes your ironsand up a level. | suffix=None
+
+FILE Entities/Virtual/mind.yml (1)
+  MindBase | name=mind | desc=None | suffix=None
+
+FILE XenoArch/effects.yml (1)
+  XenoArtifactHostileFaunaSpawn | name=None | desc=Create hostile fauna | suffix=None
+
+FILE _Gehenna/Prison/Clothing/OuterClothing/coats.yml (1)
+  ClothingOuterCoatPrisonBoss | name=prison warden's armored coat | desc=A distinguished armored coat worn by the warden of Gehenna prison. Sturdy enough to handle any trouble from the inmates. | suffix="Prison"
+
+FILE _Gehenna/Prison/Objects/Devices/pda_prison.yml (1)
+  PrisonPrisoneerCrackedPDA | name=prisoner PDA | desc=A battered, cracked PDA that's clearly seen better days inside Gehenna prison. | suffix="[Prison, Cracked]"
+
+FILE _Gehenna/Prison/Structures/Storage/chest_prison.yml (1)
+  ChestDrawerPrisonGehenna | name=prison bedside table | desc=A small bedside table found in Gehenna prison cells. | suffix="Prison"
+

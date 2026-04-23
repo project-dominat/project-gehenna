@@ -8,13 +8,14 @@ namespace Content.Client.UserInterface.Controls
     {
         private const float PadSize = 4;
         private const float EdgeSize = 2;
-        private static readonly Color EdgeColor = Color.FromHex("#525252ff");
+        private static readonly Color DefaultEdgeColor = Color.FromHex("#525252ff");
 
         private bool _hasTopEdge = true;
         private bool _hasBottomEdge = true;
         private bool _hasMargins = true;
 
         public const string StylePropertyBackground = "background";
+        public const string StylePropertyEdgeColor = "edge-color";
 
         public bool HasTopEdge
         {
@@ -103,14 +104,14 @@ namespace Content.Client.UserInterface.Controls
             if (HasTopEdge)
             {
                 centerBox += (0, (padSize + EdgeSize) * UIScale, 0, 0);
-                handle.DrawRect(new UIBox2(0, padSize * UIScale, PixelWidth, centerBox.Top), EdgeColor);
+                handle.DrawRect(new UIBox2(0, padSize * UIScale, PixelWidth, centerBox.Top), GetActualEdgeColor());
             }
 
             if (HasBottomEdge)
             {
                 centerBox += (0, 0, 0, -((padSize + EdgeSize) * UIScale));
                 handle.DrawRect(new UIBox2(0, centerBox.Bottom, PixelWidth, PixelHeight - padSize * UIScale),
-                    EdgeColor);
+                    GetActualEdgeColor());
             }
 
             GetActualStyleBox()?.Draw(handle, centerBox, UIScale);
@@ -119,6 +120,11 @@ namespace Content.Client.UserInterface.Controls
         private StyleBox? GetActualStyleBox()
         {
             return TryGetStyleProperty(StylePropertyBackground, out StyleBox? box) ? box : null;
+        }
+
+        private Color GetActualEdgeColor()
+        {
+            return TryGetStyleProperty(StylePropertyEdgeColor, out Color color) ? color : DefaultEdgeColor;
         }
     }
 }

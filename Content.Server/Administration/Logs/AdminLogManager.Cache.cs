@@ -51,7 +51,7 @@ public sealed partial class AdminLogManager
     private void CacheLog(AdminLog log)
     {
         var players = log.Players.Select(player => player.PlayerUserId).ToArray();
-        var record = new SharedAdminLog(log.Id, log.Type, log.Impact, log.Date, log.Message, players);
+        var record = new SharedAdminLog(log.Id, log.Type, log.Impact, log.Date, log.Message, players, log.RawMessage);
 
         CacheLog(record);
     }
@@ -97,7 +97,9 @@ public sealed partial class AdminLogManager
 
         if (filter.Search != null)
         {
-            query = query.Where(log => log.Message.Contains(filter.Search, StringComparison.OrdinalIgnoreCase));
+            query = query.Where(log =>
+                log.Message.Contains(filter.Search, StringComparison.OrdinalIgnoreCase) ||
+                log.RawMessage?.Contains(filter.Search, StringComparison.OrdinalIgnoreCase) == true);
         }
 
         if (filter.Types != null && filter.Types.Count != _logTypes)

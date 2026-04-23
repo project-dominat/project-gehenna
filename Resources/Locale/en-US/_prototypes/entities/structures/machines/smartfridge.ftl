@@ -1,0 +1,2 @@
+ent-SmartFridgeMedical = { "" }
+    .suffix = Medical

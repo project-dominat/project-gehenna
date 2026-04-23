@@ -1,0 +1,66 @@
+verb-categories-antag = Антагонисты
+
+
+admin-verb-make-traitor = Сделать цель предателем.
+
+
+admin-verb-make-initial-infected = Сделать цель нулевым пациентом.
+
+
+admin-verb-make-zombie = Сделать цель зомби.
+
+
+admin-verb-make-nuclear-operative = Сделать цель одиноким Ядерным оперативником.
+
+
+admin-verb-make-pirate = Сделать цель пиратом\капером. Учтите, что это не меняет игровой режим.
+
+
+admin-verb-make-head-rev = Сделать цель главой революции.
+
+
+admin-verb-make-thief = Сделать цель вором.
+
+
+admin-verb-make-paradox-clone = Создать призрачную роль парадоксального клона цели.
+
+
+admin-verb-make-changeling = Сделать цель генокрадом.
+
+
+admin-verb-text-make-traitor = Сделать предателем
+
+
+admin-verb-text-make-initial-infected = Сделать нулевым пациентом
+
+
+admin-verb-text-make-zombie = Сделать зомби
+
+
+admin-verb-text-make-nuclear-operative = Сделать ядерным оперативником
+
+
+admin-verb-text-make-pirate = Сделать пиратом
+
+
+admin-verb-text-make-head-rev = Сделать Главой революции
+
+
+admin-verb-text-make-thief = Сделать вором
+
+
+admin-verb-text-make-paradox-clone = Создать парадоксального клона
+
+
+admin-verb-text-make-changeling = Сделать генокрадом
+
+
+admin-overlay-antag-classic = АНТАГОНИСТ
+
+admin-verb-make-wizard = Превратите цель в Волшебника.
+
+admin-verb-make-space-ninja = Превратите цель в космического ниндзя.
+
+admin-verb-text-make-wizard = Мастер создания
+
+admin-verb-text-make-space-ninja = Сделать ниндзя

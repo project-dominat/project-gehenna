@@ -110,15 +110,12 @@ namespace Content.Client.Crayon.UI
                     {
                         var panelContainer = new PanelContainer()
                         {
-                            PanelOverride = new StyleBoxFlat()
-                            {
-                                BackgroundColor = StyleNano.ButtonColorDefault,
-                            },
                             Children =
                             {
                                 button,
                             },
                         };
+                        panelContainer.SetOnlyStyleClass(StyleClass.PanelLight);
                         grid.AddChild(panelContainer);
                     }
                     else

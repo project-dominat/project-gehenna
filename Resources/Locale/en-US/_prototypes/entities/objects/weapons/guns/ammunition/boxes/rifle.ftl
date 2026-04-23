@@ -1,0 +1,14 @@
+ent-MagazineBoxRifleBig = ammunition box (.20 rifle)
+    .suffix = Big
+
+ent-MagazineBoxRifle = ammunition box (.20 rifle)
+    .desc = A cardboard box of .20 rifle rounds. Intended to hold general-purpose kinetic ammunition.
+
+ent-MagazineBoxRiflePractice = ammunition box (.20 rifle practice)
+    .desc = A cardboard box of .20 rifle rounds. Intended to hold harmless practice ammunition.
+
+ent-MagazineBoxRifleIncendiary = ammunition box (.20 rifle incendiary)
+    .desc = A cardboard box of .20 rifle rounds. Intended to hold self-igniting incendiary ammunition.
+
+ent-MagazineBoxRifleUranium = ammunition box (.20 rifle uranium)
+    .desc = A cardboard box of .20 rifle rounds. Intended to hold exotic uranium-core ammunition.

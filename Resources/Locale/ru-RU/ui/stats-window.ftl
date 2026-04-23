@@ -1,0 +1,1 @@
+stats-window-title = Статистика

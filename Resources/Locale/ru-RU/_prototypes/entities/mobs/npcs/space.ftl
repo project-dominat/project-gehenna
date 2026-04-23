@@ -1,0 +1,44 @@
+ent-MobSpaceBasic = базовый
+    .desc = Выглядит дружелюбно. Почему бы тебе не обнять его?
+
+ent-MobBearSpace = космический медведь
+    .desc = Выглядит дружелюбно. Почему бы тебе не обнять его?
+
+ent-MobBearSpaceSalvage = { ent-MobBearSpace }
+    .suffix = Утилизаторские правила, обломок
+    .desc = { ent-MobBearSpace.desc }
+
+ent-MobKangarooSpace = космический кенгуру
+    .desc = Выглядит дружелюбно. Почему бы тебе не обнять его?
+
+ent-MobKangarooSpaceSalvage = { ent-MobKangarooSpace }
+    .suffix = Утилизаторские правила, обломок
+    .desc = { ent-MobKangarooSpace.desc }
+
+ent-MobSpiderSpace = космический паук
+    .desc = Светится так, что выглядит опасно.
+
+ent-MobSpiderSpaceSalvage = { ent-MobSpiderSpace }
+    .suffix = Утилизаторские правила, обломок
+    .desc = { ent-MobSpiderSpace.desc }
+
+ent-MobCobraSpace = космическая кобра
+    .desc = Длинные клыки, светящийся капюшон и манящий взгляд так и манят подойти поближе.
+
+ent-MobCobraSpaceSalvage = { ent-MobCobraSpace }
+    .suffix = Утилизаторские правила
+    .desc = { ent-MobCobraSpace.desc }
+
+ent-MobSnail = улитка
+    .desc = Отвратительно, если только вы не француз.
+
+ent-MobSnailInstantDeath = { ent-MobSnail }
+    .suffix = Мёртв
+    .desc = { ent-MobSnail.desc }
+
+ent-MobSnailSpeed = { ent-MobSnail }
+    .suffix = Скорость
+    .desc = { ent-MobSnail.desc }
+
+ent-MobSnailMoth = Сноф
+    .desc = { ent-MobSnail.desc }

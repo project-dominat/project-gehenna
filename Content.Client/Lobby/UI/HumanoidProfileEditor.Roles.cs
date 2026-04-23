@@ -165,7 +165,12 @@ public sealed partial class HumanoidProfileEditor
 
                 category.AddChild(new PanelContainer
                 {
-                    PanelOverride = new StyleBoxFlat { BackgroundColor = Color.FromHex("#464966") },
+                    PanelOverride = new StyleBoxFlat
+                    {
+                        BackgroundColor = Color.FromHex("#6b4f1f"),
+                        BorderColor = Color.FromHex("#b08840"),
+                        BorderThickness = new Thickness(1),
+                    },
                     Children =
                         {
                             new Label

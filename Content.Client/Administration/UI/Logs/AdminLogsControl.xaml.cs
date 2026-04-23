@@ -17,7 +17,7 @@ public sealed partial class AdminLogsControl : Control
 {
     private readonly Comparer<AdminLogTypeButton> _adminLogTypeButtonComparer =
         Comparer<AdminLogTypeButton>.Create((a, b) =>
-            string.Compare(a.Type.ToString(), b.Type.ToString(), StringComparison.Ordinal));
+            string.Compare(a.Text, b.Text, StringComparison.CurrentCulture));
 
     private readonly Comparer<AdminLogPlayerButton> _adminLogPlayerButtonComparer =
         Comparer<AdminLogPlayerButton>.Create((a, b) =>
@@ -292,10 +292,19 @@ public sealed partial class AdminLogsControl : Control
             return false;
 
         // Check search
-        if (!label.Log.Message.Contains(LogSearch.Text, StringComparison.OrdinalIgnoreCase))
+        if (!MatchesLogSearch(label.Log, LogSearch.Text))
             return false;
 
         return true;
+    }
+
+    private static bool MatchesLogSearch(SharedAdminLog log, string search)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+            return true;
+
+        return log.Message.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+               log.RawMessage?.Contains(search, StringComparison.OrdinalIgnoreCase) == true;
     }
 
     private void TypeButtonPressed(ButtonEventArgs args)
@@ -351,7 +360,7 @@ public sealed partial class AdminLogsControl : Control
         {
             var button = new AdminLogImpactButton(impact)
             {
-                Text = impact.ToString()
+                Text = AdminLogText.GetImpactText(impact)
             };
 
             SelectedImpacts.Add(impact);
@@ -397,7 +406,7 @@ public sealed partial class AdminLogsControl : Control
         {
             var button = new AdminLogTypeButton(type)
             {
-                Text = type.ToString(),
+                Text = AdminLogText.GetTypeText(type),
                 Pressed = true
             };
 

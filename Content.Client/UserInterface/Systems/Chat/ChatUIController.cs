@@ -271,19 +271,19 @@ public sealed partial class ChatUIController : UIController
         if (panel is null)
             return;
 
-        Color color;
-        if (panel.PanelOverride is StyleBoxFlat styleBoxFlat)
-            color = styleBoxFlat.BackgroundColor;
+        StyleBoxFlat? styleBox = null;
+        if (panel.PanelOverride is StyleBoxFlat overrideStyleBoxFlat)
+            styleBox = new StyleBoxFlat(overrideStyleBoxFlat);
         else if (panel.TryGetStyleProperty<StyleBox>(PanelContainer.StylePropertyPanel, out var style)
                  && style is StyleBoxFlat propStyleBoxFlat)
-            color = propStyleBoxFlat.BackgroundColor;
-        else
-            color = Color.FromHex("#25252ADD");
+            styleBox = new StyleBoxFlat(propStyleBoxFlat);
 
-        panel.PanelOverride = new StyleBoxFlat
+        var overrideStyle = styleBox ?? new StyleBoxFlat
         {
-            BackgroundColor = color.WithAlpha(opacity)
+            BackgroundColor = Color.FromHex("#25252ADD")
         };
+        overrideStyle.BackgroundColor = overrideStyle.BackgroundColor.WithAlpha(opacity);
+        panel.PanelOverride = overrideStyle;
     }
 
     public void SetMainChat(bool setting)

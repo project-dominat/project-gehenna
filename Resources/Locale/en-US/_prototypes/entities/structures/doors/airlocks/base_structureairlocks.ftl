@@ -1,0 +1,1 @@
+ent-AirlockGlass = glass airlock

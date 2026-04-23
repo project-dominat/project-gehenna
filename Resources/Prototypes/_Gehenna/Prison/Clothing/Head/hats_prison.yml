@@ -2,7 +2,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatPrisonBoss
   name: prison warden cap
-  suffix: "[Prison]"
+  suffix: "Prison"
   description: A distinguished cap worn by the warden of Gehenna prison.
   components:
   - type: Sprite
@@ -18,7 +18,7 @@
   parent: ClothingHeadBase
   id: ClothingHeadHatPrisonWorker
   name: prison officer cap
-  suffix: "[Prison]"
+  suffix: "Prison"
   description: A sturdy cap worn by Gehenna prison officers.
   components:
   - type: Sprite

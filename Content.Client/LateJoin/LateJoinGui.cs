@@ -3,13 +3,14 @@ using System.Numerics;
 using Content.Client.CrewManifest;
 using Content.Client.GameTicking.Managers;
 using Content.Client.Lobby;
-using Content.Client.UserInterface.Controls;
 using Content.Client.Players.PlayTimeTracking;
+using Content.Client.UserInterface.Controls;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Content.Shared.StatusIcon;
 using Robust.Client.Console;
+using Robust.Client.Graphics;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -40,7 +41,11 @@ namespace Content.Client.LateJoin
 
         private readonly Dictionary<NetEntity, Dictionary<string, List<JobButton>>> _jobButtons = new();
         private readonly Dictionary<NetEntity, Dictionary<string, BoxContainer>> _jobCategories = new();
-        private readonly List<ScrollContainer> _jobLists = new();
+        private readonly List<Control> _jobLists = new();
+        private static readonly Color PanelBackground = Color.FromHex("#14141a");
+        private static readonly Color PanelBackgroundAlt = Color.FromHex("#1a1a22");
+        private static readonly Color Gold = Color.FromHex("#b08840");
+        private static readonly Color GoldDeep = Color.FromHex("#6b4f1f");
 
         private readonly Control _base;
 
@@ -59,6 +64,7 @@ namespace Content.Client.LateJoin
             {
                 Orientation = LayoutOrientation.Vertical,
                 VerticalExpand = true,
+                SeparationOverride = 4,
             };
 
             ContentsContainer.AddChild(_base);
@@ -113,10 +119,12 @@ namespace Content.Client.LateJoin
 
                 _base.AddChild(new StripeBack()
                 {
+                    StyleClasses = { "LateJoinStripe" },
                     Children =
                     {
                         new PanelContainer()
                         {
+                            PanelOverride = CreateStationHeaderPanel(),
                             Children =
                             {
                                 new Label()
@@ -146,15 +154,22 @@ namespace Content.Client.LateJoin
                 {
                     VerticalExpand = true,
                     Children = { jobList },
+                };
+
+                var jobListPanel = new PanelContainer
+                {
+                    PanelOverride = CreateJobListPanel(),
+                    VerticalExpand = true,
                     Visible = false,
+                    Children = { jobListScroll },
                 };
 
                 if (_jobLists.Count == 0)
-                    jobListScroll.Visible = true;
+                    jobListPanel.Visible = true;
 
-                _jobLists.Add(jobListScroll);
+                _jobLists.Add(jobListPanel);
 
-                _base.AddChild(jobListScroll);
+                _base.AddChild(jobListPanel);
 
                 collapseButton.OnToggled += _ =>
                 {
@@ -162,7 +177,7 @@ namespace Content.Client.LateJoin
                     {
                         section.Visible = false;
                     }
-                    jobListScroll.Visible = true;
+                    jobListPanel.Visible = true;
                 };
 
                 var firstCategory = true;
@@ -214,6 +229,7 @@ namespace Content.Client.LateJoin
 
                     category.AddChild(new PanelContainer
                     {
+                        PanelOverride = CreateDepartmentHeaderPanel(),
                         Children =
                         {
                             new Label
@@ -335,6 +351,48 @@ namespace Content.Client.LateJoin
                 _jobButtons.Clear();
                 _jobCategories.Clear();
             }
+        }
+
+        private static StyleBoxFlat CreateStationHeaderPanel()
+        {
+            return new StyleBoxFlat
+            {
+                BackgroundColor = PanelBackgroundAlt,
+                BorderColor = GoldDeep,
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 8,
+                ContentMarginRightOverride = 8,
+                ContentMarginTopOverride = 3,
+                ContentMarginBottomOverride = 3,
+            };
+        }
+
+        private static StyleBoxFlat CreateJobListPanel()
+        {
+            return new StyleBoxFlat
+            {
+                BackgroundColor = PanelBackground,
+                BorderColor = GoldDeep,
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 6,
+                ContentMarginRightOverride = 6,
+                ContentMarginTopOverride = 6,
+                ContentMarginBottomOverride = 6,
+            };
+        }
+
+        private static StyleBoxFlat CreateDepartmentHeaderPanel()
+        {
+            return new StyleBoxFlat
+            {
+                BackgroundColor = GoldDeep,
+                BorderColor = Gold,
+                BorderThickness = new Thickness(1),
+                ContentMarginLeftOverride = 5,
+                ContentMarginRightOverride = 5,
+                ContentMarginTopOverride = 2,
+                ContentMarginBottomOverride = 2,
+            };
         }
     }
 

@@ -1,0 +1,78 @@
+- type: entity
+  id: PrisonChestStashInner
+  name: false bottom
+  description: A hidden compartment.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: Storage
+    grid:
+    - 0,0,4,2
+    maxItemSize: Normal
+    showVerb: false
+  - type: PrisonChestStashInner
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: Sprite
+    visible: false
+
+- type: entity
+  parent: filingCabinetDrawer
+  id: ChestDrawerPrisonGehenna
+  name: prison bedside table
+  suffix: "Prison"
+  description: A small bedside table found in Gehenna prison cells.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Structure/Storage/chest.rsi
+    noRot: true
+    layers:
+    - state: chestdrawer
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: chestdrawer-open
+      map: ["openLayer"]
+  - type: Damageable
+    damageModifierSet: Wood
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          MaterialWoodPlank1:
+            min: 3
+            max: 3
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: EntityStorageVisuals
+    stateBaseClosed: chestdrawer
+    stateDoorOpen: chestdrawer-open
+  - type: Appearance
+  - type: Tag
+    tags:
+    - Wooden
+  - type: Construction
+    graph: GehennaPrisonChestDrawer
+    node: chestDrawer
+  - type: PrisonChestStash

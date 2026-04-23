@@ -1,0 +1,2 @@
+ent-OrganRuminantStomach = { "" }
+    .suffix = Ruminant

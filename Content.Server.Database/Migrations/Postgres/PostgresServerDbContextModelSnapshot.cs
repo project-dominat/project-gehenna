@@ -120,6 +120,10 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("message");
 
+                    b.Property<string>("RawMessage")
+                        .HasColumnType("text")
+                        .HasColumnName("raw_message");
+
                     b.Property<int>("Type")
                         .HasColumnType("integer")
                         .HasColumnName("type");

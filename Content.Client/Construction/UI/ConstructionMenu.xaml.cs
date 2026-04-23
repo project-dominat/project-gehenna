@@ -1,3 +1,4 @@
+using System;
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Construction.Prototypes;
@@ -60,6 +61,10 @@ namespace Content.Client.Construction.UI
     [GenerateTypedNameReferences]
     public sealed partial class ConstructionMenu : DefaultWindow, IConstructionMenuView
     {
+        private const float RecipeGridCellSize = 56f;
+        private const int RecipeGridSeparation = 4;
+        private const float RecipeGridViewportPadding = 16f;
+
         public bool BuildButtonPressed
         {
             get => BuildButton.Pressed;
@@ -89,6 +94,8 @@ namespace Content.Client.Construction.UI
             RobustXamlLoader.Load(this);
 
             Title = Loc.GetString("construction-menu-title");
+            RecipesGridScrollContainer.OnResized += UpdateRecipeGridColumns;
+            UpdateRecipeGridColumns();
 
             BuildButton.Text = Loc.GetString("construction-menu-place-ghost");
             Recipes.ItemPressed += (_, data) => RecipeSelected?.Invoke(this, data as ConstructionMenuListData);
@@ -111,12 +118,19 @@ namespace Content.Client.Construction.UI
                 {
                     Text = prototype.Name,
                     Margin = new(5, 0),
+                    ClipText = true,
+                    HorizontalExpand = true,
                 };
 
-                var box = new BoxContainer();
+                var box = new BoxContainer
+                {
+                    Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                    HorizontalExpand = true,
+                };
                 box.AddChild(entProtoView);
                 box.AddChild(label);
 
+                button.HorizontalExpand = true;
                 button.AddChild(box);
                 button.ToolTip = prototype.Description;
                 button.AddStyleClass(ListContainer.StyleClassListContainerButton);
@@ -142,6 +156,17 @@ namespace Content.Client.Construction.UI
 
             MenuGridViewButton.OnPressed += _ =>
                 PopulateRecipes?.Invoke(this, (SearchBar.Text, Categories[OptionCategories.SelectedId]));
+        }
+
+        private void UpdateRecipeGridColumns()
+        {
+            var availableWidth = RecipesGridScrollContainer.Size.X - RecipeGridViewportPadding;
+            if (availableWidth <= 0f)
+                return;
+
+            var columns = Math.Max(1, (int) ((availableWidth + RecipeGridSeparation) /
+                                             (RecipeGridCellSize + RecipeGridSeparation)));
+            RecipesGrid.Columns = columns;
         }
 
         public event EventHandler? ClearAllGhosts;

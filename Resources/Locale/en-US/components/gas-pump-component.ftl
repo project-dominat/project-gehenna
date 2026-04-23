@@ -4,3 +4,7 @@ comp-gas-pump-ui-pump-set-max = Max
 comp-gas-pump-ui-pump-output-pressure = Output Pressure (kPa):
 
 comp-gas-pump-ui-pump-transfer-rate = Transfer Rate (L/s):
+
+comp-gas-pump-ui-pressure-window-title = Pressure Pump
+
+comp-gas-pump-ui-volume-window-title = Volume Pump

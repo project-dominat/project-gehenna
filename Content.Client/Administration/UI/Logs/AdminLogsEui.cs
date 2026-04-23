@@ -129,10 +129,10 @@ public sealed class AdminLogsEui : BaseEui
                 }
                 await writer.WriteAsync(CsvSeparator);
                 // Severity
-                await writer.WriteAsync(log.Impact.ToString());
+                await writer.WriteAsync(AdminLogText.GetImpactText(log.Impact));
                 await writer.WriteAsync(CsvSeparator);
                 // Type
-                await writer.WriteAsync(log.Type.ToString());
+                await writer.WriteAsync(AdminLogText.GetTypeText(log.Type));
                 await writer.WriteAsync(CsvSeparator);
                 // Message
                 await writer.WriteAsync(CsvQuote);

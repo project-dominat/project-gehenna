@@ -413,3 +413,25 @@ ui-options-admin-enable-overlay-starting-job = Show starting job
 ui-options-admin-overlay-merge-distance = Stack merge distance
 ui-options-admin-overlay-ghost-fade-distance = Ghost overlay fade range from mouse
 ui-options-admin-overlay-ghost-hide-distance = Ghost overlay hide range from mouse
+
+# Gehenna-Edit: Crosshair customization
+ui-options-tab-crosshair = Crosshair
+ui-options-crosshair-header-general = General
+ui-options-crosshair-header-shape = Shape
+ui-options-crosshair-header-feedback = Feedback
+ui-options-crosshair-enabled = Enable crosshair
+ui-options-crosshair-color = Crosshair color
+ui-options-crosshair-color-example = Example
+ui-options-crosshair-opacity = Opacity
+ui-options-crosshair-gap = Gap from center
+ui-options-crosshair-length = Line length
+ui-options-crosshair-line-width = Line width
+ui-options-crosshair-center-dot = Center dot
+ui-options-crosshair-outline = Shadow / outline
+ui-options-crosshair-hit-flash = Hit flash
+ui-options-crosshair-spread-rail = Spread indicator
+ui-options-crosshair-spread-scale = Spread scale
+ui-options-crosshair-bloom-tint = Tint crosshair by spread (yellow -> red)
+ui-options-crosshair-dynamic-line-width = Scale line width with spread
+ui-options-crosshair-center-dot-radius = Center dot radius
+ui-options-crosshair-outline-thickness = Outline thickness

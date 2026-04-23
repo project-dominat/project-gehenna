@@ -124,7 +124,7 @@
                                Align="Center"/>
                         <!-- Note: This placeholder text should never be visible. -->
                         <RichTextLabel Name="HighTemperatureWarningText"
-                                       Text="Temperature too high."/>
+                                       Text="{Loc 'cryo-pod-window-high-temperature-warning'}"/>
                     </BoxContainer>
                 </PanelContainer>
 

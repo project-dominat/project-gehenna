@@ -1,13 +1,22 @@
 {
-  "version": 1,
-  "license": "CC-BY-SA-3.0",
-  "copyright": "Created for Gehenna project",
-  "size": { "x": 32, "y": 32 },
-  "states": [
-    { "name": "planet_worker" },
-    { "name": "planet_worker_door" },
-    { "name": "planet_worker_open" },
-    { "name": "locked" },
-    { "name": "unlocked" }
-  ]
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Created for Gehenna project",
+    "size": { "x": 32, "y": 32 },
+    "states": [
+        { "name": "planet_worker" },
+        { "name": "planet_worker_door" },
+        { "name": "planet_worker_open" },
+        { "name": "doctor" },
+        { "name": "doctor_door" },
+        { "name": "doctor_open" },
+        { "name": "eng" },
+        { "name": "eng_door" },
+        { "name": "eng_open" },
+        { "name": "hos" },
+        { "name": "hos_door" },
+        { "name": "hos_open" },
+        { "name": "locked" },
+        { "name": "unlocked" }
+    ]
 }

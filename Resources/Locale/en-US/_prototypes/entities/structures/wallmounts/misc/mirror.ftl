@@ -1,0 +1,2 @@
+ent-MirrorModern = { "" }
+    .suffix = rectangle

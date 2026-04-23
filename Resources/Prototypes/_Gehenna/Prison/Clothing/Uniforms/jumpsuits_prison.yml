@@ -2,13 +2,13 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitPrisonWorker
   name: prison worker uniform
-  suffix: "[Prison]"
+  suffix: "Prison"
   description: A durable uniform for Gehenna prison workers. It smells of industrial cleaner.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-worker-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-worker-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-worker-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-worker-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
     randomMode: false
@@ -17,13 +17,13 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitPrisonerGehenna1
   name: prisoner uniform
-  suffix: "[Prison, 1]"
+  suffix: "Prison"
   description: A worn uniform issued to inmates of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-1-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-prisoner-1-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-1-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-prisoner-1-uniform.rsi
     equippedState: equipped-INNERCLOTHING-digi
   - type: SuitSensor
     mode: SensorCords
@@ -33,13 +33,13 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitPrisonerGehenna2
   name: prisoner uniform
-  suffix: "[Prison, 2]"
+  suffix: "Prison"
   description: A worn uniform issued to inmates of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-2-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-prisoner-2-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-2-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-prisoner-2-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
     randomMode: false
@@ -48,13 +48,13 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitPrisonerGehenna3
   name: prisoner uniform
-  suffix: "[Prison, 3]"
+  suffix: "Prison"
   description: A worn uniform issued to inmates of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-3-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-prisoner-3-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prison-prisoner-3-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-prisoner-3-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
     randomMode: false
@@ -63,13 +63,13 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitPrisonBossBasic
   name: prison warden uniform
-  suffix: "[Prison]"
+  suffix: "Prison"
   description: A formal uniform worn by the warden of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-basic-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prisonboss-basic-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-basic-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prisonboss-basic-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
     randomMode: false
@@ -78,13 +78,43 @@
   parent: ClothingUniformBase
   id: ClothingUniformJumpsuitPrisonBossBusiness
   name: prison warden suit
-  suffix: "[Prison]"
+  suffix: "Prison"
   description: A business suit tailored for the warden of Gehenna prison.
   components:
   - type: Sprite
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-business-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prisonboss-business-uniform.rsi
   - type: Clothing
-    sprite: _Gehenna/Prison/Clothing/Uniform/prisonboss-business-uniform.rsi
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prisonboss-business-uniform.rsi
+  - type: SuitSensor
+    mode: SensorCords
+    randomMode: false
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonWorker2
+  name: prison worker uniform
+  suffix: "Prison"
+  description: An alternate durable uniform for Gehenna prison workers.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-worker-2-uniform.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-worker-2-uniform.rsi
+  - type: SuitSensor
+    mode: SensorCords
+    randomMode: false
+
+- type: entity
+  parent: ClothingUniformBase
+  id: ClothingUniformJumpsuitPrisonBetterWorker
+  name: prison senior worker uniform
+  suffix: "Prison"
+  description: A reinforced uniform worn by senior staff of Gehenna prison.
+  components:
+  - type: Sprite
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-better-worker-uniform.rsi
+  - type: Clothing
+    sprite: _Gehenna/Prison/Clothing/Uniform/workers/prison-better-worker-uniform.rsi
   - type: SuitSensor
     mode: SensorCords
     randomMode: false

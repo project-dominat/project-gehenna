@@ -414,3 +414,25 @@ ui-options-admin-enable-overlay-starting-job = Показывать старто
 ui-options-admin-overlay-merge-distance = Дистанция объединения меток
 ui-options-admin-overlay-ghost-fade-distance = Дистанция затухания оверлея призраков от курсора
 ui-options-admin-overlay-ghost-hide-distance = Дистанция скрытия оверлея призраков от курсора
+
+# Gehenna-Edit: Crosshair customization
+ui-options-tab-crosshair = Прицел
+ui-options-crosshair-header-general = Общее
+ui-options-crosshair-header-shape = Форма
+ui-options-crosshair-header-feedback = Обратная связь
+ui-options-crosshair-enabled = Включить прицел
+ui-options-crosshair-color = Цвет прицела
+ui-options-crosshair-color-example = Пример
+ui-options-crosshair-opacity = Прозрачность
+ui-options-crosshair-gap = Зазор от центра
+ui-options-crosshair-length = Длина линий
+ui-options-crosshair-line-width = Толщина линий
+ui-options-crosshair-center-dot = Центральная точка
+ui-options-crosshair-outline = Тень / обводка
+ui-options-crosshair-hit-flash = Вспышка при попадании
+ui-options-crosshair-spread-rail = Индикатор разброса
+ui-options-crosshair-spread-scale = Масштаб разброса
+ui-options-crosshair-bloom-tint = Окрашивать прицел по разбросу (жёлтый → красный)
+ui-options-crosshair-dynamic-line-width = Менять толщину линий по разбросу
+ui-options-crosshair-center-dot-radius = Размер центральной точки
+ui-options-crosshair-outline-thickness = Толщина обводки

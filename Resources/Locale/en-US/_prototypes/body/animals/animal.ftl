@@ -1,0 +1,2 @@
+ent-OrganAnimal = { "" }
+    .suffix = Animal

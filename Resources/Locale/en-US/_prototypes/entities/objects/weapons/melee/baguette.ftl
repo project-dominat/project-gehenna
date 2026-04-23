@@ -1,0 +1,2 @@
+ent-WeaponBaguette = { "" }
+    .suffix = Weapon

@@ -10,7 +10,7 @@
             <LineEdit Name="CurrentDelayEditMinutes" MinWidth="32" />
             <Label Name="Colon" Text=":" />
             <LineEdit Name="CurrentDelayEditSeconds" MinWidth="32" />
-            <Label Name="DelayInfo" Text=" (mm:ss)" />
+            <Label Name="DelayInfo" Text="{Loc 'signal-timer-menu-delay-suffix'}" />
         </BoxContainer>
         <Button Name="StartTimer" Text="{Loc signal-timer-menu-start}" />
     </BoxContainer>

@@ -1,0 +1,40 @@
+accent-russian-words-1 = да
+
+
+accent-russian-words-replace-1 = даэ
+
+
+accent-russian-words-2 = нет
+
+
+accent-russian-words-replace-2 = нет
+
+
+accent-russian-words-3 = бабушка
+
+
+accent-russian-words-3-2 = grandmother
+
+
+accent-russian-words-3-3 = бабушка
+
+
+accent-russian-words-replace-3 = бабушка
+
+
+accent-russian-words-4 = друг
+
+
+accent-russian-words-replace-4 = товарищ
+
+
+accent-russian-words-5 = друзья
+
+
+accent-russian-words-replace-5 = товарищи
+
+
+accent-russian-words-6 = здоровы
+
+
+accent-russian-words-replace-6 = на здоровье
