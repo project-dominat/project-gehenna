@@ -39,4 +39,5 @@ public enum GehennaTreatmentKind : byte
     Bandage,
     Suture,
     Ointment,
+    Tourniquet,
 }

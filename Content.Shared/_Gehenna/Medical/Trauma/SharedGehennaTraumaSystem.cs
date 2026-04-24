@@ -1,4 +1,6 @@
 using Content.Shared.Damage;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
@@ -12,6 +14,7 @@ namespace Content.Shared._Gehenna.Medical.Trauma;
 
 public sealed class SharedGehennaTraumaSystem : EntitySystem
 {
+    [Dependency] private readonly SharedBloodstreamSystem _bloodstream = default!;
     [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
 
@@ -126,6 +129,7 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
 
             wound.State = GehennaWoundState.Bandaged;
             wound.LastTreatedAt = _timing.CurTime;
+            StopWoundBleeding(ent.Owner, wound);
             Dirty(ent.Owner, ent.Comp);
             RefreshPain(ent.Owner, ent.Comp);
             return true;
@@ -170,8 +174,44 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
             if (wound.Type == GehennaTraumaType.Burn)
                 continue;
 
+            StopWoundBleeding(ent.Owner, wound);
             ent.Comp.Wounds.RemoveAt(i);
             _damageable.TryChangeDamage(ent.Owner, -wound.Damage, true, false);
+            Dirty(ent.Owner, ent.Comp);
+            RefreshPain(ent.Owner, ent.Comp);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool TryTourniquet(Entity<GehennaTraumaComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        for (var i = 0; i < ent.Comp.Wounds.Count; i++)
+        {
+            var wound = ent.Comp.Wounds[i];
+            if (!CanTourniquet(wound))
+                continue;
+
+            var zone = wound.Zone;
+            var changed = false;
+            foreach (var zoneWound in ent.Comp.Wounds)
+            {
+                if (zoneWound.Zone != zone || !CanTourniquet(zoneWound))
+                    continue;
+
+                zoneWound.Tourniqueted = true;
+                zoneWound.LastTreatedAt = _timing.CurTime;
+                StopWoundBleeding(ent.Owner, zoneWound);
+                changed = true;
+            }
+
+            if (!changed)
+                return false;
+
             Dirty(ent.Owner, ent.Comp);
             RefreshPain(ent.Owner, ent.Comp);
             return true;
@@ -195,6 +235,8 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
                 State = wound.State,
                 Severity = wound.Severity,
                 BurnDegree = wound.BurnDegree,
+                Bleeding = wound.Bleeding,
+                Tourniqueted = wound.Tourniqueted,
                 Treatment = GetTreatmentKey(wound),
             });
         }
@@ -225,6 +267,9 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
             {
                 return true;
             }
+
+            if (treatment == GehennaTreatmentKind.Tourniquet && CanTourniquet(wound))
+                return true;
         }
 
         return false;
@@ -270,9 +315,50 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
 
         wound.Severity += amount;
         wound.Damage.DamageDict[damageType] = wound.Damage.DamageDict.GetValueOrDefault(damageType) + amount;
+        RefreshWoundBleeding(wound, amount);
 
         if (wound.State == GehennaWoundState.Bandaged)
             wound.State = GehennaWoundState.Open;
+    }
+
+    private static void RefreshWoundBleeding(GehennaWoundData wound, FixedPoint2 amount)
+    {
+        var multiplier = wound.Type switch
+        {
+            GehennaTraumaType.Cut => 0.14f,
+            GehennaTraumaType.Puncture => 0.18f,
+            GehennaTraumaType.Gunshot => 0.32f,
+            _ => 0f,
+        };
+
+        if (multiplier <= 0f)
+            return;
+
+        wound.BleedRate += FixedPoint2.New(amount.Float() * multiplier);
+        wound.Bleeding = !wound.Tourniqueted && wound.BleedRate > FixedPoint2.Zero;
+    }
+
+    private void StopWoundBleeding(EntityUid uid, GehennaWoundData wound)
+    {
+        if (!wound.Bleeding)
+            return;
+
+        _bloodstream.TryModifyBleedAmount((uid, CompOrNull<BloodstreamComponent>(uid)), -wound.BleedRate.Float());
+        wound.Bleeding = false;
+        wound.BleedRate = FixedPoint2.Zero;
+    }
+
+    private static bool CanTourniquet(GehennaWoundData wound)
+    {
+        return wound.Bleeding &&
+               !wound.Tourniqueted &&
+               wound.State == GehennaWoundState.Open &&
+               IsLimb(wound.Zone);
+    }
+
+    private static bool IsLimb(GehennaBodyZone zone)
+    {
+        return zone is GehennaBodyZone.LeftArm or GehennaBodyZone.RightArm or GehennaBodyZone.LeftLeg or GehennaBodyZone.RightLeg;
     }
 
     private static GehennaWoundData? FindWound(GehennaTraumaComponent comp, GehennaBodyZone zone, GehennaTraumaType type)
@@ -338,6 +424,9 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
             if (wound.Type == GehennaTraumaType.Burn)
                 multiplier += wound.BurnDegree * 0.15f;
 
+            if (wound.Tourniqueted)
+                multiplier += 0.15f;
+
             painValue += FixedPoint2.New(wound.Severity.Float() * multiplier);
         }
 
@@ -371,6 +460,12 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
                 _ => "gehenna-trauma-treatment-cryo",
             };
         }
+
+        if (wound.Tourniqueted)
+            return "gehenna-trauma-treatment-bandage-suture";
+
+        if (CanTourniquet(wound))
+            return "gehenna-trauma-treatment-tourniquet-bandage";
 
         return wound.State switch
         {

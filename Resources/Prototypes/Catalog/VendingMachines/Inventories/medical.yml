@@ -13,6 +13,8 @@
     GehennaSutureKit: 1
     # Gehenna-Edit
     GehennaBurnOintment: 2
+    # Gehenna-Edit
+    GehennaTourniquet: 2
     Bloodpack: 3
     ChemistryBottleEpinephrine: 3
     Syringe: 3
@@ -34,6 +36,8 @@
     GehennaElasticBandage: 2
     # Gehenna-Edit
     GehennaBurnOintment: 2
+    # Gehenna-Edit
+    GehennaTourniquet: 2
     Bloodpack: 3
     ChemistryBottleInaprovaline: 3
     Syringe: 3
@@ -66,6 +70,8 @@
     GehennaSutureKit: 4
     # Gehenna-Edit
     GehennaBurnOintment: 4
+    # Gehenna-Edit
+    GehennaTourniquet: 4
     Bloodpack: 4
     # Optional / Situational Gear
     BoxBottle: 3
@@ -92,6 +98,8 @@
     GehennaElasticBandage: 3
     # Gehenna-Edit
     GehennaBurnOintment: 3
+    # Gehenna-Edit
+    GehennaTourniquet: 3
     Bloodpack: 5
     ChemistryBottleInaprovaline: 5
     Syringe: 5

@@ -57,6 +57,7 @@ public sealed class GehennaTraumaTreatmentSystem : EntitySystem
             GehennaTreatmentKind.Bandage => _trauma.TryBandage((args.Target.Value, trauma)),
             GehennaTreatmentKind.Suture => _trauma.TrySuture((args.Target.Value, trauma)),
             GehennaTreatmentKind.Ointment => _trauma.TryOintment((args.Target.Value, trauma), ent.Comp.MaxBurnDegree),
+            GehennaTreatmentKind.Tourniquet => _trauma.TryTourniquet((args.Target.Value, trauma)),
             _ => false,
         };
 

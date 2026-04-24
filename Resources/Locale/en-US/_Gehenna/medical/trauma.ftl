@@ -10,6 +10,9 @@ ent-GehennaSutureKit = suture kit
 ent-GehennaBurnOintment = burn ointment
     .desc = A topical treatment for minor and moderate burns.
 
+ent-GehennaTourniquet = emergency tourniquet
+    .desc = A fast strap for stopping severe limb bleeding before proper wound care.
+
 gehenna-target-zone-head = head
 gehenna-target-zone-torso = torso
 gehenna-target-zone-leftarm = left arm
@@ -38,6 +41,8 @@ gehenna-trauma-treatment-ointment = apply ointment
 gehenna-trauma-treatment-ointment-gauze = apply ointment, then gauze
 gehenna-trauma-treatment-dermazine-ointment-bandage = give dermazine, apply ointment, then bandage
 gehenna-trauma-treatment-cryo = prepare for cryogenic treatment
+gehenna-trauma-treatment-tourniquet-bandage = apply a tourniquet, then bandage
+gehenna-trauma-treatment-bandage-suture = apply a bandage, then close with sutures
 gehenna-trauma-treatment-none = no further wound care
 
 gehenna-trauma-scanner-scan-mode = Scan
@@ -50,5 +55,7 @@ gehenna-trauma-scanner-wounds = Wounds
 gehenna-trauma-scanner-no-wounds = No procedural wounds detected.
 gehenna-trauma-scanner-yes = yes
 gehenna-trauma-scanner-no = no
+gehenna-trauma-scanner-bleeding-marker = [bleeding]
+gehenna-trauma-scanner-tourniquet-marker = [tourniquet]
 gehenna-trauma-scanner-wound-line = {$zone}: {$type}, {$state}, severity {$severity}
 gehenna-trauma-scanner-treatment-line = Needed: {$treatment}

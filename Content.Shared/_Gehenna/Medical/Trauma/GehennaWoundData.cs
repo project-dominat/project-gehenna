@@ -15,6 +15,9 @@ public sealed class GehennaWoundData
     public TimeSpan CreatedAt;
     public TimeSpan LastTreatedAt;
     public DamageSpecifier Damage = new();
+    public FixedPoint2 BleedRate;
+    public bool Bleeding;
+    public bool Tourniqueted;
 }
 
 [Serializable, NetSerializable]
@@ -25,5 +28,7 @@ public sealed class GehennaTraumaScannerEntry
     public GehennaWoundState State;
     public FixedPoint2 Severity;
     public int BurnDegree;
+    public bool Bleeding;
+    public bool Tourniqueted;
     public string Treatment = string.Empty;
 }

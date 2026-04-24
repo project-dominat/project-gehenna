@@ -150,3 +150,27 @@
   components:
   - type: Stack
     count: 1
+
+- type: entity
+  parent: BaseHealingItem
+  id: GehennaTourniquet
+  name: emergency tourniquet
+  description: A fast strap for stopping severe limb bleeding before proper wound care.
+  components:
+  - type: Sprite
+    state: tourniquet
+  - type: Item
+    heldPrefix: tourniquet
+  - type: GehennaTraumaTreatment
+    treatment: Tourniquet
+    delay: 0.5
+    beginSound:
+      path: "/Audio/Items/Medical/brutepack_begin.ogg"
+      params:
+        volume: 1.0
+        variation: 0.125
+    endSound:
+      path: "/Audio/Items/Medical/brutepack_end.ogg"
+      params:
+        volume: 1.0
+        variation: 0.125

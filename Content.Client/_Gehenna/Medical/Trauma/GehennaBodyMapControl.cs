@@ -105,6 +105,12 @@ public sealed class GehennaBodyMapControl : Control
             handle.DrawRect(Enlarge(iconBox, 1), Color.Black.WithAlpha(0.65f));
             handle.DrawTextureRect(infection, iconBox);
         }
+
+        if (wounds.Any(wound => wound.Bleeding))
+        {
+            var bleedBox = UIBox2.FromDimensions(zoneBox.BottomRight - new Vector2(10, 10), new Vector2(7, 7));
+            handle.DrawRect(bleedBox, Color.Red);
+        }
     }
 
     private Texture? GetWoundIcon(GehennaTraumaScannerEntry wound)

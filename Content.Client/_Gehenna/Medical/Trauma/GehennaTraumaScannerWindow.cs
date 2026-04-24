@@ -128,6 +128,10 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
             ("type", Loc.GetString($"gehenna-trauma-type-{wound.Type.ToString().ToLowerInvariant()}")),
             ("state", Loc.GetString($"gehenna-wound-state-{wound.State.ToString().ToLowerInvariant()}")),
             ("severity", wound.Severity)));
+        if (wound.Bleeding)
+            message.AddText($" {Loc.GetString("gehenna-trauma-scanner-bleeding-marker")}");
+        if (wound.Tourniqueted)
+            message.AddText($" {Loc.GetString("gehenna-trauma-scanner-tourniquet-marker")}");
         message.Pop();
         message.AddText("\n");
         message.AddText(Loc.GetString("gehenna-trauma-scanner-treatment-line", ("treatment", Loc.GetString(wound.Treatment))));

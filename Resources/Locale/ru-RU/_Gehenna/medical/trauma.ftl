@@ -10,6 +10,9 @@ ent-GehennaSutureKit = набор для швов
 ent-GehennaBurnOintment = мазь от ожогов
     .desc = Наружное средство для лёгких и умеренных ожогов.
 
+ent-GehennaTourniquet = экстренный жгут
+    .desc = Быстрый ремень для остановки сильного кровотечения конечности перед полноценной обработкой раны.
+
 gehenna-target-zone-head = голова
 gehenna-target-zone-torso = торс
 gehenna-target-zone-leftarm = левая рука
@@ -38,6 +41,8 @@ gehenna-trauma-treatment-ointment = нанести мазь
 gehenna-trauma-treatment-ointment-gauze = нанести мазь, затем марлю
 gehenna-trauma-treatment-dermazine-ointment-bandage = дать дермазин, нанести мазь, затем бинт
 gehenna-trauma-treatment-cryo = подготовить к крио-лечению
+gehenna-trauma-treatment-tourniquet-bandage = наложить жгут, затем повязку
+gehenna-trauma-treatment-bandage-suture = наложить повязку, затем закрыть швами
 gehenna-trauma-treatment-none = дальнейшая обработка не нужна
 
 gehenna-trauma-scanner-scan-mode = Сканирование
@@ -50,5 +55,7 @@ gehenna-trauma-scanner-wounds = Раны
 gehenna-trauma-scanner-no-wounds = Процедурные раны не обнаружены.
 gehenna-trauma-scanner-yes = да
 gehenna-trauma-scanner-no = нет
+gehenna-trauma-scanner-bleeding-marker = [кровит]
+gehenna-trauma-scanner-tourniquet-marker = [жгут]
 gehenna-trauma-scanner-wound-line = {$zone}: {$type}, {$state}, тяжесть {$severity}
 gehenna-trauma-scanner-treatment-line = Нужно: {$treatment}
