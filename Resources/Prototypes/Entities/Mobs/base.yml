@@ -70,6 +70,10 @@
   components:
   - type: Damageable
     damageContainer: Biological
+  # Gehenna-Edit
+  - type: GehennaTrauma
+  # Gehenna-Edit
+  - type: GehennaTargeting
   - type: Destructible
     thresholds:
     - trigger:
