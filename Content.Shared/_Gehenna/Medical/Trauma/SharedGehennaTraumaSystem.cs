@@ -171,7 +171,7 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
         for (var i = 0; i < ent.Comp.Wounds.Count; i++)
         {
             var wound = ent.Comp.Wounds[i];
-            if (wound.Type == GehennaTraumaType.Burn)
+            if (!CanSuture(wound))
                 continue;
 
             StopWoundBleeding(ent.Owner, wound);
@@ -258,7 +258,7 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
                 return true;
             }
 
-            if (treatment == GehennaTreatmentKind.Suture && wound.Type != GehennaTraumaType.Burn)
+            if (treatment == GehennaTreatmentKind.Suture && CanSuture(wound))
                 return true;
 
             if (treatment == GehennaTreatmentKind.Ointment &&
@@ -354,6 +354,12 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
                !wound.Tourniqueted &&
                wound.State == GehennaWoundState.Open &&
                IsLimb(wound.Zone);
+    }
+
+    private static bool CanSuture(GehennaWoundData wound)
+    {
+        return wound.Type != GehennaTraumaType.Burn &&
+               wound.State is GehennaWoundState.Bandaged or GehennaWoundState.Rotting;
     }
 
     private static bool IsLimb(GehennaBodyZone zone)
