@@ -1,4 +1,8 @@
 using Content.Shared._Gehenna.Medical.Trauma;
+using Content.Shared.Body.Components;
+using Content.Shared.Body.Systems;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -12,6 +16,8 @@ namespace Content.Server._Gehenna.Medical.Trauma;
 public sealed class GehennaTraumaTreatmentSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedGehennaTraumaSystem _trauma = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
@@ -56,8 +62,9 @@ public sealed class GehennaTraumaTreatmentSystem : EntitySystem
         {
             GehennaTreatmentKind.Bandage => _trauma.TryBandage((args.Target.Value, trauma)),
             GehennaTreatmentKind.Suture => _trauma.TrySuture((args.Target.Value, trauma)),
-            GehennaTreatmentKind.Ointment => _trauma.TryOintment((args.Target.Value, trauma), ent.Comp.MaxBurnDegree),
+            GehennaTreatmentKind.Ointment => _trauma.TryOintment((args.Target.Value, trauma), ent.Comp.MaxBurnDegree, ent.Comp.BurnSeverityHealing),
             GehennaTreatmentKind.Tourniquet => _trauma.TryTourniquet((args.Target.Value, trauma)),
+            GehennaTreatmentKind.Bloodpack => TryUseBloodpack(ent, args.Target.Value),
             _ => false,
         };
 
@@ -89,13 +96,34 @@ public sealed class GehennaTraumaTreatmentSystem : EntitySystem
 
     private bool CanTreat(Entity<GehennaTraumaTreatmentComponent> ent, EntityUid target, EntityUid user)
     {
-        if (!TryComp<GehennaTraumaComponent>(target, out var trauma))
-            return false;
-
         if (TryComp<StackComponent>(ent, out var stack) && stack.Count <= 0)
             return false;
 
+        if (ent.Comp.Treatment == GehennaTreatmentKind.Bloodpack)
+            return CanUseBloodpack(target);
+
+        if (!TryComp<GehennaTraumaComponent>(target, out var trauma))
+            return false;
+
         return _trauma.HasTreatableWound((target, trauma), ent.Comp.Treatment, ent.Comp.MaxBurnDegree);
+    }
+
+    private bool CanUseBloodpack(EntityUid target)
+    {
+        if (!TryComp<BloodstreamComponent>(target, out var bloodstream))
+            return false;
+
+        return _bloodstream.GetBloodLevel((target, bloodstream)) < 1f;
+    }
+
+    private bool TryUseBloodpack(Entity<GehennaTraumaTreatmentComponent> ent, EntityUid target)
+    {
+        if (!TryComp<BloodstreamComponent>(target, out var bloodstream))
+            return false;
+
+        var changedBlood = _bloodstream.TryModifyBloodLevel((target, bloodstream), ent.Comp.BloodRestoreAmount);
+        var changedDamage = _damageable.TryChangeDamage(target, new DamageSpecifier { DamageDict = { ["Bloodloss"] = -0.5 } }, true, false);
+        return changedBlood || changedDamage;
     }
 
     private void UseCharge(EntityUid uid)

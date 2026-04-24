@@ -138,7 +138,7 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
         return false;
     }
 
-    public bool TryOintment(Entity<GehennaTraumaComponent?> ent, int maxBurnDegree)
+    public bool TryOintment(Entity<GehennaTraumaComponent?> ent, int maxBurnDegree, FixedPoint2 severityHealing)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
@@ -151,7 +151,7 @@ public sealed class SharedGehennaTraumaSystem : EntitySystem
 
             wound.State = GehennaWoundState.Bandaged;
             wound.LastTreatedAt = _timing.CurTime;
-            wound.Severity = FixedPoint2.Max(FixedPoint2.Zero, wound.Severity - FixedPoint2.New(5));
+            wound.Severity = FixedPoint2.Max(FixedPoint2.Zero, wound.Severity - severityHealing);
             if (wound.Severity <= FixedPoint2.Zero)
                 ent.Comp.Wounds.RemoveAt(i);
 

@@ -153,6 +153,92 @@
 
 - type: entity
   parent: BaseHealingItem
+  id: GehennaRegenerativeMesh
+  name: regenerative trauma mesh
+  description: Advanced burn mesh for sealing deep thermal trauma.
+  suffix: Full
+  components:
+  - type: Tag
+    tags:
+    - Ointment
+  - type: Sprite
+    state: regenerative-mesh
+  - type: Item
+    heldPrefix: regenerative-mesh
+  - type: GehennaTraumaTreatment
+    treatment: Ointment
+    treatBurns: true
+    maxBurnDegree: 4
+    burnSeverityHealing: 12
+    delay: 3
+    beginSound:
+      path: "/Audio/Items/Medical/ointment_begin.ogg"
+      params:
+        volume: 1.0
+        variation: 0.125
+    endSound:
+      path: "/Audio/Items/Medical/ointment_end.ogg"
+      params:
+        volume: 1.0
+        variation: 0.125
+  - type: Stack
+    stackType: RegenerativeMesh
+    count: 10
+  - type: StackPrice
+    price: 20
+
+- type: entity
+  parent: GehennaRegenerativeMesh
+  id: GehennaRegenerativeMesh1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: BaseHealingItem
+  id: GehennaBloodpack
+  name: emergency blood pack
+  description: A universal blood replacement pack for stabilizing blood volume.
+  suffix: Full
+  components:
+  - type: Tag
+    tags:
+    - Bloodpack
+  - type: Sprite
+    state: bloodpack
+  - type: Item
+    heldPrefix: bloodpack
+  - type: GehennaTraumaTreatment
+    treatment: Bloodpack
+    bloodRestoreAmount: 15
+    delay: 2
+    beginSound:
+      path: "/Audio/Items/Medical/brutepack_begin.ogg"
+      params:
+        volume: 1.0
+        variation: 0.125
+    endSound:
+      path: "/Audio/Items/Medical/brutepack_end.ogg"
+      params:
+        volume: 1.0
+        variation: 0.125
+  - type: Stack
+    stackType: Bloodpack
+    count: 10
+  - type: StackPrice
+    price: 10
+
+- type: entity
+  parent: GehennaBloodpack
+  id: GehennaBloodpack1
+  suffix: Single
+  components:
+  - type: Stack
+    count: 1
+
+- type: entity
+  parent: BaseHealingItem
   id: GehennaTourniquet
   name: emergency tourniquet
   description: A fast strap for stopping severe limb bleeding before proper wound care.

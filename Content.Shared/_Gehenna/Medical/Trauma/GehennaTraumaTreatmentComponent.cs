@@ -1,5 +1,6 @@
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
+using Content.Shared.FixedPoint;
 
 namespace Content.Shared._Gehenna.Medical.Trauma;
 
@@ -20,6 +21,12 @@ public sealed partial class GehennaTraumaTreatmentComponent : Component
 
     [DataField, AutoNetworkedField]
     public int MaxBurnDegree = 2;
+
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 BurnSeverityHealing = FixedPoint2.New(5);
+
+    [DataField, AutoNetworkedField]
+    public FixedPoint2 BloodRestoreAmount = FixedPoint2.New(15);
 
     [DataField]
     public SoundSpecifier? BeginSound;

@@ -19,6 +19,8 @@
           amount: 2
         # Gehenna-Edit
         - id: GehennaTourniquet
+        # Gehenna-Edit
+        - id: GehennaBloodpack1
         - id: PillCanisterTricordrazine
       # see https://github.com/tgstation/blob/master/code/game/objects/items/storage/firstaid.dm for example contents
 
@@ -35,6 +37,8 @@
           amount: 2
         # Gehenna-Edit
         - id: GehennaBurnOintment
+        # Gehenna-Edit
+        - id: GehennaRegenerativeMesh1
         - id: PillCanisterKelotane
         - id: PillCanisterDermaline
 
@@ -120,6 +124,8 @@
         - id: GehennaElasticBandage
         # Gehenna-Edit
         - id: GehennaTourniquet
+        # Gehenna-Edit
+        - id: GehennaBloodpack1
         - id: Bloodpack
           amount: 2
 
@@ -140,6 +146,8 @@
         - id: GehennaElasticBandage
         # Gehenna-Edit
         - id: GehennaTourniquet
+        # Gehenna-Edit
+        - id: GehennaBloodpack1
         - id: SyringeEphedrine
         - id: SyringeSaline
         - id: BruteAutoInjector

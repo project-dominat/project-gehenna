@@ -40,4 +40,5 @@ public enum GehennaTreatmentKind : byte
     Suture,
     Ointment,
     Tourniquet,
+    Bloodpack,
 }

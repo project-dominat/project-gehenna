@@ -10,6 +10,12 @@ ent-GehennaSutureKit = suture kit
 ent-GehennaBurnOintment = burn ointment
     .desc = A topical treatment for minor and moderate burns.
 
+ent-GehennaRegenerativeMesh = regenerative trauma mesh
+    .desc = Advanced burn mesh for sealing deep thermal trauma.
+
+ent-GehennaBloodpack = emergency blood pack
+    .desc = A universal blood replacement pack for stabilizing blood volume.
+
 ent-GehennaTourniquet = emergency tourniquet
     .desc = A fast strap for stopping severe limb bleeding before proper wound care.
 
