@@ -11,6 +11,12 @@
         - id: Brutepack
         - id: Ointment
         - id: Gauze
+        # Gehenna-Edit
+        - id: GehennaElasticBandage1
+          amount: 2
+        # Gehenna-Edit
+        - id: GehennaBurnOintment1
+          amount: 2
         - id: PillCanisterTricordrazine
       # see https://github.com/tgstation/blob/master/code/game/objects/items/storage/firstaid.dm for example contents
 
@@ -25,6 +31,8 @@
         children:
         - id: Ointment
           amount: 2
+        # Gehenna-Edit
+        - id: GehennaBurnOintment
         - id: PillCanisterKelotane
         - id: PillCanisterDermaline
 
@@ -39,6 +47,11 @@
         children:
         - id: Brutepack
         - id: Gauze
+        # Gehenna-Edit
+        - id: GehennaElasticBandage
+        # Gehenna-Edit
+        - id: GehennaSutureKit1
+          amount: 2
         - id: PillCanisterIron
         - id: PillCanisterCopper
 
@@ -97,6 +110,10 @@
         children:
         - id: MedicatedSuture
         - id: RegenerativeMesh
+        # Gehenna-Edit
+        - id: GehennaSutureKit
+        # Gehenna-Edit
+        - id: GehennaElasticBandage
         - id: Bloodpack
           amount: 2
 
@@ -111,6 +128,10 @@
         children:
         - id: MedicatedSuture
         - id: RegenerativeMesh
+        # Gehenna-Edit
+        - id: GehennaSutureKit
+        # Gehenna-Edit
+        - id: GehennaElasticBandage
         - id: SyringeEphedrine
         - id: SyringeSaline
         - id: BruteAutoInjector

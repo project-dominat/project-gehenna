@@ -17,11 +17,12 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
     private readonly Label _status;
     private readonly Label _blood;
     private readonly Label _bleeding;
+    private readonly GehennaBodyMapControl _bodyMap;
     private readonly BoxContainer _wounds;
 
     public GehennaTraumaScannerWindow()
     {
-        MinSize = SetSize = new Vector2(520, 420);
+        MinSize = SetSize = new Vector2(650, 460);
 
         var root = new BoxContainer
         {
@@ -34,7 +35,7 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
         var left = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
-            MinWidth = 190,
+            MinWidth = 230,
             SeparationOverride = 6,
         };
 
@@ -54,6 +55,9 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
         _status = AddLine(left, "gehenna-trauma-scanner-status", string.Empty);
         _blood = AddLine(left, "gehenna-trauma-scanner-blood", string.Empty);
         _bleeding = AddLine(left, "gehenna-trauma-scanner-bleeding", string.Empty);
+
+        _bodyMap = new GehennaBodyMapControl();
+        left.AddChild(_bodyMap);
 
         right.AddChild(new Label
         {
@@ -86,6 +90,7 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
         _bleeding.Text = Loc.GetString(state.Bleeding
             ? "gehenna-trauma-scanner-yes"
             : "gehenna-trauma-scanner-no");
+        _bodyMap.SetWounds(state.Wounds);
 
         _wounds.RemoveAllChildren();
 
