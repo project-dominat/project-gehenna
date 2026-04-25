@@ -12,6 +12,7 @@ using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.UserInterface;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -42,6 +43,12 @@ public sealed class GehennaTraumaScannerSystem : EntitySystem
         SubscribeLocalEvent<GehennaTraumaScannerComponent, EntGotInsertedIntoContainerMessage>(OnInsertedIntoContainer);
         SubscribeLocalEvent<GehennaTraumaScannerComponent, ItemToggledEvent>(OnToggled);
         SubscribeLocalEvent<GehennaTraumaScannerComponent, DroppedEvent>(OnDropped);
+
+        Subs.BuiEvents<GehennaTraumaScannerComponent>(GehennaTraumaScannerUiKey.Key, subs =>
+        {
+            subs.Event<BoundUIOpenedEvent>(OnUiOpened);
+            subs.Event<BoundUIClosedEvent>(OnUiClosed);
+        });
     }
 
     public override void Update(float frameTime)
@@ -80,11 +87,14 @@ public sealed class GehennaTraumaScannerSystem : EntitySystem
             return;
 
         _audio.PlayPvs(ent.Comp.ScanningBeginSound, ent);
-        _doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.ScanDelay, new GehennaTraumaScannerDoAfterEvent(), ent, target: args.Target, used: ent)
+        if (!_doAfter.TryStartDoAfter(new DoAfterArgs(EntityManager, args.User, ent.Comp.ScanDelay, new GehennaTraumaScannerDoAfterEvent(), ent, target: args.Target, used: ent)
         {
             NeedHand = true,
             BreakOnMove = true,
-        });
+        }))
+            return;
+
+        args.Handled = true;
     }
 
     private void OnDoAfter(Entity<GehennaTraumaScannerComponent> ent, ref GehennaTraumaScannerDoAfterEvent args)
@@ -93,7 +103,9 @@ public sealed class GehennaTraumaScannerSystem : EntitySystem
             return;
 
         _audio.PlayPvs(ent.Comp.ScanningEndSound, ent);
-        OpenUi(args.User, ent);
+        if (!OpenUi(args.User, ent))
+            return;
+
         BeginAnalyzing(ent, args.Target.Value);
         args.Handled = true;
     }
@@ -116,15 +128,30 @@ public sealed class GehennaTraumaScannerSystem : EntitySystem
             _toggle.TryDeactivate(ent.Owner);
     }
 
-    private void OpenUi(EntityUid user, EntityUid scanner)
+    private void OnUiOpened(Entity<GehennaTraumaScannerComponent> ent, ref BoundUIOpenedEvent args)
     {
-        if (_ui.HasUi(scanner, GehennaTraumaScannerUiKey.Key))
-            _ui.OpenUi(scanner, GehennaTraumaScannerUiKey.Key, user);
+        if (ent.Comp.ScannedEntity is { } patient && !Deleted(patient))
+            UpdateScannedUser(ent.Owner, patient, ent.Comp.IsAnalyzerActive);
+        else
+            _ui.SetUiState(ent.Owner, GehennaTraumaScannerUiKey.Key, new GehennaTraumaScannerUiState());
+    }
+
+    private void OnUiClosed(Entity<GehennaTraumaScannerComponent> ent, ref BoundUIClosedEvent args)
+    {
+        if (!_ui.IsUiOpen(ent.Owner, args.UiKey) && ent.Comp.ScannedEntity is { } patient)
+            StopAnalyzing(ent, patient);
+    }
+
+    private bool OpenUi(EntityUid user, EntityUid scanner)
+    {
+        return _ui.HasUi(scanner, GehennaTraumaScannerUiKey.Key) &&
+               _ui.TryOpenUi(scanner, GehennaTraumaScannerUiKey.Key, user);
     }
 
     private void BeginAnalyzing(Entity<GehennaTraumaScannerComponent> scanner, EntityUid patient)
     {
         scanner.Comp.ScannedEntity = patient;
+        scanner.Comp.IsAnalyzerActive = true;
         _toggle.TryActivate(scanner.Owner);
         UpdateScannedUser(scanner, patient, true);
     }
@@ -132,6 +159,7 @@ public sealed class GehennaTraumaScannerSystem : EntitySystem
     private void StopAnalyzing(Entity<GehennaTraumaScannerComponent> scanner, EntityUid patient)
     {
         scanner.Comp.ScannedEntity = null;
+        scanner.Comp.IsAnalyzerActive = false;
         _toggle.TryDeactivate(scanner.Owner);
         UpdateScannedUser(scanner, patient, false);
     }
@@ -150,7 +178,7 @@ public sealed class GehennaTraumaScannerSystem : EntitySystem
         if (!_ui.HasUi(scanner, GehennaTraumaScannerUiKey.Key))
             return;
 
-        _ui.ServerSendUiMessage(scanner, GehennaTraumaScannerUiKey.Key, new GehennaTraumaScannerScannedUserMessage(GetState(patient, scanMode)));
+        _ui.SetUiState(scanner, GehennaTraumaScannerUiKey.Key, GetState(patient, scanMode));
     }
 
     private GehennaTraumaScannerUiState GetState(EntityUid patient, bool scanMode)

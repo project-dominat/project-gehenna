@@ -22,7 +22,7 @@ public sealed class GehennaTraumaScannerScannedUserMessage : BoundUserInterfaceM
 }
 
 [Serializable, NetSerializable]
-public struct GehennaTraumaScannerUiState
+public sealed class GehennaTraumaScannerUiState : Robust.Shared.GameObjects.BoundUserInterfaceState
 {
     public NetEntity? TargetEntity;
     public string Name;

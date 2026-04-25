@@ -28,36 +28,44 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
         {
             Orientation = BoxContainer.LayoutOrientation.Horizontal,
             Margin = new Thickness(8),
+            SeparationOverride = 8,
         };
 
         Contents.AddChild(root);
 
-        var left = new BoxContainer
+        var info = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            MinWidth = 180,
+            SeparationOverride = 6,
+        };
+
+        var body = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
             MinWidth = 230,
-            SeparationOverride = 6,
         };
 
         var right = new BoxContainer
         {
             Orientation = BoxContainer.LayoutOrientation.Vertical,
+            MinWidth = 300,
             SeparationOverride = 4,
         };
 
-        root.AddChild(left);
-        root.AddChild(new Control { MinWidth = 8 });
+        root.AddChild(info);
+        root.AddChild(body);
         root.AddChild(right);
 
-        _scanMode = AddLine(left, "gehenna-trauma-scanner-scan-mode", string.Empty);
-        _name = AddLine(left, "gehenna-trauma-scanner-name", string.Empty);
-        _species = AddLine(left, "gehenna-trauma-scanner-species", string.Empty);
-        _status = AddLine(left, "gehenna-trauma-scanner-status", string.Empty);
-        _blood = AddLine(left, "gehenna-trauma-scanner-blood", string.Empty);
-        _bleeding = AddLine(left, "gehenna-trauma-scanner-bleeding", string.Empty);
+        _scanMode = AddLine(info, "gehenna-trauma-scanner-scan-mode", string.Empty);
+        _name = AddLine(info, "gehenna-trauma-scanner-name", string.Empty);
+        _species = AddLine(info, "gehenna-trauma-scanner-species", string.Empty);
+        _status = AddLine(info, "gehenna-trauma-scanner-status", string.Empty);
+        _blood = AddLine(info, "gehenna-trauma-scanner-blood", string.Empty);
+        _bleeding = AddLine(info, "gehenna-trauma-scanner-bleeding", string.Empty);
 
         _bodyMap = new GehennaBodyMapControl();
-        left.AddChild(_bodyMap);
+        body.AddChild(_bodyMap);
 
         right.AddChild(new Label
         {

@@ -24,4 +24,14 @@ public sealed class GehennaTraumaScannerBoundUserInterface(EntityUid owner, Enum
 
         _window.Populate(scanned.State);
     }
+
+    protected override void UpdateState(BoundUserInterfaceState state)
+    {
+        base.UpdateState(state);
+
+        if (_window == null || state is not GehennaTraumaScannerUiState scanned)
+            return;
+
+        _window.Populate(scanned);
+    }
 }
