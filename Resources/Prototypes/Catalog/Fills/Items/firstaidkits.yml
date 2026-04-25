@@ -10,18 +10,10 @@
         children:
         - id: Brutepack
         - id: Ointment
-        - id: Gauze
         # Gehenna-Edit
-        - id: GehennaElasticBandage1
-          amount: 2
-        # Gehenna-Edit
-        - id: GehennaBurnOintment1
-          amount: 2
-        # Gehenna-Edit
-        - id: GehennaTourniquet
+        - id: GehennaElasticBandage
         # Gehenna-Edit
         - id: GehennaBloodpack1
-        - id: PillCanisterTricordrazine
       # see https://github.com/tgstation/blob/master/code/game/objects/items/storage/firstaid.dm for example contents
 
 - type: entity
@@ -36,11 +28,8 @@
         - id: Ointment
           amount: 2
         # Gehenna-Edit
-        - id: GehennaBurnOintment
-        # Gehenna-Edit
         - id: GehennaRegenerativeMesh1
         - id: PillCanisterKelotane
-        - id: PillCanisterDermaline
 
 - type: entity
   id: MedkitBruteFilled
@@ -56,12 +45,7 @@
         # Gehenna-Edit
         - id: GehennaElasticBandage
         # Gehenna-Edit
-        - id: GehennaSutureKit1
-          amount: 2
-        # Gehenna-Edit
-        - id: GehennaTourniquet
-        - id: PillCanisterIron
-        - id: PillCanisterCopper
+        - id: GehennaSutureKit
 
 - type: entity
   id: MedkitToxinFilled
@@ -121,13 +105,7 @@
         # Gehenna-Edit
         - id: GehennaSutureKit
         # Gehenna-Edit
-        - id: GehennaElasticBandage
-        # Gehenna-Edit
         - id: GehennaTourniquet
-        # Gehenna-Edit
-        - id: GehennaBloodpack1
-        - id: Bloodpack
-          amount: 2
 
 - type: entity
   id: MedkitCombatFilled
@@ -143,15 +121,7 @@
         # Gehenna-Edit
         - id: GehennaSutureKit
         # Gehenna-Edit
-        - id: GehennaElasticBandage
-        # Gehenna-Edit
         - id: GehennaTourniquet
-        # Gehenna-Edit
-        - id: GehennaBloodpack1
-        - id: SyringeEphedrine
-        - id: SyringeSaline
-        - id: BruteAutoInjector
-        - id: BurnAutoInjector
 
 - type: entity
   id: StimkitFilled
