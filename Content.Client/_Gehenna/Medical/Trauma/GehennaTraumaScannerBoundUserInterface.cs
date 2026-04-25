@@ -11,6 +11,9 @@ public sealed class GehennaTraumaScannerBoundUserInterface(EntityUid owner, Enum
 
     protected override void Open()
     {
+        if (IsOpened || _window != null)
+            return;
+
         base.Open();
 
         _window = this.CreateWindow<GehennaTraumaScannerWindow>();
@@ -33,5 +36,15 @@ public sealed class GehennaTraumaScannerBoundUserInterface(EntityUid owner, Enum
             return;
 
         _window.Populate(scanned);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+
+        if (!disposing)
+            return;
+
+        _window = null;
     }
 }
