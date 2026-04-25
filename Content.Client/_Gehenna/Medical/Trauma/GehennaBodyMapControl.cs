@@ -7,6 +7,7 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Shared.IoC;
 using Robust.Shared.Maths;
+using Robust.Shared.Utility;
 
 namespace Content.Client._Gehenna.Medical.Trauma;
 
@@ -200,6 +201,7 @@ public sealed class GehennaBodyMapControl : Control
 
     private void LoadTexture(IResourceCache cache, string key, string path)
     {
-        _textures[key] = cache.GetResource<TextureResource>(path);
+        if (cache.TryGetResource(new ResPath(path), out TextureResource? texture))
+            _textures[key] = texture;
     }
 }

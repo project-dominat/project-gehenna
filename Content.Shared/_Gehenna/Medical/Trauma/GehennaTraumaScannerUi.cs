@@ -11,9 +11,14 @@ public enum GehennaTraumaScannerUiKey : byte
 }
 
 [Serializable, NetSerializable]
-public sealed class GehennaTraumaScannerScannedUserMessage(GehennaTraumaScannerUiState state) : BoundUserInterfaceMessage
+public sealed class GehennaTraumaScannerScannedUserMessage : BoundUserInterfaceMessage
 {
-    public GehennaTraumaScannerUiState State = state;
+    public GehennaTraumaScannerUiState State;
+
+    public GehennaTraumaScannerScannedUserMessage(GehennaTraumaScannerUiState state)
+    {
+        State = state;
+    }
 }
 
 [Serializable, NetSerializable]
@@ -27,6 +32,18 @@ public struct GehennaTraumaScannerUiState
     public bool Bleeding;
     public bool ScanMode;
     public List<GehennaTraumaScannerEntry> Wounds;
+
+    public GehennaTraumaScannerUiState()
+    {
+        TargetEntity = null;
+        Name = string.Empty;
+        Species = string.Empty;
+        MobState = null;
+        BloodLevel = float.NaN;
+        Bleeding = false;
+        ScanMode = false;
+        Wounds = new List<GehennaTraumaScannerEntry>();
+    }
 
     public GehennaTraumaScannerUiState(
         NetEntity? targetEntity,

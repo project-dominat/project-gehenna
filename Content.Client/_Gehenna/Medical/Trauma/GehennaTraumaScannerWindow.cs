@@ -76,6 +76,8 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
 
     public void Populate(GehennaTraumaScannerUiState state)
     {
+        var wounds = state.Wounds ?? new List<GehennaTraumaScannerEntry>();
+
         _scanMode.Text = Loc.GetString(state.ScanMode
             ? "health-analyzer-window-scan-mode-active"
             : "health-analyzer-window-scan-mode-inactive");
@@ -90,17 +92,17 @@ public sealed class GehennaTraumaScannerWindow : DefaultWindow
         _bleeding.Text = Loc.GetString(state.Bleeding
             ? "gehenna-trauma-scanner-yes"
             : "gehenna-trauma-scanner-no");
-        _bodyMap.SetWounds(state.Wounds);
+        _bodyMap.SetWounds(wounds);
 
         _wounds.RemoveAllChildren();
 
-        if (state.Wounds.Count == 0)
+        if (wounds.Count == 0)
         {
             _wounds.AddChild(new Label { Text = Loc.GetString("gehenna-trauma-scanner-no-wounds") });
             return;
         }
 
-        foreach (var wound in state.Wounds)
+        foreach (var wound in wounds)
         {
             _wounds.AddChild(CreateWoundLabel(wound));
         }
